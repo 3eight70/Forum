@@ -1,10 +1,12 @@
 package com.hits.FileSystem.Controllers;
 
 import com.hits.FileSystem.Models.Dto.Response.Response;
-import com.hits.FileSystem.Services.MinIOService;
+import com.hits.FileSystem.Models.Entity.User;
+import com.hits.FileSystem.Services.IMinIOService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,12 +17,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class MinIOController {
-    private final MinIOService minIOService;
+    private final IMinIOService minIOService;
 
     @PostMapping("/file/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> uploadFile(@AuthenticationPrincipal User user, @RequestParam("file") MultipartFile file){
         try{
-            return minIOService.uploadFile(file);
+            return minIOService.uploadFile(user, file);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -31,13 +33,24 @@ public class MinIOController {
     }
 
     @PostMapping("/file/download/{filename}")
-    public ResponseEntity<?> downloadFile(@PathVariable("filename") UUID fileId){
+    public ResponseEntity<?> downloadFile(@AuthenticationPrincipal User user, @PathVariable("filename") UUID fileId){
         try{
-            return minIOService.downloadFile(fileId);
+            return minIOService.downloadFile(user, fileId);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Ошибка при скачивании файла из MinIO"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/file/get")
+    public ResponseEntity<?> getFiles(@AuthenticationPrincipal User user){
+        try{
+            return minIOService.getAllFiles(user);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
