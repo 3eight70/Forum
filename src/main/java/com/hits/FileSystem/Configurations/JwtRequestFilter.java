@@ -40,17 +40,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.equals("Bearer null")) {
             authHeader = null;
         }
-
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7);
-
-            if (redisRepository.checkToken(jwtTokenUtils.getIdFromToken(jwt))) {
-                tokenInRedis = true;
-            }
-            email = jwtTokenUtils.getUserEmail(jwt);
-        }
-
         try {
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                jwt = authHeader.substring(7);
+
+                if (redisRepository.checkToken(jwtTokenUtils.getIdFromToken(jwt))) {
+                    tokenInRedis = true;
+                }
+                email = jwtTokenUtils.getUserEmail(jwt);
+            }
+
             User user = userService.loadUserByUsername(email);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && user != null) {
@@ -63,6 +62,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         catch (UsernameNotFoundException e){
+
+        }
+        catch (ExpiredJwtException e){
+
+        }
+        catch (SignatureException e){
 
         }
         if (request.getMethod().equals("OPTIONS")) {

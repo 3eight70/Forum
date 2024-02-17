@@ -9,11 +9,14 @@ import java.util.UUID;
 
 public class UserMapper {
     public static User userRegisterModelToUser(UserRegisterModel userRegisterModel){
+        String email = userRegisterModel.getEmail();
+        String modifiedEmail = email.replace("@", "").replace(".", "");
+
         return new User(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
                 userRegisterModel.getEmail(),
-                userRegisterModel.getEmail().substring(0, userRegisterModel.getEmail().indexOf("@")),
+                modifiedEmail,
                 userRegisterModel.getPassword()
         );
     }

@@ -1,6 +1,7 @@
 package com.hits.FileSystem.ExceptionHandler;
 
 import com.hits.FileSystem.Models.Dto.Response.Response;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,5 +25,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response> handleNoSuchKeyException(NoSuchKeyException e){
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
                 "Файла с данным id не существует"), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Response> handleExpiredJwtException(ExpiredJwtException e) {
+        return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
     }
 }

@@ -7,6 +7,7 @@ import com.hits.FileSystem.Models.Dto.UserDto.LoginCredentials;
 import com.hits.FileSystem.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.FileSystem.Models.Entity.RefreshToken;
 import com.hits.FileSystem.Models.Entity.User;
+import com.hits.FileSystem.Repositories.RedisRepository;
 import com.hits.FileSystem.Repositories.UserRepository;
 import com.hits.FileSystem.Utils.JwtTokenUtils;
 import jakarta.transaction.Transactional;
@@ -45,6 +46,7 @@ public class UserService implements UserDetailsService, IUserService {
         userRepository.save(user);
 
         String token = jwtTokenUtils.generateToken(user);
+        jwtTokenUtils.saveToken(token, "Valid");
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));
