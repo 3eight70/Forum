@@ -64,7 +64,7 @@ public class UserController {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Неправильный логин или пароль"), HttpStatus.BAD_REQUEST);
         }
         catch (RuntimeException e){
-            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Действие токена истекло"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Данный токен отсутствует в базе данных"), HttpStatus.UNAUTHORIZED);
         }
 
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

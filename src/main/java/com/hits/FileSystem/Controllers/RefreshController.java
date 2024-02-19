@@ -38,7 +38,7 @@ public class RefreshController {
                     .orElseThrow(() -> new RuntimeException("Данного токена нет в базе данных"));
         }
         catch (RuntimeException e){
-            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Действие токена истекло"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Данного токена нет в базе данных"), HttpStatus.UNAUTHORIZED);
         }
     }
 }

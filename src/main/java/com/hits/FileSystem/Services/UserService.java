@@ -44,9 +44,9 @@ public class UserService implements UserDetailsService, IUserService {
 
         user = UserMapper.userRegisterModelToUser(userRegisterModel);
         userRepository.save(user);
-
+        
         String token = jwtTokenUtils.generateToken(user);
-        jwtTokenUtils.saveToken(token, "Valid");
+	jwtTokenUtils.saveToken(token, "Valid");
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));
