@@ -13,7 +13,10 @@ import io.minio.MinioClient;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +27,9 @@ import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
@@ -82,24 +87,17 @@ public class MinIOService implements IMinIOService{
                     "Файл с данным id не найден"), HttpStatus.NOT_FOUND);
         }
 
-        try {
+        byte[] fileBytes = file.getFileContent();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(fileBytes);
 
-            String presignedUrl = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                            .method(Method.GET)
-                            .bucket(claims.getSubject().replace("@", ""))
-                            .object(file.getName())
-                            .expiry(1, TimeUnit.DAYS)
-                    .build());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= " + file.getName());
 
-            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
-                    presignedUrl), HttpStatus.OK);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                "Вы еще не загрузили ни одного файла"), HttpStatus.NOT_FOUND);
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new InputStreamResource(inputStream));
     }
 
     public ResponseEntity<?> getAllFiles(String token){

@@ -1,5 +1,6 @@
 package com.hits.file.Exceptions;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.hits.file.Models.Dto.Response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Response> handleMissingRequestHeader(MissingRequestHeaderException e) {
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
                 "Отсутствует header Authorization"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(JsonParseException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Response> handleJsonParseException(JsonParseException e) {
+        return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                "Не удалось получить данные с JSON"), HttpStatus.UNAUTHORIZED);
     }
 }
