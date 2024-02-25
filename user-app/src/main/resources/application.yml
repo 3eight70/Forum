@@ -1,0 +1,24 @@
+server:
+  port: 8010
+
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF
+  expiration: 1h
+
+refresh:
+  expiration: 1d
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/FileSystem
+    username: postgres
+    password: gbhfns
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
