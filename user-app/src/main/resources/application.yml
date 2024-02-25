@@ -10,7 +10,7 @@ refresh:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/FileSystem
+    url: jdbc:postgresql://localhost:5432/filesystem
     username: postgres
     password: gbhfns
     driverClassName: org.postgresql.Driver
