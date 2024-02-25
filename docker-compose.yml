@@ -26,6 +26,7 @@ services:
     environment:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
+      MINIO_DOMAIN: localhost
     command: server --console-address ":9001" /data
     volumes:
       - minio_storage:/data
@@ -58,6 +59,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: gbhfns
     depends_on:
       - postgres
-
+      - minio
 volumes:
   minio_storage: {}
