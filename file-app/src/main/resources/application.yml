@@ -1,0 +1,25 @@
+server:
+  port: 8011
+
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF
+  expiration: 1h
+
+refresh:
+  expiration: 1d
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/FileSystem
+    username: postgres
+    password: gbhfns
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+minio:
+  accessKey: minioadmin
+  secretKey: minioadmin
+  endpoint: http://localhost:9000

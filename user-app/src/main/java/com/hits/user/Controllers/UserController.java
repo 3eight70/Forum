@@ -23,14 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class UserController {
     private final IUserService userService;
     private final AuthenticationManager authenticationManager;
     private final IRefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/account/register")
+    public static final String REGISTER_USER = "/api/account/register";
+    public static final String LOGIN_USER = "/api/account/login";
+
+    @PostMapping(REGISTER_USER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel){
         userRegisterModel.setPassword(passwordEncoder.encode(userRegisterModel.getPassword()));
 
@@ -45,7 +47,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/account/login")
+    @PostMapping(LOGIN_USER)
     public ResponseEntity<?> loginUser(@RequestBody LoginCredentials loginCredentials){
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getEmail(), loginCredentials.getPassword()));
@@ -56,10 +58,7 @@ public class UserController {
                 return userService.loginUser(loginCredentials, refreshToken);
             }
         }
-        catch (BadCredentialsException  e) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Неправильный логин или пароль"), HttpStatus.BAD_REQUEST);
-        }
-        catch (UsernameNotFoundException e){
+        catch (BadCredentialsException | UsernameNotFoundException e) {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Неправильный логин или пароль"), HttpStatus.BAD_REQUEST);
         }
         catch (RuntimeException e){

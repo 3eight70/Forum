@@ -36,7 +36,6 @@ public class File {
     @Column(name = "file_content", nullable = false)
     private byte[] fileContent;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private UUID user;
 }

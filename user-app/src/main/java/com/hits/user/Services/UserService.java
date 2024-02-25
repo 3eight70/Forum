@@ -7,7 +7,6 @@ import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entity.RefreshToken;
 import com.hits.user.Models.Entity.User;
-import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
 import jakarta.transaction.Transactional;

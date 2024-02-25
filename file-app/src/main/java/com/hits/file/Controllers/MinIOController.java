@@ -1,8 +1,8 @@
 package com.hits.file.Controllers;
 
 import com.hits.file.Models.Dto.Response.Response;
-import com.hits.file.Models.Entity.User;
 import com.hits.file.Services.IMinIOService;
+import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +14,17 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class MinIOController {
     private final IMinIOService minIOService;
 
-    @PostMapping("/file/upload")
-    public ResponseEntity<?> uploadFile(/*@AuthenticationPrincipal*/ User user, @RequestParam("file") MultipartFile file){
+    public static final String  UPLOAD_FILE = "/api/file/upload";
+    public static final String  DOWNLOAD_FILE = "/api/file/download";
+    public static final String  GET_FILES = "/api/file/get";
+
+    @PostMapping(UPLOAD_FILE)
+    public ResponseEntity<?> uploadFile(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file){
         try{
-            return minIOService.uploadFile(user, file);
+            return minIOService.uploadFile(token, file);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -29,12 +32,24 @@ public class MinIOController {
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "Ошибка при загрузке файла в MinIO"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        catch (SignatureException e){
+            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                    "Неверная подпись токена авторизации"), HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PostMapping("/file/download/{filename}")
-    public ResponseEntity<?> downloadFile(/*@AuthenticationPrincipal*/ User user, @PathVariable("filename") UUID fileId){
+    @PostMapping(DOWNLOAD_FILE + "/{filename}")
+    public ResponseEntity<?> downloadFile(@RequestHeader("Authorization") String token, @PathVariable("filename") UUID fileId){
         try{
-            return minIOService.downloadFile(user, fileId);
+            return minIOService.downloadFile(token, fileId);
+        }
+        catch (SignatureException e){
+            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                    "Неверная подпись токена авторизации"), HttpStatus.UNAUTHORIZED);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -42,10 +57,14 @@ public class MinIOController {
         }
     }
 
-    @GetMapping("/file/get")
-    public ResponseEntity<?> getFiles(/*@AuthenticationPrincipal*/ User user){
+    @GetMapping(GET_FILES)
+    public ResponseEntity<?> getFiles(@RequestHeader("Authorization") String token){
         try{
-            return minIOService.getAllFiles(user);
+            return minIOService.getAllFiles(token);
+        }
+        catch (SignatureException e){
+            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                    "Неверная подпись токена авторизации"), HttpStatus.UNAUTHORIZED);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),

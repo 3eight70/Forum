@@ -32,9 +32,6 @@ public class User implements UserDetails {
     @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+", message = "Неверный адрес электронной почты")
     private String email;
 
-    @Column(unique = true, nullable = false)
-    private String name;
-
     @Column(length = 1000, nullable = false)
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")
     private String password;
