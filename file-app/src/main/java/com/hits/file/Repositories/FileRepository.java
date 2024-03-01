@@ -1,6 +1,7 @@
 package com.hits.file.Repositories;
 
-import com.hits.file.Models.Entity.File;
+import com.hits.common.Entities.File;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

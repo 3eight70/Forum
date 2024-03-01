@@ -1,7 +1,7 @@
 package com.hits.file.Mappers;
 
 import com.hits.file.Models.Dto.FileDto.FileDto;
-import com.hits.file.Models.Entity.File;
+import com.hits.common.Entities.File;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class FileMapper {
                 file.getId(),
                 file.getName(),
                 file.getSize(),
-                file.getDownloadTime()
+                file.getUploadTime()
         );
     }
 }

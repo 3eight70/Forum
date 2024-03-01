@@ -1,4 +1,4 @@
-package com.hits.user.Models.Entity;
+package com.hits.common.Entities;
 
 import jakarta.persistence.*;
 import lombok.*;

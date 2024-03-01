@@ -1,11 +1,13 @@
 package com.hits.file.Controllers;
 
+import com.hits.common.Entities.User;
 import com.hits.file.Models.Dto.Response.Response;
 import com.hits.file.Services.IMinIOService;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +24,9 @@ public class MinIOController {
     public static final String  GET_FILES = "/api/file/get";
 
     @PostMapping(UPLOAD_FILE)
-    public ResponseEntity<?> uploadFile(@RequestHeader("Authorization") String token, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> uploadFile(@AuthenticationPrincipal User user, @RequestParam("file") MultipartFile file){
         try{
-            return minIOService.uploadFile(token, file);
+            return minIOService.uploadFile(user, file);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -43,9 +45,9 @@ public class MinIOController {
     }
 
     @PostMapping(DOWNLOAD_FILE + "/{filename}")
-    public ResponseEntity<?> downloadFile(@RequestHeader("Authorization") String token, @PathVariable("filename") UUID fileId){
+    public ResponseEntity<?> downloadFile(@AuthenticationPrincipal User user, @PathVariable("filename") UUID fileId){
         try{
-            return minIOService.downloadFile(token, fileId);
+            return minIOService.downloadFile(user, fileId);
         }
         catch (SignatureException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
@@ -58,9 +60,9 @@ public class MinIOController {
     }
 
     @GetMapping(GET_FILES)
-    public ResponseEntity<?> getFiles(@RequestHeader("Authorization") String token){
+    public ResponseEntity<?> getFiles(@AuthenticationPrincipal User user){
         try{
-            return minIOService.getAllFiles(token);
+            return minIOService.getAllFiles(user);
         }
         catch (SignatureException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),

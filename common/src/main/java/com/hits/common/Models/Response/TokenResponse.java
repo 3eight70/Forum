@@ -1,4 +1,4 @@
-package com.hits.user.Models.Dto.Response;
+package com.hits.common.Models.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

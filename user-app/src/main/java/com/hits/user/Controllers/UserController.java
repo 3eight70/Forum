@@ -1,9 +1,9 @@
 package com.hits.user.Controllers;
 
-import com.hits.user.Models.Dto.Response.Response;
+import com.hits.common.Models.Response.Response;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.user.Models.Entity.RefreshToken;
+import com.hits.common.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Services.IUserService;
 import jakarta.validation.Valid;
@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

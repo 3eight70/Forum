@@ -1,4 +1,4 @@
-package com.hits.file.Models.Entity;
+package com.hits.common.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -21,7 +21,7 @@ public class File {
     private UUID id;
 
     @Column(name = "download_time", nullable = false)
-    private LocalDateTime downloadTime = LocalDateTime.now();
+    private LocalDateTime uploadTime = LocalDateTime.now();
 
     @Column(name = "name", nullable = false)
     private String name;

@@ -1,10 +1,9 @@
 package com.hits.user.Mappers;
 
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.user.Models.Entity.User;
+import com.hits.common.Entities.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserMapper {
@@ -13,6 +12,7 @@ public class UserMapper {
                 UUID.randomUUID(),
                 LocalDateTime.now(),
                 userRegisterModel.getEmail(),
+                userRegisterModel.getLogin(),
                 userRegisterModel.getPassword()
         );
     }

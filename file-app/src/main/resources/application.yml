@@ -1,5 +1,5 @@
 server:
-  port: 8011
+  port: 8081
 
 jwt:
   secret: AbdaasdasdasdasfasgasASFASF
@@ -16,7 +16,7 @@ spring:
     driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
 
 minio:

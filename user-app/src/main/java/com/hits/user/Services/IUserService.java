@@ -2,8 +2,8 @@ package com.hits.user.Services;
 
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.user.Models.Entity.RefreshToken;
-import com.hits.user.Models.Entity.User;
+import com.hits.common.Entities.RefreshToken;
+import com.hits.common.Entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 

@@ -1,16 +1,14 @@
 package com.hits.file.Services;
 
+import com.hits.common.Entities.User;
 import com.hits.common.Utils.JwtUtils;
 import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Dto.Response.Response;
-import com.hits.file.Models.Entity.File;
+import com.hits.common.Entities.File;
 import com.hits.file.Repositories.FileRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureException;
-import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
-import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -29,9 +27,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.List;
 
 @Service
@@ -39,18 +35,16 @@ import java.util.List;
 public class MinIOService implements IMinIOService{
     private final S3Client s3Client;
     private final FileRepository fileRepository;
-    private final MinioClient minioClient;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    public ResponseEntity<?> uploadFile(String token, MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadFile(User user, MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         File newFile;
-        Claims claims = JwtUtils.parseToken(token.replace("Bearer ", ""), secret);
 
         try {
-            String email = claims.getSubject().replace("@", "");
+            String email = user.getEmail().replace("@", "");
 
             if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(email))){
                 s3Client.createBucket(CreateBucketRequest.builder().bucket(email).build());
@@ -68,7 +62,7 @@ public class MinIOService implements IMinIOService{
                     .build();
             s3Client.putObject(obj, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            newFile = FileMapper.multipartFileToFile(file, UUID.fromString((String) claims.get("userId")));
+            newFile = FileMapper.multipartFileToFile(file, user.getId());
             fileRepository.save(newFile);
         }
         catch (S3Exception e) {
@@ -78,9 +72,8 @@ public class MinIOService implements IMinIOService{
         return ResponseEntity.ok(newFile.getId());
     }
 
-    public ResponseEntity<?> downloadFile(String token, UUID id) throws Exception{
-        Claims claims = JwtUtils.parseToken(token.replace("Bearer ", ""), secret);
-        File file = fileRepository.findFileByIdAndUser(id, UUID.fromString((String) claims.get("userId")));
+    public ResponseEntity<?> downloadFile(User user, UUID id){
+        File file = fileRepository.findFileByIdAndUser(id, user.getId());
 
         if (file == null){
             return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
@@ -100,9 +93,8 @@ public class MinIOService implements IMinIOService{
                 .body(new InputStreamResource(inputStream));
     }
 
-    public ResponseEntity<?> getAllFiles(String token){
-        Claims claims = JwtUtils.parseToken(token.replace("Bearer ", ""), secret);
-        List<FileDto> files = fileRepository.findAllByUser(UUID.fromString((String) claims.get("userId")))
+    public ResponseEntity<?> getAllFiles(User user){
+        List<FileDto> files = fileRepository.findAllByUser(user.getId())
                 .stream()
                 .map(FileMapper::fileToFileDto)
                 .toList();

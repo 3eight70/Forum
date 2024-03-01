@@ -1,5 +1,5 @@
 server:
-  port: 8010
+  port: 8080
 
 jwt:
   secret: AbdaasdasdasdasfasgasASFASF
@@ -14,10 +14,6 @@ spring:
     username: postgres
     password: gbhfns
     driverClassName: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
   data:
     redis:
       host: redis

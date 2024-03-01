@@ -1,6 +1,6 @@
 package com.hits.user.Repositories;
 
-import com.hits.user.Models.Entity.User;
+import com.hits.common.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

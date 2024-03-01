@@ -1,12 +1,12 @@
 package com.hits.user.Services;
 
 import com.hits.user.Mappers.UserMapper;
-import com.hits.user.Models.Dto.Response.Response;
-import com.hits.user.Models.Dto.Response.TokenResponse;
+import com.hits.common.Models.Response.Response;
+import com.hits.common.Models.Response.TokenResponse;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.user.Models.Entity.RefreshToken;
-import com.hits.user.Models.Entity.User;
+import com.hits.common.Entities.RefreshToken;
+import com.hits.common.Entities.User;
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
 import jakarta.transaction.Transactional;
@@ -40,6 +40,7 @@ public class UserService implements UserDetailsService, IUserService {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                     "Пользователь с указанной почтой уже существует"), HttpStatus.BAD_REQUEST);
         }
+
 
         user = UserMapper.userRegisterModelToUser(userRegisterModel);
         userRepository.save(user);

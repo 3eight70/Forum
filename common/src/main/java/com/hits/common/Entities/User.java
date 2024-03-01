@@ -1,4 +1,4 @@
-package com.hits.user.Models.Entity;
+package com.hits.common.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -31,6 +31,11 @@ public class User implements UserDetails {
     @Size(min = 1, message = "Минимальная длина не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+", message = "Неверный адрес электронной почты")
     private String email;
+
+    @Column(unique = true, nullable = false)
+    @Size(min = 1, message = "Минимальная длина не менее 1 символа")
+    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
+    private String login;
 
     @Column(length = 1000, nullable = false)
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")

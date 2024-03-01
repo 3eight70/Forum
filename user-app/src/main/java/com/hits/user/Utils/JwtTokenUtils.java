@@ -1,6 +1,6 @@
 package com.hits.user.Utils;
 
-import com.hits.user.Models.Entity.User;
+import com.hits.common.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import io.jsonwebtoken.Claims;
