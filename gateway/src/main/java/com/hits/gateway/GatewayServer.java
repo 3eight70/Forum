@@ -1,14 +1,14 @@
-package com.hits.file;
+package com.hits.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableDiscoveryClient
-public class FileServer {
+public class GatewayServer {
     public static void main(String[] args) {
-        SpringApplication.run(FileServer.class, args);
+        SpringApplication.run(GatewayServer.class, args);
     }
 }

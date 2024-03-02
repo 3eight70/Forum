@@ -8,6 +8,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartException;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.security.SignatureException;
@@ -40,5 +41,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response> handleJsonParseException(JsonParseException e) {
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
                 "Не удалось получить данные с JSON"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response> handleMultipartException(MultipartException e) {
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                "Файл не был прикреплен"), HttpStatus.BAD_REQUEST);
     }
 }

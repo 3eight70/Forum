@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -18,7 +18,8 @@
 		<module>user-app</module>
 		<module>file-app</module>
 		<module>common</module>
-		<module>forum-core</module>
+		<module>gateway</module>
+		<module>service-registry</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>
@@ -29,6 +30,10 @@
 		<jaxb.version>2.3.1</jaxb.version>
 		<jwt.version>0.9.1</jwt.version>
 		<postgres.version>42.6.1</postgres.version>
+		<spring-cloud.version>2023.0.0</spring-cloud.version>
+		<spring-gateway.version>4.1.1</spring-gateway.version>
+		<registry.version>4.1.0</registry.version>
+		<webflux.version>3.2.2</webflux.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -71,6 +76,18 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-gateway</artifactId>
+				<version>${spring-gateway.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-test</artifactId>
 				<version>${spring-boot.version}</version>
@@ -85,6 +102,16 @@
 				<groupId>javax.xml.bind</groupId>
 				<artifactId>jaxb-api</artifactId>
 				<version>${jaxb.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-webflux</artifactId>
+				<version>${webflux.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+				<version>${registry.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

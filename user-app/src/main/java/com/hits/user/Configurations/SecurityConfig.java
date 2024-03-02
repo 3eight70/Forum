@@ -1,6 +1,5 @@
 package com.hits.user.Configurations;
 
-import com.hits.user.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.hits.common.Consts.LOGOUT_USER;
+
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
@@ -30,9 +31,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/file/upload").authenticated()
-                        .requestMatchers("/api/file/download/*").authenticated()
-                        .requestMatchers("/api/file/get").authenticated()
+                        .requestMatchers(LOGOUT_USER).authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

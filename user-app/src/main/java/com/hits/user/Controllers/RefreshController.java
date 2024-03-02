@@ -3,7 +3,7 @@ package com.hits.user.Controllers;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
 import com.hits.user.Models.Dto.Token.RefreshRequestDto;
-import com.hits.common.Entities.RefreshToken;
+import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Repositories.RefreshRepository;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Utils.JwtTokenUtils;
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.hits.common.Consts.REFRESH_TOKEN;
+
 @RestController
 @RequiredArgsConstructor
 public class RefreshController {
     private final RefreshRepository refreshRepository;
     private final IRefreshTokenService refreshTokenService;
     private final JwtTokenUtils jwtTokenUtils;
-
-    public static final String REFRESH_TOKEN = "/api/refreshToken";
 
     @PostMapping(REFRESH_TOKEN)
     public ResponseEntity<?> refreshToken(@RequestBody RefreshRequestDto refreshRequestDto){

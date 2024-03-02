@@ -3,10 +3,10 @@ package com.hits.user.Controllers;
 import com.hits.common.Models.Response.Response;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.common.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Services.IUserService;
 import jakarta.validation.Valid;
+import com.hits.user.Models.Entities.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,9 +27,6 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final IRefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
-
-    public static final String REGISTER_USER = "/api/account/register";
-    public static final String LOGIN_USER = "/api/account/login";
 
     @PostMapping(REGISTER_USER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel){
@@ -65,5 +62,31 @@ public class UserController {
         }
 
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping(LOGOUT_USER)
+    public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token){
+        try {
+            return userService.logoutUser(token);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(VALIDATE_TOKEN)
+    public ResponseEntity<?> validateToken(@RequestParam(name = "token") String token){
+        try{
+            Boolean valid = userService.validateToken(token);
+
+            if (valid){
+                return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "Токен валиден"), HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Токен не валиден"), HttpStatus.UNAUTHORIZED);
+            }
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

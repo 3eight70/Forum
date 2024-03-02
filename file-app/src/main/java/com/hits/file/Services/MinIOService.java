@@ -1,14 +1,11 @@
 package com.hits.file.Services;
 
-import com.hits.common.Entities.User;
 import com.hits.common.Utils.JwtUtils;
 import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Dto.Response.Response;
-import com.hits.common.Entities.File;
+import com.hits.file.Models.Entities.File;
 import com.hits.file.Repositories.FileRepository;
-import io.jsonwebtoken.Claims;
-import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -39,12 +36,12 @@ public class MinIOService implements IMinIOService{
     @Value("${jwt.secret}")
     private String secret;
 
-    public ResponseEntity<?> uploadFile(User user, MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadFile(String token, MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         File newFile;
 
         try {
-            String email = user.getEmail().replace("@", "");
+            String email = JwtUtils.getUserEmail(token, secret).replace("@", "");
 
             if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(email))){
                 s3Client.createBucket(CreateBucketRequest.builder().bucket(email).build());
@@ -62,7 +59,7 @@ public class MinIOService implements IMinIOService{
                     .build();
             s3Client.putObject(obj, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            newFile = FileMapper.multipartFileToFile(file, user.getId());
+            newFile = FileMapper.multipartFileToFile(file, JwtUtils.getUserIdFromToken(token, secret));
             fileRepository.save(newFile);
         }
         catch (S3Exception e) {
@@ -72,8 +69,8 @@ public class MinIOService implements IMinIOService{
         return ResponseEntity.ok(newFile.getId());
     }
 
-    public ResponseEntity<?> downloadFile(User user, UUID id){
-        File file = fileRepository.findFileByIdAndUser(id, user.getId());
+    public ResponseEntity<?> downloadFile(String token, UUID id){
+        File file = fileRepository.findFileByIdAndUserId(id, JwtUtils.getUserIdFromToken(token, secret));
 
         if (file == null){
             return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
@@ -93,8 +90,8 @@ public class MinIOService implements IMinIOService{
                 .body(new InputStreamResource(inputStream));
     }
 
-    public ResponseEntity<?> getAllFiles(User user){
-        List<FileDto> files = fileRepository.findAllByUser(user.getId())
+    public ResponseEntity<?> getAllFiles(String token){
+        List<FileDto> files = fileRepository.findAllByUserId(JwtUtils.getUserIdFromToken(token, secret))
                 .stream()
                 .map(FileMapper::fileToFileDto)
                 .toList();

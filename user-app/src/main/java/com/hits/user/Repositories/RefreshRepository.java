@@ -1,6 +1,6 @@
 package com.hits.user.Repositories;
 
-import com.hits.common.Entities.RefreshToken;
+import com.hits.user.Models.Entities.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

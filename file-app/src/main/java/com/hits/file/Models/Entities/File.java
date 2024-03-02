@@ -1,4 +1,4 @@
-package com.hits.common.Entities;
+package com.hits.file.Models.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -37,5 +37,5 @@ public class File {
     private byte[] fileContent;
 
     @Column(name = "user_id", nullable = false)
-    private UUID user;
+    private String userId;
 }

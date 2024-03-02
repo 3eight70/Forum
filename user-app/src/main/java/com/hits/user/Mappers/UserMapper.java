@@ -1,7 +1,7 @@
 package com.hits.user.Mappers;
 
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.common.Entities.User;
+import com.hits.user.Models.Entities.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

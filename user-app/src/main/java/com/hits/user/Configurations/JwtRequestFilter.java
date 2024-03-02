@@ -1,6 +1,6 @@
 package com.hits.user.Configurations;
 
-import com.hits.common.Entities.User;
+import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Services.IUserService;
