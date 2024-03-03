@@ -1,9 +1,10 @@
 package com.hits.forum.Services;
 
-import com.hits.forum.Models.Dto.CategoryRequest;
-import com.hits.forum.Models.Dto.EditMessageRequest;
-import com.hits.forum.Models.Dto.MessageRequest;
-import com.hits.forum.Models.Dto.ThemeRequest;
+import com.hits.forum.Models.Dto.Category.CategoryRequest;
+import com.hits.forum.Models.Dto.Message.EditMessageRequest;
+import com.hits.forum.Models.Dto.Message.MessageRequest;
+import com.hits.forum.Models.Dto.Theme.ThemeRequest;
+import com.hits.forum.Models.Enums.SortOrder;
 import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
@@ -18,4 +19,5 @@ public interface IForumService {
     ResponseEntity<?> deleteCategory(String token, UUID categoryId);
     ResponseEntity<?> deleteTheme(String token, UUID themeId);
     ResponseEntity<?> deleteMessage(String token, UUID messageId);
+    ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder);
 }

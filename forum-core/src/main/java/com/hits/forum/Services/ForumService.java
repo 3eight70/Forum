@@ -3,27 +3,33 @@ package com.hits.forum.Services;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Utils.JwtUtils;
 import com.hits.forum.Mappers.ForumMapper;
-import com.hits.forum.Models.Dto.CategoryRequest;
-import com.hits.forum.Models.Dto.EditMessageRequest;
-import com.hits.forum.Models.Dto.MessageRequest;
-import com.hits.forum.Models.Dto.ThemeRequest;
+import com.hits.forum.Models.Dto.Category.CategoryRequest;
+import com.hits.forum.Models.Dto.Message.EditMessageRequest;
+import com.hits.forum.Models.Dto.Message.MessageRequest;
+import com.hits.forum.Models.Dto.Responses.PageResponse;
+import com.hits.forum.Models.Dto.Responses.ThemeResponse;
+import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;
 import com.hits.forum.Models.Entities.ForumTheme;
+import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Repositories.CategoryRepository;
 import com.hits.forum.Repositories.MessageRepository;
 import com.hits.forum.Repositories.ThemeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -267,6 +273,44 @@ public class ForumService implements IForumService {
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Сообщение успешно удалено"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<ForumTheme> themesPage = themeRepository.findAll(pageable);
+
+        List<ThemeRequest> themeRequests = themesPage.getContent().stream()
+                .map(ForumMapper::forumThemeToThemeRequest)
+                .collect(Collectors.toList());
+
+        Page<ThemeRequest> themeRequestsPage = new PageImpl<>(themeRequests, pageable, themesPage.getTotalElements());
+        Long totalThemes = themeRepository.count();
+
+        Integer totalPages = (int) Math.ceil((double) totalThemes/ size);
+
+        return ResponseEntity.ok(new ThemeResponse(
+                themeRequestsPage.getContent(),
+                new PageResponse(
+                        totalPages,
+                        page,
+                        themeRequestsPage.getSize(),
+                        totalThemes
+                )
+        ));
+    }
+
+
+
+    private Comparator getComparator(SortOrder sortOrder) {
+        switch (sortOrder) {
+            case CreateDesc:
+                return Comparator.comparing(ForumTheme::getCreateTime).reversed();
+            case CreateAsc:
+                return Comparator.comparing(ForumTheme::getCreateTime);
+            default:
+                return Comparator.comparing(ForumTheme::getCreateTime);
+        }
     }
 
     private ResponseEntity<?> notFoundResponse(String message) {

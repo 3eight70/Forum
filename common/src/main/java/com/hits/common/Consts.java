@@ -12,6 +12,7 @@ public class Consts {
     public static final String EUREKA = "/eureka";
     public static final String CREATE_CATEGORY = "/api/forum/category";
     public static final String CREATE_THEME = "/api/forum/category/theme";
+    public static final String GET_THEMES = "/api/forum/category/theme/get";
     public static final String SEND_MESSAGE = "/api/forum/theme/message";
     public static final String EDIT_CATEGORY = "/api/forum/category/edit";
     public static final String EDIT_THEME = "/api/forum/category/theme/edit";

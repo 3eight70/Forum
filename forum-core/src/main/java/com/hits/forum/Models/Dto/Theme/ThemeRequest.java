@@ -1,4 +1,4 @@
-package com.hits.forum.Models.Dto;
+package com.hits.forum.Models.Dto.Theme;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

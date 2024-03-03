@@ -1,10 +1,11 @@
 package com.hits.forum.Controllers;
 
 import com.hits.common.Models.Response.Response;
-import com.hits.forum.Models.Dto.CategoryRequest;
-import com.hits.forum.Models.Dto.EditMessageRequest;
-import com.hits.forum.Models.Dto.MessageRequest;
-import com.hits.forum.Models.Dto.ThemeRequest;
+import com.hits.forum.Models.Dto.Category.CategoryRequest;
+import com.hits.forum.Models.Dto.Message.EditMessageRequest;
+import com.hits.forum.Models.Dto.Message.MessageRequest;
+import com.hits.forum.Models.Dto.Theme.ThemeRequest;
+import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Services.IForumService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
@@ -142,6 +143,19 @@ public class ForumController {
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_THEMES)
+    public ResponseEntity<?> getThemes(
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+            @RequestParam(name = "sortOrder", required = false, defaultValue = "CreateAsc") SortOrder sortOrder){
+        try {
+            return forumService.getAllThemes(page, size, sortOrder);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);

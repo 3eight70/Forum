@@ -1,4 +1,4 @@
-package com.hits.forum.Models.Dto;
+package com.hits.forum.Models.Dto.Category;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

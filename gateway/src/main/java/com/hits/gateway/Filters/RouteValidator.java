@@ -14,6 +14,7 @@ public class RouteValidator {
             LOGIN_USER,
             REGISTER_USER,
             REFRESH_TOKEN,
+            GET_THEMES,
             EUREKA);
 
     public Predicate<ServerHttpRequest> isSecured =

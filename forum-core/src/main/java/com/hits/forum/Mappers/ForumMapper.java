@@ -1,8 +1,8 @@
 package com.hits.forum.Mappers;
 
-import com.hits.forum.Models.Dto.CategoryRequest;
-import com.hits.forum.Models.Dto.MessageRequest;
-import com.hits.forum.Models.Dto.ThemeRequest;
+import com.hits.forum.Models.Dto.Category.CategoryRequest;
+import com.hits.forum.Models.Dto.Message.MessageRequest;
+import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;
 import com.hits.forum.Models.Entities.ForumTheme;
@@ -44,6 +44,13 @@ public class ForumMapper {
                 userLogin,
                 messageRequest.getContent(),
                 messageRequest.getThemeId()
+        );
+    }
+
+    public static ThemeRequest forumThemeToThemeRequest(ForumTheme forumTheme){
+        return new ThemeRequest(
+                forumTheme.getThemeName(),
+                forumTheme.getCategoryId()
         );
     }
 }
