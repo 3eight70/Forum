@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService, IUserService {
         userRepository.save(user);
 
         String token = jwtTokenUtils.generateToken(user);
-        jwtTokenUtils.saveToken(token, "Valid");
+        jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));

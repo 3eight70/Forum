@@ -9,6 +9,10 @@ refresh:
   expiration: 1d
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
   application:
     name: FILE-SERVICE
   datasource:

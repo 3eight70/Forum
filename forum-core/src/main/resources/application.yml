@@ -9,6 +9,8 @@ refresh:
   expiration: 1d
 
 spring:
+  application:
+    name: FORUM-SERVICE
   datasource:
     url: jdbc:postgresql://postgres:5432/filesystem
     username: postgres

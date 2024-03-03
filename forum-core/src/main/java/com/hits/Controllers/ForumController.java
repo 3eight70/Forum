@@ -3,16 +3,12 @@ package com.hits.Controllers;
 import com.hits.Models.Dto.CategoryRequest;
 import com.hits.Models.Dto.ThemeRequest;
 import com.hits.Models.Dto.MessageRequest;
-import com.hits.common.Entities.User;
 import com.hits.common.Models.Response.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +25,7 @@ public class ForumController {
     public static final String DELETE_MESSAGE = "/api/forum/theme/message/delete";
 
     @PostMapping(CREATE_CATEGORY)
-    public ResponseEntity<?> createCategory(@AuthenticationPrincipal User user, CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, CategoryRequest createCategoryRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -40,7 +36,7 @@ public class ForumController {
     }
 
     @PostMapping(CREATE_THEME)
-    public ResponseEntity<?> createTheme(@AuthenticationPrincipal User user, ThemeRequest createThemeRequest){
+    public ResponseEntity<?> createTheme(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ThemeRequest createThemeRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -51,7 +47,7 @@ public class ForumController {
     }
 
     @PostMapping(SEND_MESSAGE)
-    public ResponseEntity<?> sendMessage(@AuthenticationPrincipal User user, MessageRequest messageRequest){
+    public ResponseEntity<?> sendMessage(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, MessageRequest messageRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -62,7 +58,7 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_CATEGORY)
-    public ResponseEntity<?> editCategory(@AuthenticationPrincipal User user, CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> editCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, CategoryRequest createCategoryRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -73,7 +69,7 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_THEME)
-    public ResponseEntity<?> editTheme(@AuthenticationPrincipal User user, ThemeRequest createThemeRequest){
+    public ResponseEntity<?> editTheme(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ThemeRequest createThemeRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -84,7 +80,7 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_MESSAGE)
-    public ResponseEntity<?> editMessage(@AuthenticationPrincipal User user, MessageRequest messageRequest){
+    public ResponseEntity<?> editMessage(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, MessageRequest messageRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -94,7 +90,7 @@ public class ForumController {
         }
     }
     @DeleteMapping(DELETE_CATEGORY)
-    public ResponseEntity<?> deleteCategory(@AuthenticationPrincipal User user, CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> deleteCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, CategoryRequest createCategoryRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -105,7 +101,7 @@ public class ForumController {
     }
 
     @DeleteMapping(DELETE_THEME)
-    public ResponseEntity<?> deleteTheme(@AuthenticationPrincipal User user, ThemeRequest createThemeRequest){
+    public ResponseEntity<?> deleteTheme(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, ThemeRequest createThemeRequest){
 
         try {
             return ResponseEntity.ok().build();
@@ -116,7 +112,7 @@ public class ForumController {
     }
 
     @DeleteMapping(DELETE_MESSAGE)
-    public ResponseEntity<?> deleteMessage(@AuthenticationPrincipal User user, MessageRequest messageRequest){
+    public ResponseEntity<?> deleteMessage(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, MessageRequest messageRequest){
 
         try {
             return ResponseEntity.ok().build();
