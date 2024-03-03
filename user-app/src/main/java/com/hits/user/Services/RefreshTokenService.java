@@ -1,8 +1,13 @@
 package com.hits.user.Services;
 
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
+<<<<<<< HEAD
 import com.hits.user.Models.Entity.RefreshToken;
 import com.hits.user.Models.Entity.User;
+=======
+import com.hits.user.Models.Entities.RefreshToken;
+import com.hits.user.Models.Entities.User;
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Repositories.RefreshRepository;
 import com.hits.user.Repositories.UserRepository;
 import jakarta.transaction.Transactional;

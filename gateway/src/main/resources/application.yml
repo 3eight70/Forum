@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: GATEWAY
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: file-service
+          uri: lb://FILE-SERVICE
+          predicates:
+            - Path=/api/file/**
+          filters:
+            - AuthenticationFilter
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/account/**
+
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF

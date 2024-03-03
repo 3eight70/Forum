@@ -29,12 +29,4 @@ public class MinIOConfig {
                 .credentialsProvider(() -> AwsBasicCredentials.create(accessKey, secretKey))
                 .build();
     }
-
-    @Bean
-    public MinioClient minioClient(){
-        return MinioClient.builder()
-                .endpoint(endpoint)
-                .credentials(accessKey, secretKey)
-                .build();
-    }
 }

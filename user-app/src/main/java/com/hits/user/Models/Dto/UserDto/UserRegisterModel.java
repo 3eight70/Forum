@@ -13,6 +13,10 @@ public class UserRegisterModel {
     @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+", message = "Неверный адрес электронной почты")
     private String email;
 
+    @Size(min = 1, message = "Минимальная длина не менее 1 символа")
+    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
+    private String login;
+
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")
     private String password;
 }

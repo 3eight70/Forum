@@ -1,9 +1,15 @@
 package com.hits.user.Utils;
 
+<<<<<<< HEAD
 import com.hits.user.Models.Entity.User;
+=======
+
+import com.hits.user.Models.Entities.User;
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +24,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtils {
-    private final UserRepository userRepository;
     private final RedisRepository redisRepository;
 
     @Value("${jwt.secret}")
@@ -49,11 +54,6 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public User getUserFromToken(String token) {
-        var userId = getAllClaimsFromToken(token).get("userId", String.class);
-        return userRepository.findById(UUID.fromString(userId)).orElseThrow();
-    }
-
     public String getUserEmail(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
@@ -67,6 +67,10 @@ public class JwtTokenUtils {
                 .setSigningKey(secret.getBytes())
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public Boolean validateToken(String token){
+        return redisRepository.checkToken(getIdFromToken(token));
     }
 
     public String getIdFromToken(String token) {

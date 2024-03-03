@@ -30,6 +30,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+<<<<<<< HEAD
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
         </dependency>
@@ -38,6 +39,8 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
+=======
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
@@ -45,6 +48,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+<<<<<<< HEAD
+=======
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
     </dependencies>
 
     <build>

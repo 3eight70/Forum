@@ -1,0 +1,4 @@
+minio:
+  accessKey: minioadmin
+  secretKey: minioadmin
+  endpoint: http://localhost:9000

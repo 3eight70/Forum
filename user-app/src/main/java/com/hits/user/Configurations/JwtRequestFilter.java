@@ -1,7 +1,13 @@
 package com.hits.user.Configurations;
 
+<<<<<<< HEAD
 import com.hits.user.Models.Entity.User;
 import com.hits.user.Repositories.RedisRepository;
+=======
+import com.hits.user.Models.Entities.User;
+import com.hits.user.Repositories.RedisRepository;
+import com.hits.user.Repositories.UserRepository;
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Services.IUserService;
 import com.hits.user.Utils.JwtTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,7 +30,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final RedisRepository redisRepository;
-    private final IUserService userService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -50,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 email = jwtTokenUtils.getUserEmail(jwt);
             }
 
-            User user = userService.loadUserByUsername(email);
+            User user = userRepository.findByEmail(email);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && user != null) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
@@ -61,13 +67,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
-        catch (UsernameNotFoundException e){
-
-        }
-        catch (ExpiredJwtException e){
-
-        }
-        catch (SignatureException e){
+        catch (UsernameNotFoundException | ExpiredJwtException | SignatureException e){
 
         }
         if (request.getMethod().equals("OPTIONS")) {

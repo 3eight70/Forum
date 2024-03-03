@@ -1,12 +1,22 @@
 package com.hits.user.Services;
 
 import com.hits.user.Mappers.UserMapper;
+<<<<<<< HEAD
 import com.hits.user.Models.Dto.Response.Response;
 import com.hits.user.Models.Dto.Response.TokenResponse;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entity.RefreshToken;
 import com.hits.user.Models.Entity.User;
+=======
+import com.hits.common.Models.Response.Response;
+import com.hits.common.Models.Response.TokenResponse;
+import com.hits.user.Models.Dto.UserDto.LoginCredentials;
+import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
+import com.hits.user.Models.Entities.RefreshToken;
+import com.hits.user.Models.Entities.User;
+import com.hits.user.Repositories.RedisRepository;
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
 import jakarta.transaction.Transactional;
@@ -23,6 +33,7 @@ public class UserService implements UserDetailsService, IUserService {
     private final UserRepository userRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final IRefreshTokenService refreshTokenService;
+    private final RedisRepository redisRepository;
 
     @Transactional
     @Override
@@ -40,6 +51,7 @@ public class UserService implements UserDetailsService, IUserService {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                     "Пользователь с указанной почтой уже существует"), HttpStatus.BAD_REQUEST);
         }
+
 
         user = UserMapper.userRegisterModelToUser(userRegisterModel);
         userRepository.save(user);
@@ -59,5 +71,22 @@ public class UserService implements UserDetailsService, IUserService {
         jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
 
         return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));
+    }
+
+    public Boolean validateToken(String token){
+        return jwtTokenUtils.validateToken(token);
+    }
+
+    public ResponseEntity<?> logoutUser(String token){
+        String tokenId = "";
+
+        if (token != null) {
+            token = token.substring(7);
+            tokenId = jwtTokenUtils.getIdFromToken(token);
+        }
+        redisRepository.delete(tokenId);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Пользователь успешно вышел из аккаунт"), HttpStatus.OK);
     }
 }
