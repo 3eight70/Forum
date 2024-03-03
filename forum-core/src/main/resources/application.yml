@@ -1,0 +1,20 @@
+server:
+  port: 8082
+
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF
+  expiration: 1h
+
+refresh:
+  expiration: 1d
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/filesystem
+    username: postgres
+    password: gbhfns
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
