@@ -1,8 +1,8 @@
 package com.hits.user.Services;
 
-import com.hits.user.Mappers.UserMapper;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
+import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;

@@ -2,7 +2,6 @@ package com.hits.user.Services;
 
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Models.Entities.User;
 import org.springframework.http.ResponseEntity;

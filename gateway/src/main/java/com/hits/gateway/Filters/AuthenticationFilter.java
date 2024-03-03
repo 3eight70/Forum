@@ -44,14 +44,19 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 try{
-                    template.getForObject("http://USER-SERVICE" + VALIDATE_TOKEN + "?token=" + authHeader, String.class);
+                    if (!jwtUtils.isTokenExpired(authHeader)) {
+                        template.getForObject("http://USER-SERVICE" + VALIDATE_TOKEN + "?token=" + authHeader, String.class);
 
-                    request = exchange.getRequest()
-                            .mutate()
-                            .header("Authorization", authHeader).build();
+                        request = exchange.getRequest()
+                                .mutate()
+                                .header("Authorization", authHeader).build();
+                    }
+                    else{
+                        throw new RuntimeException("Токен просрочен");
+                    }
                 }
                 catch (Exception e){
-                    throw new RuntimeException("Попытка получить доступ к приложение, неавторизованным пользователем");
+                    throw new RuntimeException("Попытка получить доступ к приложению, неавторизованным пользователем");
                 }
             }
 

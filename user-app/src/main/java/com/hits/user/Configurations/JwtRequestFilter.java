@@ -3,7 +3,6 @@ package com.hits.user.Configurations;
 import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
-import com.hits.user.Services.IUserService;
 import com.hits.user.Utils.JwtTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;

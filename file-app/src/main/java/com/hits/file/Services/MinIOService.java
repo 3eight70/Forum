@@ -24,8 +24,8 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class MinIOService implements IMinIOService{
         File newFile;
 
         try {
-            String email = JwtUtils.getUserEmail(token, secret).replace("@", "");
+            String email = JwtUtils.getUserLogin(token, secret);
 
             if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(email))){
                 s3Client.createBucket(CreateBucketRequest.builder().bucket(email).build());

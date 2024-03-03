@@ -1,4 +1,4 @@
-package com.hits.Models.Entities;
+package com.hits.forum.Models.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

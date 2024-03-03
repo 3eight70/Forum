@@ -1,4 +1,4 @@
-package com.hits.Models.Entities;
+package com.hits.forum.Models.Entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -9,14 +9,15 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "categories")
-public class ForumCategory {
+@Table(name = "themes")
+public class ForumTheme {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -30,8 +31,12 @@ public class ForumCategory {
     private String authorLogin;
 
     @Column(nullable = false)
-    @Size(min = 5, message = "Минимальная длина названия категории равна 5")
-    private String categoryName;
+    @Size(min = 5, message = "Минимальная длина названия темы равна 5")
+    private String themeName;
 
-    private UUID parentId;
+    @Column(nullable = false)
+    private UUID categoryId;
+
+    @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL)
+    private List<ForumMessage> messages;
 }

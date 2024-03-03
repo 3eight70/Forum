@@ -2,13 +2,12 @@ package com.hits.common.Utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtils {
 
-    public static String getUserEmail(String token, String secret) {
+    public static String getUserLogin(String token, String secret) {
         return getAllClaimsFromToken(token, secret).getSubject();
     }
 

@@ -1,12 +1,8 @@
 package com.hits.user.Controllers;
 
 import com.hits.common.Models.Response.Response;
-import com.hits.common.Models.Response.TokenResponse;
 import com.hits.user.Models.Dto.Token.RefreshRequestDto;
-import com.hits.user.Models.Entities.RefreshToken;
-import com.hits.user.Repositories.RefreshRepository;
 import com.hits.user.Services.IRefreshTokenService;
-import com.hits.user.Utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

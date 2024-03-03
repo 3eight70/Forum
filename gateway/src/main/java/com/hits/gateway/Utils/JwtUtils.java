@@ -5,14 +5,13 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class JwtUtils {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String getUserEmail(String token) {
-        return getAllClaimsFromToken(token).getSubject();
-    }
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
@@ -21,7 +20,13 @@ public class JwtUtils {
                 .getBody();
     }
 
-    public String getIdFromToken(String token) {
-        return getAllClaimsFromToken(token).getId();
+    public boolean isTokenExpired(String token) {
+        try {
+            Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            Date expiration = claims.getExpiration();
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            return true;
+        }
     }
 }
