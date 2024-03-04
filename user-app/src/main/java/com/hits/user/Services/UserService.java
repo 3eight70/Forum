@@ -1,22 +1,13 @@
 package com.hits.user.Services;
 
-import com.hits.user.Mappers.UserMapper;
-<<<<<<< HEAD
-import com.hits.user.Models.Dto.Response.Response;
-import com.hits.user.Models.Dto.Response.TokenResponse;
-import com.hits.user.Models.Dto.UserDto.LoginCredentials;
-import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.user.Models.Entity.RefreshToken;
-import com.hits.user.Models.Entity.User;
-=======
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
+import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
->>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
 import jakarta.transaction.Transactional;
@@ -57,7 +48,7 @@ public class UserService implements UserDetailsService, IUserService {
         userRepository.save(user);
 
         String token = jwtTokenUtils.generateToken(user);
-        jwtTokenUtils.saveToken(token, "Valid");
+        jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));

@@ -42,6 +42,9 @@ public class MinIOController {
 =======
     @PostMapping(UPLOAD_FILE)
     public ResponseEntity<?> uploadFile(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("file") MultipartFile file){
+        System.out.println(file);
+        MultipartFile fl = file;
+
         try{
             return minIOService.uploadFile(token.substring(7), file);
 >>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d

@@ -1,19 +1,12 @@
 package com.hits.user.Controllers;
 
-<<<<<<< HEAD
-import com.hits.user.Models.Dto.Response.Response;
-import com.hits.user.Models.Dto.UserDto.LoginCredentials;
-import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
-import com.hits.user.Models.Entity.RefreshToken;
-=======
 import com.hits.common.Models.Response.Response;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
->>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
+import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Services.IUserService;
 import jakarta.validation.Valid;
-import com.hits.user.Models.Entities.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +28,6 @@ public class UserController {
     private final IRefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
 
-<<<<<<< HEAD
-    public static final String REGISTER_USER = "/api/account/register";
-    public static final String LOGIN_USER = "/api/account/login";
-
-=======
->>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
     @PostMapping(REGISTER_USER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel){
         userRegisterModel.setPassword(passwordEncoder.encode(userRegisterModel.getPassword()));

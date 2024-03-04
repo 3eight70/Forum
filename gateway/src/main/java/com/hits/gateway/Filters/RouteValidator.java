@@ -10,11 +10,12 @@ import static com.hits.common.Consts.*;
 
 @Component
 public class RouteValidator {
-    public static final List<String> apiEndpoints = List.of(DOWNLOAD_FILE,
-            GET_FILES,
-            UPLOAD_FILE,
-            EUREKA,
-            LOGOUT_USER);
+    public static final List<String> apiEndpoints = List.of(
+            LOGIN_USER,
+            REGISTER_USER,
+            REFRESH_TOKEN,
+            GET_THEMES,
+            EUREKA);
 
     public Predicate<ServerHttpRequest> isSecured =
             request -> apiEndpoints

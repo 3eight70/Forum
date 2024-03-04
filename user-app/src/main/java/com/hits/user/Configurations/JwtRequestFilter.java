@@ -1,14 +1,8 @@
 package com.hits.user.Configurations;
 
-<<<<<<< HEAD
-import com.hits.user.Models.Entity.User;
-import com.hits.user.Repositories.RedisRepository;
-=======
 import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
->>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
-import com.hits.user.Services.IUserService;
 import com.hits.user.Utils.JwtTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;

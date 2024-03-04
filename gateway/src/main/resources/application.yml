@@ -18,5 +18,10 @@ spring:
           predicates:
             - Path=/api/account/**
 
+        - id: forum-service
+          uri: lb://FORUM-SERVICE
+          predicates:
+            - Path=/api/forum/**
+
 jwt:
   secret: AbdaasdasdasdasfasgasASFASF

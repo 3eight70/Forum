@@ -1,5 +1,7 @@
 package com.hits.user.Services;
 
+import com.hits.common.Models.Response.TokenResponse;
+import com.hits.user.Models.Dto.Token.RefreshRequestDto;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 <<<<<<< HEAD
 import com.hits.user.Models.Entity.RefreshToken;
@@ -10,10 +12,12 @@ import com.hits.user.Models.Entities.User;
 >>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Repositories.RefreshRepository;
 import com.hits.user.Repositories.UserRepository;
+import com.hits.user.Utils.JwtTokenUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -26,6 +30,7 @@ import java.util.UUID;
 public class RefreshTokenService implements IRefreshTokenService{
     private final RefreshRepository refreshRepository;
     private final UserRepository userRepository;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @Value("${refresh.expiration}")
     private Duration lifetime;
@@ -62,5 +67,19 @@ public class RefreshTokenService implements IRefreshTokenService{
         refreshRepository.flush();
 
         return createRefreshToken(user.getEmail());
+    }
+
+    @Transactional
+    public ResponseEntity<?> refreshJwtToken(RefreshRequestDto refreshRequestDto){
+        return refreshRepository.findByToken(refreshRequestDto.getToken())
+                .map(this::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String accessToken = jwtTokenUtils.generateToken(user);
+                    jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(accessToken), "Valid");
+
+                    return ResponseEntity.ok(new TokenResponse(accessToken, refreshRequestDto.getToken()));
+                })
+                .orElseThrow(() -> new RuntimeException("Данного токена нет в базе данных"));
     }
 }

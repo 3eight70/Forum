@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleMultipartException(MultipartException e) {
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                "Файл не был прикреплен"), HttpStatus.BAD_REQUEST);
+                e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 >>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 }

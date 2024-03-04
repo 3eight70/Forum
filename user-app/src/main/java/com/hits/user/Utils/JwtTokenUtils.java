@@ -7,9 +7,7 @@ import com.hits.user.Models.Entity.User;
 import com.hits.user.Models.Entities.User;
 >>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
 import com.hits.user.Repositories.RedisRepository;
-import com.hits.user.Repositories.UserRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +43,7 @@ public class JwtTokenUtils {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getEmail())
+                .setSubject(user.getLogin())
                 .claim("userId", user.getId().toString())
                 .setId(tokenId.toString())
                 .setIssuedAt(issuedDate)

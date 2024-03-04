@@ -4,7 +4,10 @@ package com.hits.file.Models.Entity;
 package com.hits.file.Models.Entities;
 >>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d:file-app/src/main/java/com/hits/file/Models/Entities/File.java
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
