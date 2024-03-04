@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class MessageRequest {
     @Size(min = 1, message = "Минимальная длина сообщения равна 1")
+    @NotNull(message = "Сообщение должно содержать не менее 1 символа")
     private String content;
 
     @NotNull(message = "id темы должен быть указан")

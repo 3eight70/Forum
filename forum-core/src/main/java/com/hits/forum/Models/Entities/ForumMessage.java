@@ -35,4 +35,7 @@ public class ForumMessage {
 
     @Column(nullable = false)
     private UUID themeId;
+
+    @Column(nullable = false)
+    private UUID categoryId;
 }

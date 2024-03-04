@@ -3,11 +3,17 @@ package com.hits.forum.Services;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Utils.JwtUtils;
 import com.hits.forum.Mappers.ForumMapper;
+import com.hits.forum.Models.Dto.Category.CategoryDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
+import com.hits.forum.Models.Dto.Category.CategoryWithSubstring;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
+import com.hits.forum.Models.Dto.Message.MessageDto;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
+import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
+import com.hits.forum.Models.Dto.Responses.MessageResponse;
 import com.hits.forum.Models.Dto.Responses.PageResponse;
 import com.hits.forum.Models.Dto.Responses.ThemeResponse;
+import com.hits.forum.Models.Dto.Theme.ThemeDto;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;
@@ -19,10 +25,7 @@ import com.hits.forum.Repositories.ThemeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,16 +54,18 @@ public class ForumService implements IForumService {
                     "Категория с данным названием уже существует"), HttpStatus.BAD_REQUEST);
         }
 
-        if (createCategoryRequest.getParentId() != null) {
-            forumCategory = categoryRepository.findForumCategoryById(createCategoryRequest.getParentId());
+        forumCategory = ForumMapper.categoryRequestToForumCategory(JwtUtils.getUserLogin(token, secret), createCategoryRequest);
 
-            if (forumCategory == null) {
+        if (createCategoryRequest.getParentId() != null) {
+            ForumCategory parent = categoryRepository.findForumCategoryById(createCategoryRequest.getParentId());
+
+            if (parent == null) {
                 return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                         "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
             }
+            parent.getChildCategories().add(forumCategory);
+            categoryRepository.saveAndFlush(parent);
         }
-
-        forumCategory = ForumMapper.categoryRequestToForumCategory(JwtUtils.getUserLogin(token, secret), createCategoryRequest);
 
         categoryRepository.saveAndFlush(forumCategory);
 
@@ -100,7 +105,7 @@ public class ForumService implements IForumService {
                     "Тема-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
         }
 
-        ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(JwtUtils.getUserLogin(token, secret), createMessageRequest);
+        ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(JwtUtils.getUserLogin(token, secret), createMessageRequest, forumTheme.getCategoryId());
 
         messageRepository.saveAndFlush(forumMessage);
 
@@ -140,6 +145,9 @@ public class ForumService implements IForumService {
                     return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                             "Категории не могут одновременно быть родителями друг друга"), HttpStatus.BAD_REQUEST);
                 }
+
+                parent.getChildCategories().add(forumCategory);
+                categoryRepository.saveAndFlush(parent);
             }
         }
 
@@ -276,15 +284,16 @@ public class ForumService implements IForumService {
     }
 
     public ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder){
-        Pageable pageable = PageRequest.of(page, size);
+        Sort sort = Sort.by(getComparator(sortOrder));
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<ForumTheme> themesPage = themeRepository.findAll(pageable);
 
-        List<ThemeRequest> themeRequests = themesPage.getContent().stream()
-                .map(ForumMapper::forumThemeToThemeRequest)
+        List<ThemeDto> themeRequests = themesPage.getContent().stream()
+                .map(ForumMapper::forumThemeToThemeDto)
                 .collect(Collectors.toList());
 
-        Page<ThemeRequest> themeRequestsPage = new PageImpl<>(themeRequests, pageable, themesPage.getTotalElements());
+        Page<ThemeDto> themeRequestsPage = new PageImpl<>(themeRequests, pageable, themesPage.getTotalElements());
         Long totalThemes = themeRepository.count();
 
         Integer totalPages = (int) Math.ceil((double) totalThemes/ size);
@@ -300,17 +309,104 @@ public class ForumService implements IForumService {
         ));
     }
 
+    public ResponseEntity<?> getCategories(SortOrder sortOrder){
+        Sort sort = Sort.by(getComparator(sortOrder));
+        List<CategoryDto> categories = categoryRepository.findAllByParentIdIsNull(sort)
+                .stream()
+                .map(ForumMapper::forumCategoryToCategoryDto)
+                .collect(Collectors.toList());
 
+        return ResponseEntity.ok(categories);
+    }
 
-    private Comparator getComparator(SortOrder sortOrder) {
-        switch (sortOrder) {
-            case CreateDesc:
-                return Comparator.comparing(ForumTheme::getCreateTime).reversed();
-            case CreateAsc:
-                return Comparator.comparing(ForumTheme::getCreateTime);
-            default:
-                return Comparator.comparing(ForumTheme::getCreateTime);
+    public ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder){
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+
+        if (forumTheme == null) {
+            return notFoundResponse("Темы с данным id не существует");
         }
+
+        Sort sort = Sort.by(getComparator(sortOrder));
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        List<MessageDto> messageDtos = messageRepository.findAllByThemeId(themeId, pageable)
+                .stream()
+                .map(ForumMapper::forumMessageToMessageDto)
+                .collect(Collectors.toList());
+
+        Page<MessageDto> messageDtoPage = new PageImpl<>(messageDtos, pageable, messageDtos.size());
+
+        Long totalThemes = messageRepository.countAllByThemeId(themeId);
+
+        Integer totalPages = (int) Math.ceil((double) totalThemes/ size);
+
+        return ResponseEntity.ok(new MessageResponse(
+                messageDtoPage.getContent(),
+                new PageResponse(
+                        totalPages,
+                        page,
+                        messageDtoPage.getSize(),
+                        totalThemes
+                )
+        ));
+    }
+
+    public ResponseEntity<?> getMessagesWithFilters(String content,
+                                                    LocalDateTime timeFrom,
+                                                    LocalDateTime timeTo,
+                                                    String authorLogin,
+                                                    UUID themeId,
+                                                    UUID categoryId){
+
+
+        List<MessageWithFiltersDto> messages = messageRepository.findAll()
+                .stream()
+                .filter(m -> content == null || m.getContent().contains(content))
+                .filter(m -> timeFrom == null || m.getCreateTime().isAfter(timeFrom))
+                .filter(m -> timeTo == null || m.getCreateTime().isBefore(timeTo))
+                .filter(m -> authorLogin == null || m.getAuthorLogin().contains(authorLogin))
+                .filter(m -> themeId == null || m.getThemeId().equals(themeId))
+                .filter(m -> categoryId == null || m.getCategoryId().equals(categoryId))
+                .map(ForumMapper::forumMessageToMessageWithFiltersDto)
+                .toList();
+
+        return ResponseEntity.ok(messages);
+    }
+
+    public ResponseEntity<?> getCategoriesWithSubstring(String substring){
+        List<CategoryWithSubstring> forumCategories = categoryRepository.findAllByCategoryNameContainingIgnoreCase(substring)
+                .stream()
+                .map(ForumMapper::forumCategoryToCategoryWithSubstring)
+                .toList();
+
+        return ResponseEntity.ok(forumCategories);
+    }
+
+    public ResponseEntity<?> getThemesWithSubstring(String substring){
+        List<ThemeDto> forumThemes = themeRepository.findAllByThemeNameContainingIgnoreCase(substring)
+                .stream()
+                .map(ForumMapper::forumThemeToThemeDto)
+                .toList();
+
+        return ResponseEntity.ok(forumThemes);
+    }
+
+    public ResponseEntity<?> getMessagesWithSubstring(String substring){
+        List<MessageWithFiltersDto> forumMessages = messageRepository.findAllByContentContainingIgnoreCase(substring)
+                .stream()
+                .map(ForumMapper::forumMessageToMessageWithFiltersDto)
+                .toList();
+
+        return ResponseEntity.ok(forumMessages);
+    }
+
+    private Sort.Order getComparator(SortOrder sortOrder) {
+        return switch (sortOrder) {
+            case CreateDesc -> Sort.Order.desc("createTime");
+            case CreateAsc -> Sort.Order.asc("createTime");
+            case NameAsc -> Sort.Order.asc("categoryName");
+            case NameDesc -> Sort.Order.desc("categoryName");
+        };
     }
 
     private ResponseEntity<?> notFoundResponse(String message) {

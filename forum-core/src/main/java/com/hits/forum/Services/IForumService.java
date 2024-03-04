@@ -7,6 +7,7 @@ import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IForumService {
@@ -20,4 +21,16 @@ public interface IForumService {
     ResponseEntity<?> deleteTheme(String token, UUID themeId);
     ResponseEntity<?> deleteMessage(String token, UUID messageId);
     ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder);
+    ResponseEntity<?> getCategories(SortOrder sortOrder);
+    ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder);
+    ResponseEntity<?> getMessagesWithFilters(
+            String content,
+            LocalDateTime timeFrom,
+            LocalDateTime timeTo,
+            String authorLogin,
+            UUID themeId,
+            UUID categoryId);
+    ResponseEntity<?> getCategoriesWithSubstring(String substring);
+    ResponseEntity<?> getThemesWithSubstring(String substring);
+    ResponseEntity<?> getMessagesWithSubstring(String substring);
 }

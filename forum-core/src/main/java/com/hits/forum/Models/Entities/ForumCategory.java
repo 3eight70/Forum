@@ -38,4 +38,7 @@ public class ForumCategory {
 
     @OneToMany(mappedBy = "categoryId", cascade = CascadeType.ALL)
     private List<ForumTheme> themes;
+
+    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL)
+    private List<ForumCategory> childCategories;
 }

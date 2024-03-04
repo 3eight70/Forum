@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.hits.common.Consts.*;
@@ -153,9 +154,80 @@ public class ForumController {
     public ResponseEntity<?> getThemes(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
-            @RequestParam(name = "sortOrder", required = false, defaultValue = "CreateAsc") SortOrder sortOrder){
+            @RequestParam(name = "sortOrder", required = false, defaultValue = "CreateDesc") SortOrder sortOrder){
         try {
             return forumService.getAllThemes(page, size, sortOrder);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_CATEGORIES)
+    public ResponseEntity<?> getCategories(@RequestParam(name = "sortOrder", required = false, defaultValue = "NameAsc") SortOrder sortOrder){
+        try{
+            return forumService.getCategories(sortOrder);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_MESSAGES)
+    public ResponseEntity<?> getMessages(
+            @PathVariable("themeId") UUID themeId,
+            @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5") Integer size,
+            @RequestParam(name = "sortOrder", required = false, defaultValue = "CreateDesc") SortOrder sortOrder){
+        try {
+            return forumService.getMessages(themeId, page, size, sortOrder);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_MESSAGES_WITH_FILTERS)
+    public ResponseEntity<?> getMessagesWithFilters(
+            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "timeFrom", required = false) LocalDateTime timeFrom,
+            @RequestParam(value = "timeTo", required = false) LocalDateTime timeTo,
+            @RequestParam(value = "authorLogin", required = false) String authorLogin,
+            @RequestParam(value = "themeId", required = false) UUID themeId,
+            @RequestParam(value = "categoryId", required = false) UUID categoryId
+            ){
+        try {
+            return forumService.getMessagesWithFilters(content, timeFrom, timeTo, authorLogin, themeId, categoryId);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_CATEGORIES_WITH_SUBSTRING)
+    public ResponseEntity<?> getCategoriesWithSubstring(@RequestParam(value = "name") String name){
+        try {
+            return forumService.getCategoriesWithSubstring(name);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_THEMES_WITH_SUBSTRING)
+    public ResponseEntity<?> getThemesWithSubstring(@RequestParam(value = "name") String name){
+        try {
+            return forumService.getThemesWithSubstring(name);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_MESSAGES_WITH_SUBSTRING)
+    public ResponseEntity<?> getMessagesWithSubstring(@RequestParam(value = "content") String content){
+        try {
+            return forumService.getMessagesWithSubstring(content);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,15 +1,16 @@
 package com.hits.forum.Models.Dto.Responses;
 
-import com.hits.forum.Models.Dto.Theme.ThemeDto;
+import com.hits.forum.Models.Dto.Message.MessageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ThemeResponse {
-    private List<ThemeDto> themes;
+@NoArgsConstructor
+public class MessageResponse {
+    private List<MessageDto> messages;
     private PageResponse page;
 }
