@@ -1,0 +1,49 @@
+server:
+<<<<<<< HEAD
+  port: 8011
+=======
+  port: 8082
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
+
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF
+  expiration: 1h
+
+refresh:
+  expiration: 1d
+
+spring:
+<<<<<<< HEAD
+  datasource:
+    url: jdbc:postgresql://localhost:5432/FileSystem
+=======
+  application:
+    name: FILE-SERVICE
+  datasource:
+    url: jdbc:postgresql://localhost:5432/filesystem
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
+    username: postgres
+    password: gbhfns
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+<<<<<<< HEAD
+      ddl-auto: update
+=======
+      ddl-auto: create
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
+    show-sql: true
+
+minio:
+  accessKey: minioadmin
+  secretKey: minioadmin
+<<<<<<< HEAD
+  endpoint: http://localhost:9000
+=======
+  endpoint: http://minio:9000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+>>>>>>> 652e6b5cc00632fb43cd0fa859c1d48e64471d8d
