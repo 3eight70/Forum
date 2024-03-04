@@ -1,0 +1,36 @@
+server:
+  port: 8082
+
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF
+  expiration: 1h
+
+refresh:
+  expiration: 1d
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  application:
+    name: FILE-SERVICE
+  datasource:
+    url: jdbc:postgresql://localhost:5432/filesystem
+    username: postgres
+    password: gbhfns
+    driverClassName: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+
+minio:
+  accessKey: minioadmin
+  secretKey: minioadmin
+  endpoint: http://minio:9000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
