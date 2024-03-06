@@ -48,7 +48,7 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public String getUserEmail(String token) {
+    public String getUserLogin(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 

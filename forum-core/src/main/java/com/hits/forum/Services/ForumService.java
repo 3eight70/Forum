@@ -1,7 +1,6 @@
 package com.hits.forum.Services;
 
 import com.hits.common.Models.Response.Response;
-import com.hits.common.Utils.JwtUtils;
 import com.hits.forum.Mappers.ForumMapper;
 import com.hits.forum.Models.Dto.Category.CategoryDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
@@ -22,6 +21,7 @@ import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Repositories.CategoryRepository;
 import com.hits.forum.Repositories.MessageRepository;
 import com.hits.forum.Repositories.ThemeRepository;
+import com.hits.user.Models.Entities.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -46,7 +48,7 @@ public class ForumService implements IForumService {
     private String secret;
 
     @Transactional
-    public ResponseEntity<?> createCategory(String token, CategoryRequest createCategoryRequest) {
+    public ResponseEntity<?> createCategory(User user, CategoryRequest createCategoryRequest) {
         ForumCategory forumCategory = categoryRepository.findByCategoryName(createCategoryRequest.getCategoryName());
 
         if (forumCategory != null) {
@@ -54,7 +56,7 @@ public class ForumService implements IForumService {
                     "Категория с данным названием уже существует"), HttpStatus.BAD_REQUEST);
         }
 
-        forumCategory = ForumMapper.categoryRequestToForumCategory(JwtUtils.getUserLogin(token, secret), createCategoryRequest);
+        forumCategory = ForumMapper.categoryRequestToForumCategory(user.getLogin(), createCategoryRequest);
 
         if (createCategoryRequest.getParentId() != null) {
             ForumCategory parent = categoryRepository.findForumCategoryById(createCategoryRequest.getParentId());
@@ -74,7 +76,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createTheme(String token, ThemeRequest createThemeRequest) {
+    public ResponseEntity<?> createTheme(User user, ThemeRequest createThemeRequest) {
         ForumTheme forumTheme = themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId());
 
         if (forumTheme != null) {
@@ -88,7 +90,7 @@ public class ForumService implements IForumService {
                     "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
         }
 
-        forumTheme = ForumMapper.themeRequestToForumTheme(JwtUtils.getUserLogin(token, secret), createThemeRequest);
+        forumTheme = ForumMapper.themeRequestToForumTheme(user.getLogin(), createThemeRequest);
 
         themeRepository.saveAndFlush(forumTheme);
 
@@ -97,7 +99,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createMessage(String token, MessageRequest createMessageRequest) {
+    public ResponseEntity<?> createMessage(User user, MessageRequest createMessageRequest) {
         ForumTheme forumTheme = themeRepository.findForumThemeById(createMessageRequest.getThemeId());
 
         if (forumTheme == null) {
@@ -105,7 +107,7 @@ public class ForumService implements IForumService {
                     "Тема-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
         }
 
-        ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(JwtUtils.getUserLogin(token, secret), createMessageRequest, forumTheme.getCategoryId());
+        ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(user.getLogin(), createMessageRequest, forumTheme.getCategoryId());
 
         messageRepository.saveAndFlush(forumMessage);
 
@@ -114,7 +116,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editCategory(String token, UUID categoryId, CategoryRequest createCategoryRequest) {
+    public ResponseEntity<?> editCategory(User user, UUID categoryId, CategoryRequest createCategoryRequest) {
         UUID parentId = createCategoryRequest.getParentId();
 
         if (parentId != null && parentId.equals(categoryId)) {
@@ -128,7 +130,7 @@ public class ForumService implements IForumService {
             return notFoundResponse("Категории с данным id не существует");
         }
 
-        if (!Objects.equals(JwtUtils.getUserLogin(token, secret), forumCategory.getAuthorLogin())) {
+        if (!Objects.equals(user.getLogin(), forumCategory.getAuthorLogin())) {
             return forbiddenResponse();
         }
 
@@ -169,14 +171,14 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editTheme(String token, UUID themeId, ThemeRequest createThemeRequest) {
+    public ResponseEntity<?> editTheme(User user, UUID themeId, ThemeRequest createThemeRequest) {
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
             return notFoundResponse("Темы с данным id не существует");
         }
 
-        if (!Objects.equals(JwtUtils.getUserLogin(token, secret), forumTheme.getAuthorLogin())) {
+        if (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin())) {
             return forbiddenResponse();
         }
 
@@ -206,14 +208,14 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editMessage(String token, UUID messageId, EditMessageRequest editMessageRequest) {
+    public ResponseEntity<?> editMessage(User user, UUID messageId, EditMessageRequest editMessageRequest) {
         ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
 
         if (forumMessage == null) {
             return notFoundResponse("Сообщения с данным id не существует");
         }
 
-        if (!Objects.equals(JwtUtils.getUserLogin(token, secret), forumMessage.getAuthorLogin())) {
+        if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
             return forbiddenResponse();
         }
 
@@ -228,14 +230,14 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteCategory(String token, UUID categoryId) {
+    public ResponseEntity<?> deleteCategory(User user, UUID categoryId) {
         ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
         if (forumCategory == null) {
             return notFoundResponse("Категории с данным id не существует");
         }
 
-        if (!Objects.equals(JwtUtils.getUserLogin(token, secret), forumCategory.getAuthorLogin())) {
+        if (!Objects.equals(user.getLogin(), forumCategory.getAuthorLogin())) {
             return forbiddenResponse();
         }
 
@@ -246,14 +248,14 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteTheme(String token, UUID themeId) {
+    public ResponseEntity<?> deleteTheme(User user, UUID themeId) {
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
             return notFoundResponse("Темы с данным id не существует");
         }
 
-        if (!Objects.equals(JwtUtils.getUserLogin(token, secret), forumTheme.getAuthorLogin())) {
+        if (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin())) {
             return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
                     "Изменение чужих данных запрещено"), HttpStatus.FORBIDDEN);
         }
@@ -265,14 +267,14 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteMessage(String token, UUID messageId) {
+    public ResponseEntity<?> deleteMessage(User user, UUID messageId) {
         ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
 
         if (forumMessage == null) {
             return notFoundResponse("Сообщения с данным id не существует");
         }
 
-        if (!Objects.equals(JwtUtils.getUserLogin(token, secret), forumMessage.getAuthorLogin())) {
+        if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
             return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
                     "Изменение чужих данных запрещено"), HttpStatus.FORBIDDEN);
         }

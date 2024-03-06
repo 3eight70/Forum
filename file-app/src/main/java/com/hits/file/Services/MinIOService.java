@@ -1,11 +1,11 @@
 package com.hits.file.Services;
 
-import com.hits.common.Utils.JwtUtils;
 import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Dto.Response.Response;
 import com.hits.file.Models.Entities.File;
 import com.hits.file.Repositories.FileRepository;
+import com.hits.user.Models.Entities.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -33,33 +33,30 @@ public class MinIOService implements IMinIOService{
     private final S3Client s3Client;
     private final FileRepository fileRepository;
 
-    @Value("${jwt.secret}")
-    private String secret;
-
-    public ResponseEntity<?> uploadFile(String token, MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadFile(User user, MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         File newFile;
 
         try {
-            String email = JwtUtils.getUserLogin(token, secret);
-
-            if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(email))){
-                s3Client.createBucket(CreateBucketRequest.builder().bucket(email).build());
+            String login = user.getLogin().toLowerCase(); //Будет некорректно работать, если юзеры имеют одинаковые логины
+                                                          //с отличием в заглавных буквах
+            if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(login))){
+                s3Client.createBucket(CreateBucketRequest.builder().bucket(login).build());
             }
 
-            if(s3Client.listObjects(ListObjectsRequest.builder().bucket(email).build()).contents().stream()
+            if(s3Client.listObjects(ListObjectsRequest.builder().bucket(login).build()).contents().stream()
                     .anyMatch(object -> object.key().equals(filename))){
                 return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                         "Вы уже загрузили файл с таким же названием"), HttpStatus.BAD_REQUEST);
             }
 
             PutObjectRequest obj = PutObjectRequest.builder()
-                    .bucket(email)
+                    .bucket(login)
                     .key(filename)
                     .build();
             s3Client.putObject(obj, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            newFile = FileMapper.multipartFileToFile(file, JwtUtils.getUserIdFromToken(token, secret));
+            newFile = FileMapper.multipartFileToFile(file, user);
             fileRepository.save(newFile);
         }
         catch (S3Exception e) {
@@ -69,8 +66,8 @@ public class MinIOService implements IMinIOService{
         return ResponseEntity.ok(newFile.getId());
     }
 
-    public ResponseEntity<?> downloadFile(String token, UUID id){
-        File file = fileRepository.findFileByIdAndUserId(id, JwtUtils.getUserIdFromToken(token, secret));
+    public ResponseEntity<?> downloadFile(User user, UUID id){
+        File file = fileRepository.findFileByIdAndUserId(id, user.getId());
 
         if (file == null){
             return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
@@ -90,8 +87,8 @@ public class MinIOService implements IMinIOService{
                 .body(new InputStreamResource(inputStream));
     }
 
-    public ResponseEntity<?> getAllFiles(String token){
-        List<FileDto> files = fileRepository.findAllByUserId(JwtUtils.getUserIdFromToken(token, secret))
+    public ResponseEntity<?> getAllFiles(User user){
+        List<FileDto> files = fileRepository.findAllByUserId(user.getId())
                 .stream()
                 .map(FileMapper::fileToFileDto)
                 .toList();

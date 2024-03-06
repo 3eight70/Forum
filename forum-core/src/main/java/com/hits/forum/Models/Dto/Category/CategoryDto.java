@@ -1,14 +1,12 @@
 package com.hits.forum.Models.Dto.Category;
 
-import com.hits.forum.Models.Entities.ForumCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor

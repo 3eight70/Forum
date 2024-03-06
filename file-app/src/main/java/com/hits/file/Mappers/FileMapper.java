@@ -2,6 +2,7 @@ package com.hits.file.Mappers;
 
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Entities.File;
+import com.hits.user.Models.Entities.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -9,14 +10,14 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class FileMapper {
-    public static File multipartFileToFile(MultipartFile file, String userId) throws IOException {
+    public static File multipartFileToFile(MultipartFile file, User user) throws IOException {
         return new File(UUID.randomUUID(),
                 LocalDateTime.now(),
                 file.getOriginalFilename(),
                 file.getContentType(),
                 file.getSize(),
                 file.getBytes(),
-                userId
+                user
         );
     }
 

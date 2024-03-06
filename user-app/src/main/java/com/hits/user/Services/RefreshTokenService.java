@@ -30,12 +30,12 @@ public class RefreshTokenService implements IRefreshTokenService{
     @Value("${refresh.expiration}")
     private Duration lifetime;
 
-    @Transactional
+    @Transactional()
     public RefreshToken verifyExpiration(RefreshToken token){
         if (token.getExpiryTime().compareTo(Instant.now()) < 0){
-            refreshRepository.delete(token);
+            refreshRepository.deleteRefreshTokenById(token.getId());
 
-            throw new RuntimeException(token.getToken() + " действие RefreshToken'а истекло");
+            return null;
         }
 
         return token;

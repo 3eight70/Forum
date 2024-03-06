@@ -3,11 +3,12 @@ package com.hits.file.Controllers;
 
 import com.hits.file.Models.Dto.Response.Response;
 import com.hits.file.Services.IMinIOService;
+import com.hits.user.Models.Entities.User;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,12 +23,9 @@ public class MinIOController {
     private final IMinIOService minIOService;
 
     @PostMapping(UPLOAD_FILE)
-    public ResponseEntity<?> uploadFile(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("file") MultipartFile file){
-        System.out.println(file);
-        MultipartFile fl = file;
-
+    public ResponseEntity<?> uploadFile(@AuthenticationPrincipal User user, @RequestParam("file") MultipartFile file){
         try{
-            return minIOService.uploadFile(token.substring(7), file);
+            return minIOService.uploadFile(user, file);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -46,9 +44,9 @@ public class MinIOController {
     }
 
     @PostMapping(DOWNLOAD_FILE + "/{filename}")
-    public ResponseEntity<?> downloadFile(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable("filename") UUID fileId){
+    public ResponseEntity<?> downloadFile(@AuthenticationPrincipal User user, @PathVariable("filename") UUID fileId){
         try{
-            return minIOService.downloadFile(token.substring(7), fileId);
+            return minIOService.downloadFile(user, fileId);
         }
         catch (SignatureException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
@@ -56,14 +54,14 @@ public class MinIOController {
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "Ошибка при скачивании файла из MinIO"), HttpStatus.INTERNAL_SERVER_ERROR);
+                    "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping(GET_FILES)
-    public ResponseEntity<?> getFiles(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<?> getFiles(@AuthenticationPrincipal User user){
         try{
-           return minIOService.getAllFiles(token.substring(7));
+           return minIOService.getAllFiles(user);
         }
         catch (SignatureException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),

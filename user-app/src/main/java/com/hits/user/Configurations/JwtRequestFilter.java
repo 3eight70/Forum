@@ -29,7 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        String email = null;
+        String login = null;
         String jwt = null;
         boolean tokenInRedis = false;
 
@@ -47,12 +47,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 if (redisRepository.checkToken(jwtTokenUtils.getIdFromToken(jwt))) {
                     tokenInRedis = true;
                 }
-                email = jwtTokenUtils.getUserEmail(jwt);
+                login = jwtTokenUtils.getUserLogin(jwt);
             }
 
-            User user = userRepository.findByEmail(email);
+            User user = userRepository.findByLogin(login);
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && user != null) {
+            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && user != null) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         user,
                         null,

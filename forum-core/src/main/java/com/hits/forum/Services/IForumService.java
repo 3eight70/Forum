@@ -5,21 +5,22 @@ import com.hits.forum.Models.Dto.Message.EditMessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
+import com.hits.user.Models.Entities.User;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IForumService {
-    ResponseEntity<?> createCategory(String token, CategoryRequest createCategoryRequest);
-    ResponseEntity<?> createTheme(String token, ThemeRequest createThemeRequest);
-    ResponseEntity<?> createMessage(String token, MessageRequest createMessageRequest);
-    ResponseEntity<?> editCategory(String token, UUID categoryId, CategoryRequest createCategoryRequest);
-    ResponseEntity<?> editTheme(String token, UUID themeId, ThemeRequest createThemeRequest);
-    ResponseEntity<?> editMessage(String token, UUID messageId, EditMessageRequest editMessageRequest);
-    ResponseEntity<?> deleteCategory(String token, UUID categoryId);
-    ResponseEntity<?> deleteTheme(String token, UUID themeId);
-    ResponseEntity<?> deleteMessage(String token, UUID messageId);
+    ResponseEntity<?> createCategory(User user, CategoryRequest createCategoryRequest);
+    ResponseEntity<?> createTheme(User user, ThemeRequest createThemeRequest);
+    ResponseEntity<?> createMessage(User user, MessageRequest createMessageRequest);
+    ResponseEntity<?> editCategory(User user, UUID categoryId, CategoryRequest createCategoryRequest);
+    ResponseEntity<?> editTheme(User user, UUID themeId, ThemeRequest createThemeRequest);
+    ResponseEntity<?> editMessage(User user, UUID messageId, EditMessageRequest editMessageRequest);
+    ResponseEntity<?> deleteCategory(User user, UUID categoryId);
+    ResponseEntity<?> deleteTheme(User user, UUID themeId);
+    ResponseEntity<?> deleteMessage(User user, UUID messageId);
     ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder);
     ResponseEntity<?> getCategories(SortOrder sortOrder);
     ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder);

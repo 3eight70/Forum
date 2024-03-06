@@ -43,6 +43,12 @@ public class UserService implements UserDetailsService, IUserService {
                     "Пользователь с указанной почтой уже существует"), HttpStatus.BAD_REQUEST);
         }
 
+        user = userRepository.findByLogin(userRegisterModel.getLogin());
+
+        if (user != null){
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                    "Пользователь с указанным логином уже существует"), HttpStatus.BAD_REQUEST);
+        }
 
         user = UserMapper.userRegisterModelToUser(userRegisterModel);
         userRepository.save(user);

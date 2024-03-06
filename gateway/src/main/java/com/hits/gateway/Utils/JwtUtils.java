@@ -22,7 +22,7 @@ public class JwtUtils {
 
     public boolean isTokenExpired(String token) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
             Date expiration = claims.getExpiration();
             return expiration.before(new Date());
         } catch (Exception e) {

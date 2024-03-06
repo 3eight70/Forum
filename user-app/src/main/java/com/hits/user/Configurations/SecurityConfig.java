@@ -1,5 +1,6 @@
 package com.hits.user.Configurations;
 
+import com.hits.user.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,19 +12,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.hits.common.Consts.LOGOUT_USER;
+import static com.hits.common.Consts.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-    private final UserDetailsService userService;
+    private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
 
     @Bean
@@ -32,6 +32,11 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(LOGOUT_USER).authenticated()
+                        .requestMatchers(CREATE_CATEGORY, EDIT_CATEGORY, DELETE_CATEGORY).authenticated()
+                        .requestMatchers(CREATE_THEME, EDIT_THEME, DELETE_THEME).authenticated()
+                        .requestMatchers(SEND_MESSAGE, EDIT_MESSAGE, DELETE_MESSAGE).authenticated()
+                        .requestMatchers(GET_FILES, UPLOAD_FILE).authenticated()
+                        .requestMatchers(DOWNLOAD_FILE+"/*", DOWNLOAD_FILE + "*").authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

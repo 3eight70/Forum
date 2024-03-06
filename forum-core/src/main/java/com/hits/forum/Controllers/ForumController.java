@@ -7,12 +7,13 @@ import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Services.IForumService;
+import com.hits.user.Models.Entities.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,10 +27,10 @@ public class ForumController {
     private final IForumService forumService;
 
     @PostMapping(CREATE_CATEGORY)
-    public ResponseEntity<?> createCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> createCategory(@AuthenticationPrincipal User user, @Valid @RequestBody CategoryRequest createCategoryRequest){
 
         try {
-            return forumService.createCategory(token.substring(7), createCategoryRequest);
+            return forumService.createCategory(user, createCategoryRequest);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -40,10 +41,10 @@ public class ForumController {
     }
 
     @PostMapping(CREATE_THEME)
-    public ResponseEntity<?> createTheme(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody ThemeRequest createThemeRequest){
+    public ResponseEntity<?> createTheme(@AuthenticationPrincipal User user, @Valid @RequestBody ThemeRequest createThemeRequest){
 
         try {
-            return forumService.createTheme(token.substring(7), createThemeRequest);
+            return forumService.createTheme(user, createThemeRequest);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -54,10 +55,10 @@ public class ForumController {
     }
 
     @PostMapping(SEND_MESSAGE)
-    public ResponseEntity<?> sendMessage(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @Valid @RequestBody MessageRequest messageRequest){
+    public ResponseEntity<?> sendMessage(@AuthenticationPrincipal User user, @Valid @RequestBody MessageRequest messageRequest){
 
         try {
-            return forumService.createMessage(token.substring(7), messageRequest);
+            return forumService.createMessage(user, messageRequest);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -68,10 +69,10 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_CATEGORY)
-    public ResponseEntity<?> editCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(name = "categoryId") UUID categoryId, @Valid @RequestBody CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> editCategory(@AuthenticationPrincipal User user, @RequestParam(name = "categoryId") UUID categoryId, @Valid @RequestBody CategoryRequest createCategoryRequest){
 
         try {
-            return forumService.editCategory(token.substring(7), categoryId, createCategoryRequest);
+            return forumService.editCategory(user, categoryId, createCategoryRequest);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -82,10 +83,10 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_THEME)
-    public ResponseEntity<?> editTheme(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(name = "themeId") UUID themeId, @Valid @RequestBody ThemeRequest createThemeRequest){
+    public ResponseEntity<?> editTheme(@AuthenticationPrincipal User user, @RequestParam(name = "themeId") UUID themeId, @Valid @RequestBody ThemeRequest createThemeRequest){
 
         try {
-            return forumService.editTheme(token.substring(7), themeId, createThemeRequest);
+            return forumService.editTheme(user, themeId, createThemeRequest);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -96,10 +97,10 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_MESSAGE)
-    public ResponseEntity<?> editMessage(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(name = "messageId") UUID messageId, @Valid @RequestBody EditMessageRequest editMessageRequest){
+    public ResponseEntity<?> editMessage(@AuthenticationPrincipal User user, @RequestParam(name = "messageId") UUID messageId, @Valid @RequestBody EditMessageRequest editMessageRequest){
 
         try {
-            return forumService.editMessage(token.substring(7), messageId, editMessageRequest);
+            return forumService.editMessage(user, messageId, editMessageRequest);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -109,10 +110,10 @@ public class ForumController {
         }
     }
     @DeleteMapping(DELETE_CATEGORY)
-    public ResponseEntity<?> deleteCategory(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(name = "categoryId") UUID categoryId){
+    public ResponseEntity<?> deleteCategory(@AuthenticationPrincipal User user, @RequestParam(name = "categoryId") UUID categoryId){
 
         try {
-            return forumService.deleteCategory(token.substring(7), categoryId);
+            return forumService.deleteCategory(user, categoryId);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -123,10 +124,10 @@ public class ForumController {
     }
 
     @DeleteMapping(DELETE_THEME)
-    public ResponseEntity<?> deleteTheme(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(name = "themeId") UUID themeId){
+    public ResponseEntity<?> deleteTheme(@AuthenticationPrincipal User user, @RequestParam(name = "themeId") UUID themeId){
 
         try {
-            return forumService.deleteTheme(token.substring(7), themeId);
+            return forumService.deleteTheme(user, themeId);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
@@ -137,10 +138,10 @@ public class ForumController {
     }
 
     @DeleteMapping(DELETE_MESSAGE)
-    public ResponseEntity<?> deleteMessage(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam(name = "messageId") UUID messageId){
+    public ResponseEntity<?> deleteMessage(@AuthenticationPrincipal User user, @RequestParam(name = "messageId") UUID messageId){
 
         try {
-            return forumService.deleteMessage(token.substring(7), messageId);
+            return forumService.deleteMessage(user, messageId);
         }
         catch (ExpiredJwtException e){
             return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
