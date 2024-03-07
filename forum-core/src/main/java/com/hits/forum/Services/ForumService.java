@@ -65,6 +65,11 @@ public class ForumService implements IForumService {
                 return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                         "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
             }
+
+            if (!parent.getThemes().isEmpty()){
+                return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                        "У данной категории уже присутствуют топики"), HttpStatus.BAD_REQUEST);
+            }
             parent.getChildCategories().add(forumCategory);
             categoryRepository.saveAndFlush(parent);
         }
@@ -88,6 +93,10 @@ public class ForumService implements IForumService {
         if (forumCategory == null) {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                     "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+        }
+        else if (!forumCategory.getChildCategories().isEmpty()){
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                    "Вы не можете создать топик не в категории нижнего уровня"), HttpStatus.BAD_REQUEST);
         }
 
         forumTheme = ForumMapper.themeRequestToForumTheme(user.getLogin(), createThemeRequest);
@@ -142,6 +151,10 @@ public class ForumService implements IForumService {
                 return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                         "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
             } else {
+                if (!parent.getThemes().isEmpty()){
+                    return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                            "У данной категории уже присутствуют топики"), HttpStatus.BAD_REQUEST);
+                }
                 UUID parentOfParentId = parent.getParentId();
                 if (parentOfParentId != null && parentOfParentId.equals(categoryId)) {
                     return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
@@ -187,6 +200,10 @@ public class ForumService implements IForumService {
         if (forumCategory != null) {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                     "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+        }
+        else if (!forumCategory.getChildCategories().isEmpty()){
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                    "Вы не можете создать топик не в категории нижнего уровня"), HttpStatus.BAD_REQUEST);
         }
 
         ForumTheme checkTheme = themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId());
