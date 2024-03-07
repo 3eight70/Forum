@@ -1,6 +1,7 @@
 package com.hits.forum.Services;
 
 import com.hits.common.Models.Response.Response;
+import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Mappers.ForumMapper;
 import com.hits.forum.Models.Dto.Category.CategoryDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
@@ -48,7 +49,7 @@ public class ForumService implements IForumService {
     private String secret;
 
     @Transactional
-    public ResponseEntity<?> createCategory(User user, CategoryRequest createCategoryRequest) {
+    public ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest) {
         ForumCategory forumCategory = categoryRepository.findByCategoryName(createCategoryRequest.getCategoryName());
 
         if (forumCategory != null) {
@@ -81,7 +82,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createTheme(User user, ThemeRequest createThemeRequest) {
+    public ResponseEntity<?> createTheme(UserDto user, ThemeRequest createThemeRequest) {
         ForumTheme forumTheme = themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId());
 
         if (forumTheme != null) {
@@ -108,7 +109,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createMessage(User user, MessageRequest createMessageRequest) {
+    public ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest) {
         ForumTheme forumTheme = themeRepository.findForumThemeById(createMessageRequest.getThemeId());
 
         if (forumTheme == null) {
@@ -125,7 +126,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editCategory(User user, UUID categoryId, CategoryRequest createCategoryRequest) {
+    public ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest) {
         UUID parentId = createCategoryRequest.getParentId();
 
         if (parentId != null && parentId.equals(categoryId)) {
@@ -184,7 +185,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editTheme(User user, UUID themeId, ThemeRequest createThemeRequest) {
+    public ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest) {
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
@@ -225,7 +226,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editMessage(User user, UUID messageId, EditMessageRequest editMessageRequest) {
+    public ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest) {
         ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
 
         if (forumMessage == null) {
@@ -247,7 +248,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteCategory(User user, UUID categoryId) {
+    public ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId) {
         ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
         if (forumCategory == null) {
@@ -265,7 +266,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteTheme(User user, UUID themeId) {
+    public ResponseEntity<?> deleteTheme(UserDto user, UUID themeId) {
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
@@ -284,7 +285,7 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteMessage(User user, UUID messageId) {
+    public ResponseEntity<?> deleteMessage(UserDto user, UUID messageId) {
         ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
 
         if (forumMessage == null) {

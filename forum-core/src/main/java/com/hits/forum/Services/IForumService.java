@@ -1,5 +1,6 @@
 package com.hits.forum.Services;
 
+import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
@@ -12,15 +13,15 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IForumService {
-    ResponseEntity<?> createCategory(User user, CategoryRequest createCategoryRequest);
-    ResponseEntity<?> createTheme(User user, ThemeRequest createThemeRequest);
-    ResponseEntity<?> createMessage(User user, MessageRequest createMessageRequest);
-    ResponseEntity<?> editCategory(User user, UUID categoryId, CategoryRequest createCategoryRequest);
-    ResponseEntity<?> editTheme(User user, UUID themeId, ThemeRequest createThemeRequest);
-    ResponseEntity<?> editMessage(User user, UUID messageId, EditMessageRequest editMessageRequest);
-    ResponseEntity<?> deleteCategory(User user, UUID categoryId);
-    ResponseEntity<?> deleteTheme(User user, UUID themeId);
-    ResponseEntity<?> deleteMessage(User user, UUID messageId);
+    ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest);
+    ResponseEntity<?> createTheme(UserDto user, ThemeRequest createThemeRequest);
+    ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest);
+    ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest);
+    ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest);
+    ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest);
+    ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId);
+    ResponseEntity<?> deleteTheme(UserDto user, UUID themeId);
+    ResponseEntity<?> deleteMessage(UserDto user, UUID messageId);
     ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder);
     ResponseEntity<?> getCategories(SortOrder sortOrder);
     ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder);

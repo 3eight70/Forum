@@ -1,5 +1,6 @@
 package com.hits.user.Configurations;
 
+import com.hits.common.Models.User.UserDto;
 import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
@@ -12,12 +13,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -51,12 +55,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
             User user = userRepository.findByLogin(login);
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setEmail(user.getEmail());
+            userDto.setLogin(user.getLogin());
+            userDto.setCreateTime(user.getCreateTime());
+            userDto.setAuthorities(user.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList()));
+
 
             if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && user != null) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                        user,
+                        userDto,
                         null,
-                        user.getAuthorities()
+                        userDto.getAuthorities()
+                                .stream()
+                                .map(SimpleGrantedAuthority::new)
+                                .collect(Collectors.toList())
                 );
                 SecurityContextHolder.getContext().setAuthentication(token);
             }

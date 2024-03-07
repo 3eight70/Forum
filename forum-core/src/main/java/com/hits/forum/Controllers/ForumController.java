@@ -1,6 +1,7 @@
 package com.hits.forum.Controllers;
 
 import com.hits.common.Models.Response.Response;
+import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
@@ -27,7 +28,7 @@ public class ForumController {
     private final IForumService forumService;
 
     @PostMapping(CREATE_CATEGORY)
-    public ResponseEntity<?> createCategory(@AuthenticationPrincipal User user, @Valid @RequestBody CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> createCategory(@AuthenticationPrincipal UserDto user, @Valid @RequestBody CategoryRequest createCategoryRequest){
 
         try {
             return forumService.createCategory(user, createCategoryRequest);
@@ -41,7 +42,7 @@ public class ForumController {
     }
 
     @PostMapping(CREATE_THEME)
-    public ResponseEntity<?> createTheme(@AuthenticationPrincipal User user, @Valid @RequestBody ThemeRequest createThemeRequest){
+    public ResponseEntity<?> createTheme(@AuthenticationPrincipal UserDto user, @Valid @RequestBody ThemeRequest createThemeRequest){
 
         try {
             return forumService.createTheme(user, createThemeRequest);
@@ -55,7 +56,7 @@ public class ForumController {
     }
 
     @PostMapping(SEND_MESSAGE)
-    public ResponseEntity<?> sendMessage(@AuthenticationPrincipal User user, @Valid @RequestBody MessageRequest messageRequest){
+    public ResponseEntity<?> sendMessage(@AuthenticationPrincipal UserDto user, @Valid @RequestBody MessageRequest messageRequest){
 
         try {
             return forumService.createMessage(user, messageRequest);
@@ -69,7 +70,7 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_CATEGORY)
-    public ResponseEntity<?> editCategory(@AuthenticationPrincipal User user, @RequestParam(name = "categoryId") UUID categoryId, @Valid @RequestBody CategoryRequest createCategoryRequest){
+    public ResponseEntity<?> editCategory(@AuthenticationPrincipal UserDto user, @RequestParam(name = "categoryId") UUID categoryId, @Valid @RequestBody CategoryRequest createCategoryRequest){
 
         try {
             return forumService.editCategory(user, categoryId, createCategoryRequest);
@@ -83,7 +84,7 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_THEME)
-    public ResponseEntity<?> editTheme(@AuthenticationPrincipal User user, @RequestParam(name = "themeId") UUID themeId, @Valid @RequestBody ThemeRequest createThemeRequest){
+    public ResponseEntity<?> editTheme(@AuthenticationPrincipal UserDto user, @RequestParam(name = "themeId") UUID themeId, @Valid @RequestBody ThemeRequest createThemeRequest){
 
         try {
             return forumService.editTheme(user, themeId, createThemeRequest);
@@ -97,7 +98,7 @@ public class ForumController {
     }
 
     @PutMapping(EDIT_MESSAGE)
-    public ResponseEntity<?> editMessage(@AuthenticationPrincipal User user, @RequestParam(name = "messageId") UUID messageId, @Valid @RequestBody EditMessageRequest editMessageRequest){
+    public ResponseEntity<?> editMessage(@AuthenticationPrincipal UserDto user, @RequestParam(name = "messageId") UUID messageId, @Valid @RequestBody EditMessageRequest editMessageRequest){
 
         try {
             return forumService.editMessage(user, messageId, editMessageRequest);
@@ -110,7 +111,7 @@ public class ForumController {
         }
     }
     @DeleteMapping(DELETE_CATEGORY)
-    public ResponseEntity<?> deleteCategory(@AuthenticationPrincipal User user, @RequestParam(name = "categoryId") UUID categoryId){
+    public ResponseEntity<?> deleteCategory(@AuthenticationPrincipal UserDto user, @RequestParam(name = "categoryId") UUID categoryId){
 
         try {
             return forumService.deleteCategory(user, categoryId);
@@ -124,7 +125,7 @@ public class ForumController {
     }
 
     @DeleteMapping(DELETE_THEME)
-    public ResponseEntity<?> deleteTheme(@AuthenticationPrincipal User user, @RequestParam(name = "themeId") UUID themeId){
+    public ResponseEntity<?> deleteTheme(@AuthenticationPrincipal UserDto user, @RequestParam(name = "themeId") UUID themeId){
 
         try {
             return forumService.deleteTheme(user, themeId);
@@ -138,7 +139,7 @@ public class ForumController {
     }
 
     @DeleteMapping(DELETE_MESSAGE)
-    public ResponseEntity<?> deleteMessage(@AuthenticationPrincipal User user, @RequestParam(name = "messageId") UUID messageId){
+    public ResponseEntity<?> deleteMessage(@AuthenticationPrincipal UserDto user, @RequestParam(name = "messageId") UUID messageId){
 
         try {
             return forumService.deleteMessage(user, messageId);
