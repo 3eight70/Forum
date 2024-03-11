@@ -8,7 +8,6 @@ import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Services.IForumService;
-import com.hits.user.Models.Entities.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

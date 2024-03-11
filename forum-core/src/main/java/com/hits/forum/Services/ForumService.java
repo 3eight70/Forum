@@ -22,7 +22,6 @@ import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Repositories.CategoryRepository;
 import com.hits.forum.Repositories.MessageRepository;
 import com.hits.forum.Repositories.ThemeRepository;
-import com.hits.user.Models.Entities.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

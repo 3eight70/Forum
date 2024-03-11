@@ -1,7 +1,9 @@
 package com.hits.file.Models.Entities;
 
-import com.hits.user.Models.Entities.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,7 +39,6 @@ public class File {
     @Column(name = "file_content", nullable = false)
     private byte[] fileContent;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
 }

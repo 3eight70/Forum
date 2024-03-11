@@ -1,9 +1,9 @@
 package com.hits.file.Controllers;
 
 
+import com.hits.common.Models.User.UserDto;
 import com.hits.file.Models.Dto.Response.Response;
 import com.hits.file.Services.IMinIOService;
-import com.hits.user.Models.Entities.User;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class MinIOController {
     private final IMinIOService minIOService;
 
     @PostMapping(UPLOAD_FILE)
-    public ResponseEntity<?> uploadFile(@AuthenticationPrincipal User user, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> uploadFile(@AuthenticationPrincipal UserDto user, @RequestParam("file") MultipartFile file){
         try{
             return minIOService.uploadFile(user, file);
         }
@@ -44,7 +44,7 @@ public class MinIOController {
     }
 
     @PostMapping(DOWNLOAD_FILE + "/{filename}")
-    public ResponseEntity<?> downloadFile(@AuthenticationPrincipal User user, @PathVariable("filename") UUID fileId){
+    public ResponseEntity<?> downloadFile(@AuthenticationPrincipal UserDto user, @PathVariable("filename") UUID fileId){
         try{
             return minIOService.downloadFile(user, fileId);
         }
@@ -59,7 +59,7 @@ public class MinIOController {
     }
 
     @GetMapping(GET_FILES)
-    public ResponseEntity<?> getFiles(@AuthenticationPrincipal User user){
+    public ResponseEntity<?> getFiles(@AuthenticationPrincipal UserDto user){
         try{
            return minIOService.getAllFiles(user);
         }

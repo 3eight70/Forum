@@ -6,7 +6,6 @@ import com.hits.forum.Models.Dto.Message.EditMessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
-import com.hits.user.Models.Entities.User;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;

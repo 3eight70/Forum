@@ -1,13 +1,12 @@
 package com.hits.file.Services;
 
+import com.hits.common.Models.User.UserDto;
 import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Dto.Response.Response;
 import com.hits.file.Models.Entities.File;
 import com.hits.file.Repositories.FileRepository;
-import com.hits.user.Models.Entities.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,7 @@ public class MinIOService implements IMinIOService{
     private final S3Client s3Client;
     private final FileRepository fileRepository;
 
-    public ResponseEntity<?> uploadFile(User user, MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadFile(UserDto user, MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         File newFile;
 
@@ -66,7 +65,7 @@ public class MinIOService implements IMinIOService{
         return ResponseEntity.ok(newFile.getId());
     }
 
-    public ResponseEntity<?> downloadFile(User user, UUID id){
+    public ResponseEntity<?> downloadFile(UserDto user, UUID id){
         File file = fileRepository.findFileByIdAndUserId(id, user.getId());
 
         if (file == null){
@@ -87,7 +86,7 @@ public class MinIOService implements IMinIOService{
                 .body(new InputStreamResource(inputStream));
     }
 
-    public ResponseEntity<?> getAllFiles(User user){
+    public ResponseEntity<?> getAllFiles(UserDto user){
         List<FileDto> files = fileRepository.findAllByUserId(user.getId())
                 .stream()
                 .map(FileMapper::fileToFileDto)
