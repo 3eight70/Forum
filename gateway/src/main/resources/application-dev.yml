@@ -7,25 +7,21 @@ spring:
     gateway:
       routes:
         - id: file-service
-          uri: http://file-app:8083
+          uri: lb://FILE-SERVICE
           predicates:
             - Path=/api/file/**
           filters:
             - AuthenticationFilter
 
         - id: user-service
-          uri: http://user-app:8081
+          uri: lb://USER-SERVICE
           predicates:
             - Path=/api/account/**
-          filters:
-            - AuthenticationFilter
 
         - id: forum-service
-          uri: http://forum-core:8082
+          uri: lb://FORUM-SERVICE
           predicates:
             - Path=/api/forum/**
-          filters:
-            - AuthenticationFilter
 
 jwt:
   secret: AbdaasdasdasdasfasgasASFASF
