@@ -31,12 +31,27 @@ services:
     volumes:
       - minio_storage:/data
 
+  service-registry:
+    build:
+      context: ./service-registry
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on: service-registry
+
   user-app:
     build:
       context: ./user-app
       dockerfile: Dockerfile
     ports:
-      - "8010:8010"
+      - "8081:8081"
     environment:
         SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/filesystem
         SPRING_DATASOURCE_USERNAME: postgres
@@ -47,12 +62,26 @@ services:
       - postgres
       - redis
 
+  forum-core:
+    build:
+      context: ./forum-core
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/filesystem
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: gbhfns
+    depends_on:
+      - postgres
+      - user-app
+
   file-app:
     build:
       context: ./file-app
       dockerfile: Dockerfile
     ports:
-      - "8011:8011"
+      - "8083:8083"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/filesystem
       SPRING_DATASOURCE_USERNAME: postgres
@@ -60,5 +89,7 @@ services:
     depends_on:
       - postgres
       - minio
+      - user-app
+
 volumes:
   minio_storage: {}
