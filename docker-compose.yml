@@ -44,8 +44,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on: service-registry
-
+        
   user-app:
     build:
       context: ./user-app
@@ -74,8 +73,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: gbhfns
     depends_on:
       - postgres
-      - user-app
-
+    
   file-app:
     build:
       context: ./file-app
@@ -89,7 +87,6 @@ services:
     depends_on:
       - postgres
       - minio
-      - user-app
-
+      
 volumes:
   minio_storage: {}
