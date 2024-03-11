@@ -1,0 +1,893 @@
+{
+	"info": {
+		"_postman_id": "69a9694e-0558-4544-93d4-3397a40cde8e",
+		"name": "FileSystem",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29907070"
+	},
+	"item": [
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "UploadFile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/User/Downloads/Описание планируемого бизнес-процесса.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/file/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetFiles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/User/Desktop/dockerfile.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/file/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DownloadFile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/file/download/{{fileId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"download",
+								"{{fileId}}"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "RegisterUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/account/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogoutUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/account/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"account",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/account/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Forum",
+			"item": [
+				{
+					"name": "Category",
+					"item": [
+						{
+							"name": "CreateCategory",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"categoryName\": \"Categor\",\r\n    \"parentId\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EditCategory",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"categoryName\": \"Categoryas\",\r\n    \"parentId\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/edit?categoryId=d1388a18-6097-4c45-a2b1-0297cc397f65",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"edit"
+									],
+									"query": [
+										{
+											"key": "categoryId",
+											"value": "d1388a18-6097-4c45-a2b1-0297cc397f65"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteCategory",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/delete?categoryId=d1388a18-6097-4c45-a2b1-0297cc397f65",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "categoryId",
+											"value": "d1388a18-6097-4c45-a2b1-0297cc397f65"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetCategories",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme/get",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme",
+										"get"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetCategoriesWithSubstr",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/categories?name=cata",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"categories"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "cata"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Theme",
+					"item": [
+						{
+							"name": "EditTheme",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"namea\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64d\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme/edit?themeId=c5a60bed-4e84-4255-8827-fdef371cc827",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme",
+										"edit"
+									],
+									"query": [
+										{
+											"key": "themeId",
+											"value": "c5a60bed-4e84-4255-8827-fdef371cc827"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteTheme",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme/delete",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateTheme",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetThemes",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme/get",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme",
+										"get"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetThemesWithSubstr",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/themes?name=P",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"themes"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "P"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Message",
+					"item": [
+						{
+							"name": "EditMessage",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/theme/message/edit",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"theme",
+										"message",
+										"edit"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteMessage",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/theme/message/delete?messageId=366d2ffa-8c94-48df-8869-eb02fb68d051",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"theme",
+										"message",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "messageId",
+											"value": "366d2ffa-8c94-48df-8869-eb02fb68d051"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetMessages",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/theme/{{themeId}}/message/get",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"theme",
+										"{{themeId}}",
+										"message",
+										"get"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetMessagesWithFilters",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/message/get",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"message",
+										"get"
+									],
+									"query": [
+										{
+											"key": "timeFrom",
+											"value": "2024-03-04T21:24:19.15547",
+											"disabled": true
+										},
+										{
+											"key": "timeTo",
+											"value": "2024-03-04T21:24:30.15547",
+											"disabled": true
+										},
+										{
+											"key": "content",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "authorLogin",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "categoryId",
+											"value": "be4e7dfe-e15a-4fa0-9e7e-f4cb1292e5e5",
+											"disabled": true
+										},
+										{
+											"key": "themeId",
+											"value": "341469ab-6335-414a-9109-6423dcc1730f",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetMessagesWithSubstr",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"themeName\": \"nameasd\",\r\n    \"categoryId\": \"1055c4f8-43b6-4829-a4f6-62bc55d4e64c\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/message/get",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"message",
+										"get"
+									],
+									"query": [
+										{
+											"key": "timeFrom",
+											"value": "2024-03-04T21:24:19.15547",
+											"disabled": true
+										},
+										{
+											"key": "timeTo",
+											"value": "2024-03-04T21:24:30.15547",
+											"disabled": true
+										},
+										{
+											"key": "content",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "authorLogin",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "categoryId",
+											"value": "be4e7dfe-e15a-4fa0-9e7e-f4cb1292e5e5",
+											"disabled": true
+										},
+										{
+											"key": "themeId",
+											"value": "341469ab-6335-414a-9109-6423dcc1730f",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateMessage",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"content\": \"O yeaaaaa\",\r\n    \"themeId\": \"2b737623-b71d-43c9-8ac0-5fc2797fe3a4\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/theme/message",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"theme",
+										"message"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "RefreshToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"834c9a01-0d6e-40e4-8c9a-fde1997ba6a9\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/account/refreshToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"account",
+						"refreshToken"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHYmhmbnMiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzA5OTgwODgxLCJ1c2VySWQiOiIwNjVmZTRkOC1mMTE4LTQwZjgtODVjOS02NTY1N2QxOTU2MTEiLCJpYXQiOjE3MDk5NzcyODEsImp0aSI6ImI3OGQ5NDk2LTc4NzktNGNhYy1hMjExLTAxZWFmOWVlYjkwOCJ9.cb2LtZwGgStWIl2X3EmloSsWH5LpaE66-WSrw8N8mks",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "fileId",
+			"value": "c9ffa024-55ab-4655-b3fc-7108d95227fe",
+			"type": "string"
+		},
+		{
+			"key": "themeId",
+			"value": "341469ab-6335-414a-9109-6423dcc1730f",
+			"type": "string"
+		}
+	]
+}
