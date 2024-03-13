@@ -9,6 +9,7 @@ public class Consts {
     public static final String LOGIN_USER = "/api/account/login";
     public static final String LOGOUT_USER = "/api/account/logout";
     public static final String VALIDATE_TOKEN = "/api/token/validate";
+    public static final String GET_USER = "/api/account/user";
     public static final String EUREKA = "/eureka";
     public static final String CREATE_CATEGORY = "/api/forum/category";
     public static final String GET_CATEGORIES = "/api/forum/category/get";

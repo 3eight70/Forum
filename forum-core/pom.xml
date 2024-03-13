@@ -12,8 +12,8 @@
     <artifactId>forum-core</artifactId>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>20</maven.compiler.source>
+        <maven.compiler.target>20</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -22,10 +22,10 @@
         <groupId>com.hits</groupId>
         <artifactId>common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-    </dependency>
+        </dependency>
         <dependency>
             <groupId>com.hits</groupId>
-            <artifactId>user-app</artifactId>
+            <artifactId>security</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

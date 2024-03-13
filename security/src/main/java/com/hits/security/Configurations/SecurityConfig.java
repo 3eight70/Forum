@@ -1,6 +1,5 @@
-package com.hits.user.Configurations;
+package com.hits.security.Configurations;
 
-import com.hits.user.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +22,6 @@ import static com.hits.common.Consts.*;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-    private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
 
     @Bean
@@ -46,22 +44,5 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userService);
 
-        return daoAuthenticationProvider;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
 }

@@ -2,6 +2,7 @@ package com.hits.user.Services;
 
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
+import com.hits.common.Models.User.UserDto;
 import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
@@ -10,6 +11,7 @@ import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -85,5 +87,15 @@ public class UserService implements UserDetailsService, IUserService {
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Пользователь успешно вышел из аккаунт"), HttpStatus.OK);
+    }
+
+    public UserDto getUserFromLogin(String login) throws FeignException {
+        User user = userRepository.findByLogin(login);
+
+        if (user == null){
+            return null;
+        }
+
+        return UserMapper.userToUserDto(user);
     }
 }

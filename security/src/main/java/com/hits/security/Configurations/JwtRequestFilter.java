@@ -1,10 +1,8 @@
-package com.hits.user.Configurations;
+package com.hits.security.Configurations;
 
 import com.hits.common.Models.User.UserDto;
-import com.hits.user.Models.Entities.User;
-import com.hits.user.Repositories.RedisRepository;
-import com.hits.user.Repositories.UserRepository;
-import com.hits.user.Utils.JwtTokenUtils;
+import com.hits.common.Utils.JwtUtils;
+import com.hits.security.Client.UserAppClient;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -12,8 +10,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 @Component
+@Import(JwtUtils.class)
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
-    private final JwtTokenUtils jwtTokenUtils;
-    private final RedisRepository redisRepository;
-    private final UserRepository userRepository;
+    private final JwtUtils jwtTokenUtils;
+    private final UserAppClient userAppClient;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,6 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String login = null;
         String jwt = null;
         boolean tokenInRedis = false;
+        UserDto userDto = null;
 
         response.setHeader("Access-Control-Allow-Origin", "http://localhost");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -48,25 +49,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 jwt = authHeader.substring(7);
 
-                if (redisRepository.checkToken(jwtTokenUtils.getIdFromToken(jwt))) {
-                    tokenInRedis = true;
-                }
+                tokenInRedis = userAppClient.validateToken(jwt);
                 login = jwtTokenUtils.getUserLogin(jwt);
             }
 
-            User user = userRepository.findByLogin(login);
-            UserDto userDto = new UserDto();
-            userDto.setId(user.getId());
-            userDto.setEmail(user.getEmail());
-            userDto.setLogin(user.getLogin());
-            userDto.setCreateTime(user.getCreateTime());
-            userDto.setAuthorities(user.getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList()));
+            if (login != null && !login.isEmpty()) {
+                ResponseEntity<UserDto> userRequest = userAppClient.getUser(login);
 
+                if (userRequest.getStatusCode() == HttpStatus.OK) {
+                    userDto = userRequest.getBody();
+                }
+            }
 
-            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && user != null) {
+            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDto,
                         null,
