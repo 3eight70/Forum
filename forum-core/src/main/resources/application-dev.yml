@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/filesystem
+    url: jdbc:postgresql://localhost:5432/forumapp
     username: postgres
     password: gbhfns
     driverClassName: org.postgresql.Driver

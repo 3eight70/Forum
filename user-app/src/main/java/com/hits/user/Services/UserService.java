@@ -2,6 +2,7 @@ package com.hits.user.Services;
 
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
+import com.hits.common.Models.User.UserDto;
 import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
@@ -85,5 +86,15 @@ public class UserService implements UserDetailsService, IUserService {
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Пользователь успешно вышел из аккаунт"), HttpStatus.OK);
+    }
+
+    public UserDto getUserFromLogin(String login) {
+        User user = userRepository.findByLogin(login);
+
+        if (user == null){
+            return null;
+        }
+
+        return UserMapper.userToUserDto(user);
     }
 }

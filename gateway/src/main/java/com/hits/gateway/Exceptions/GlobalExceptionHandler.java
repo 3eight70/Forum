@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<Response> handleRuntimeException(RuntimeException ex) {
-        return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), ex.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new Response(HttpStatus.SERVICE_UNAVAILABLE.value(), ex.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
     }
 }

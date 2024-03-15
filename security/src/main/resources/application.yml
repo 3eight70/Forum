@@ -1,0 +1,3 @@
+jwt:
+  secret: AbdaasdasdasdasfasgasASFASF
+  expiration: 1h

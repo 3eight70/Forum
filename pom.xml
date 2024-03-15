@@ -20,8 +20,9 @@
 		<module>common</module>
 		<module>gateway</module>
 		<module>service-registry</module>
+        <module>security</module>
 		<module>forum-core</module>
-	</modules>
+    </modules>
 	<properties>
 		<java.version>17</java.version>
 		<spring-boot.version>3.2.2</spring-boot.version>
@@ -35,6 +36,7 @@
 		<spring-gateway.version>4.1.1</spring-gateway.version>
 		<registry.version>4.1.0</registry.version>
 		<webflux.version>3.2.2</webflux.version>
+		<feign.version>4.1.0</feign.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -42,6 +44,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-data-jpa</artifactId>
 				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-openfeign</artifactId>
+				<version>${feign.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

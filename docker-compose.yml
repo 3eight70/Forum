@@ -11,6 +11,26 @@ services:
     ports:
       - "5432:5432"
 
+  postgres_us:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gbhfns
+      POSTGRES_DB: userapp
+    ports:
+      - "5433:5433"
+
+  postgres_for:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gbhfns
+      POSTGRES_DB: forumapp
+    ports:
+      - "5434:5434"
+
   redis:
     image: redis:latest
     restart: always

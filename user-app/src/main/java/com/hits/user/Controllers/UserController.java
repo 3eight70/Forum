@@ -1,6 +1,8 @@
 package com.hits.user.Controllers;
 
 import com.hits.common.Models.Response.Response;
+import com.hits.common.Models.User.UserDto;
+import com.hits.security.Client.UserAppClient;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
@@ -22,7 +24,7 @@ import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserAppClient {
     private final IUserService userService;
     private final AuthenticationManager authenticationManager;
     private final IRefreshTokenService refreshTokenService;
@@ -77,19 +79,12 @@ public class UserController {
     }
 
     @GetMapping(VALIDATE_TOKEN)
-    public ResponseEntity<?> validateToken(@RequestParam(name = "token") String token){
-        try{
-            Boolean valid = userService.validateToken(token);
+    public Boolean validateToken(@RequestParam(name = "token") String token){
+            return userService.validateToken(token);
+    }
 
-            if (valid){
-                return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "Токен валиден"), HttpStatus.OK);
-            }
-            else{
-                return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Токен не валиден"), HttpStatus.UNAUTHORIZED);
-            }
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping(GET_USER)
+    public UserDto getUser(@RequestParam(name = "login") String login){
+        return userService.getUserFromLogin(login);
     }
 }

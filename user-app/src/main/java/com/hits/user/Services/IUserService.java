@@ -1,5 +1,6 @@
 package com.hits.user.Services;
 
+import com.hits.common.Models.User.UserDto;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
@@ -13,4 +14,5 @@ public interface IUserService {
     ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken);
     Boolean validateToken(String token);
     ResponseEntity<?> logoutUser(String token);
+    UserDto getUserFromLogin(String login);
 }
