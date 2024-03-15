@@ -12,7 +12,7 @@ spring:
   application:
     name: USER-SERVICE
   datasource:
-    url: jdbc:postgresql://postgres_us:5432/userapp
+    url: jdbc:postgresql://postgres_us:5433/userapp
     username: postgres
     password: gbhfns
     driverClassName: org.postgresql.Driver

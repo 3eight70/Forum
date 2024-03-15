@@ -19,7 +19,7 @@ services:
       POSTGRES_PASSWORD: gbhfns
       POSTGRES_DB: userapp
     ports:
-      - "5432:5432"
+      - "5433:5433"
 
   postgres_for:
     image: postgres:latest
@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: gbhfns
       POSTGRES_DB: forumapp
     ports:
-      - "5432:5432"
+      - "5434:5434"
 
   redis:
     image: redis:latest

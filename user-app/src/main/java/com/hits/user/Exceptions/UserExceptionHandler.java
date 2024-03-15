@@ -1,9 +1,7 @@
 package com.hits.user.Exceptions;
 
 import com.hits.common.Models.Response.Response;
-import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

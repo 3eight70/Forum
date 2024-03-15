@@ -11,7 +11,6 @@ import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
-import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

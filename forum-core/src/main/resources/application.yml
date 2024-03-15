@@ -12,7 +12,7 @@ spring:
   application:
     name: FORUM-SERVICE
   datasource:
-    url: jdbc:postgresql://postgres_for:5432/forumapp
+    url: jdbc:postgresql://postgres_for:5434/forumapp
     username: postgres
     password: gbhfns
     driverClassName: org.postgresql.Driver

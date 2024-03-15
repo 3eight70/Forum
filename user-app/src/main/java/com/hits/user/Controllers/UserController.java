@@ -8,7 +8,6 @@ import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Services.IUserService;
-import feign.FeignException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

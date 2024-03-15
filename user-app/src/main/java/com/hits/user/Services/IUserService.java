@@ -7,7 +7,6 @@ import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Models.Entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestParam;
 
 public interface IUserService {
     User loadUserByUsername(String email) throws UsernameNotFoundException;
