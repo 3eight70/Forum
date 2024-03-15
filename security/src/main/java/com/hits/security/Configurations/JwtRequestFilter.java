@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtTokenUtils;
-    @Qualifier("userController")
+    @Qualifier("com.hits.security.Client.UserAppClient")
     private final UserAppClient userAppClient;
 
     @Override
