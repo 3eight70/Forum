@@ -2,6 +2,7 @@ package com.hits.user.Controllers;
 
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
+import com.hits.security.Client.UserAppClient;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
@@ -24,7 +25,7 @@ import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserAppClient {
     private final IUserService userService;
     private final AuthenticationManager authenticationManager;
     private final IRefreshTokenService refreshTokenService;

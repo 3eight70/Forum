@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtTokenUtils;
+    @Qualifier("userController")
     private final UserAppClient userAppClient;
 
     @Override
@@ -54,11 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
 
             if (login != null && !login.isEmpty()) {
-                ResponseEntity<UserDto> userRequest = userAppClient.getUser(login);
-
-                if (userRequest.getStatusCode() == HttpStatus.OK) {
-                    userDto = userRequest.getBody();
-                }
+                userDto = userAppClient.getUser(login);
             }
 
             if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null) {

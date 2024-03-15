@@ -15,5 +15,5 @@ public interface UserAppClient {
     Boolean validateToken(@RequestParam("token") String token);
 
     @GetMapping(GET_USER)
-    ResponseEntity<UserDto> getUser(@RequestParam("login") String login);
+    UserDto getUser(@RequestParam("login") String login);
 }

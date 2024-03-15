@@ -89,7 +89,7 @@ public class UserService implements UserDetailsService, IUserService {
                 "Пользователь успешно вышел из аккаунт"), HttpStatus.OK);
     }
 
-    public UserDto getUserFromLogin(String login) throws FeignException {
+    public UserDto getUserFromLogin(String login) {
         User user = userRepository.findByLogin(login);
 
         if (user == null){
