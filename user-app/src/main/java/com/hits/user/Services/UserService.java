@@ -88,6 +88,11 @@ public class UserService implements UserDetailsService, IUserService {
     public ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken){
         User user = userRepository.findByEmail(loginCredentials.getEmail());
 
+        if (!user.getIsConfirmed()){
+            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                    "Сперва подтвердите аккаунт"), HttpStatus.UNAUTHORIZED);
+        }
+
         String token = jwtTokenUtils.generateToken(user);
 
         jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
@@ -199,7 +204,7 @@ public class UserService implements UserDetailsService, IUserService {
         String subject = "Пожалуйста подтвердите свою регистрацию";
         String content = "Эй, [[name]],<br>"
                 + "Пожалуйста перейдите по ссылке ниже для подтверждения регистрации:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">[[URL]]</a></h3>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">ПОДТВЕРДИ МЕНЯ</a></h3>"
                 + "Спасибо,<br>"
                 + "HITS COMPANY.";
 
