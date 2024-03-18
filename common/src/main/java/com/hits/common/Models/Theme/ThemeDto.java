@@ -1,4 +1,4 @@
-package com.hits.forum.Models.Dto.Theme;
+package com.hits.common.Models.Theme;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

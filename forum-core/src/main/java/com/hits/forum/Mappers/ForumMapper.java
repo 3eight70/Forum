@@ -6,7 +6,7 @@ import com.hits.forum.Models.Dto.Category.CategoryWithSubstring;
 import com.hits.forum.Models.Dto.Message.MessageDto;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
-import com.hits.forum.Models.Dto.Theme.ThemeDto;
+import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;

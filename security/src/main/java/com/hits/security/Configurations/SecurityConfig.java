@@ -3,6 +3,7 @@ package com.hits.security.Configurations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,9 +28,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(LOGOUT_USER).authenticated()
                         .requestMatchers(CREATE_CATEGORY, EDIT_CATEGORY, DELETE_CATEGORY).authenticated()
-                        .requestMatchers(CREATE_THEME, EDIT_THEME, DELETE_THEME).authenticated()
+                        .requestMatchers(HttpMethod.POST, CREATE_THEME).authenticated()
+                        .requestMatchers(EDIT_THEME, DELETE_THEME).authenticated()
                         .requestMatchers(SEND_MESSAGE, EDIT_MESSAGE, DELETE_MESSAGE).authenticated()
                         .requestMatchers(GET_FILES, UPLOAD_FILE).authenticated()
+                        .requestMatchers(GET_FAVORITE, ADD_TO_FAVORITE, DELETE_FROM_FAVORITE).authenticated()
                         .requestMatchers(DOWNLOAD_FILE+"/*", DOWNLOAD_FILE + "*").authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

@@ -13,7 +13,7 @@ import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
 import com.hits.forum.Models.Dto.Responses.MessageResponse;
 import com.hits.forum.Models.Dto.Responses.PageResponse;
 import com.hits.forum.Models.Dto.Responses.ThemeResponse;
-import com.hits.forum.Models.Dto.Theme.ThemeDto;
+import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;
@@ -370,6 +370,17 @@ public class ForumService implements IForumService {
         ));
     }
 
+    public ResponseEntity<?> checkTheme(UUID themeId){
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+
+        if (forumTheme == null){
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                    "Темы с данным id не существует"), HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
     public ResponseEntity<?> getMessagesWithFilters(String content,
                                                     LocalDateTime timeFrom,
                                                     LocalDateTime timeTo,
@@ -417,6 +428,15 @@ public class ForumService implements IForumService {
                 .toList();
 
         return ResponseEntity.ok(forumMessages);
+    }
+
+    public ResponseEntity<?> getThemesById(List<UUID> themesId){
+        List<ThemeDto> themes = themeRepository.findAllByIdIn(themesId)
+                .stream()
+                .map(ForumMapper::forumThemeToThemeDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(themes);
     }
 
     private Sort.Order getComparator(SortOrder sortOrder) {

@@ -1,5 +1,6 @@
 package com.hits.forum.Controllers;
 
+import com.hits.common.Client.ForumAppClient;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
@@ -17,13 +18,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
-public class ForumController {
+public class ForumController implements ForumAppClient {
     private final IForumService forumService;
 
     @PostMapping(CREATE_CATEGORY)
@@ -229,6 +231,26 @@ public class ForumController {
     public ResponseEntity<?> getMessagesWithSubstring(@RequestParam(value = "content") String content){
         try {
             return forumService.getMessagesWithSubstring(content);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> checkTheme(UUID themeId) {
+        try {
+            return forumService.checkTheme(themeId);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId){
+        try {
+            return forumService.getThemesById(themesId);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);

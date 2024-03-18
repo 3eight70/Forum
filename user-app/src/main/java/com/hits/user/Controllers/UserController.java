@@ -2,12 +2,13 @@ package com.hits.user.Controllers;
 
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
-import com.hits.security.Client.UserAppClient;
+import com.hits.common.Client.UserAppClient;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Services.IUserService;
+import feign.FeignException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 import static com.hits.common.Consts.*;
 
@@ -78,13 +82,58 @@ public class UserController implements UserAppClient {
         }
     }
 
-    @GetMapping(VALIDATE_TOKEN)
+    @Override
     public Boolean validateToken(@RequestParam(name = "token") String token){
             return userService.validateToken(token);
     }
 
-    @GetMapping(GET_USER)
+    @Override
     public UserDto getUser(@RequestParam(name = "login") String login){
         return userService.getUserFromLogin(login);
+    }
+
+    @PostMapping(ADD_TO_FAVORITE)
+    public ResponseEntity<?> addThemeToFavorite(@AuthenticationPrincipal UserDto userDto, @RequestParam(name = "themeId") UUID themeId){
+        try {
+            return userService.addThemeToFavorite(userDto, themeId);
+        }
+        catch (FeignException.BadRequest e){
+            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Темы с указанным id не существует"), HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping(DELETE_FROM_FAVORITE)
+    public ResponseEntity<?> deleteThemeFromFavorite(@AuthenticationPrincipal UserDto userDto, @RequestParam(name = "themeId") UUID themeId){
+        try {
+            return userService.deleteThemeFromFavorite(userDto, themeId);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(GET_FAVORITE)
+    public ResponseEntity<?> getFavoriteThemes(@AuthenticationPrincipal UserDto userDto){
+        try {
+            return userService.getFavoriteThemes(userDto);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(VERIFY_USER)
+    public ResponseEntity<?> verifyUser(
+            @RequestParam(name = "id") UUID userId,
+            @RequestParam(name = "code") String code){
+        try {
+            return userService.verifyUser(userId, code);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

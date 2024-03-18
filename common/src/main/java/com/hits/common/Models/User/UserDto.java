@@ -30,5 +30,11 @@ public class UserDto {
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
     private String login;
 
+    @NotNull
+    private Boolean isConfirmed;
+
+    @NotNull
+    private Boolean isBanned;
+
     private List<String> authorities;
 }

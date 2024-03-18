@@ -1,4 +1,4 @@
-package com.hits.security.Client;
+package com.hits.common.Client;
 
 import com.hits.common.Models.User.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;

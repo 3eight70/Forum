@@ -1,6 +1,6 @@
 package com.hits.forum.Models.Dto.Responses;
 
-import com.hits.forum.Models.Dto.Theme.ThemeDto;
+import com.hits.common.Models.Theme.ThemeDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -12,4 +12,6 @@ public interface ThemeRepository extends JpaRepository<ForumTheme, UUID> {
     ForumTheme findByThemeNameAndCategoryId(String themeName, UUID categoryId);
     ForumTheme findForumThemeById(UUID id);
     List<ForumTheme> findAllByThemeNameContainingIgnoreCase(String themeName);
+
+    List<ForumTheme> findAllByIdIn(List<UUID> themeIds);
 }

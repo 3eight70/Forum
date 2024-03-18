@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.List;
 
 @Setter
 @Getter
@@ -43,6 +44,21 @@ public class User implements UserDetails {
     @Column(length = 1000, nullable = false)
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")
     private String password;
+
+    private String verificationCode;
+
+    @Column(nullable = false)
+    private Boolean isConfirmed;
+
+    @Column(nullable = false)
+    private Boolean isBanned;
+
+    @ElementCollection
+    @CollectionTable(name = "user_favorite_themes", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "theme_id")
+    private List<UUID> favoriteThemes;
+
+    private UUID manageCategoryId;
 
     @PrePersist
     private void init(){

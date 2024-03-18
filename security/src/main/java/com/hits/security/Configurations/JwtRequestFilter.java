@@ -2,7 +2,7 @@ package com.hits.security.Configurations;
 
 import com.hits.common.Models.User.UserDto;
 import com.hits.common.Utils.JwtUtils;
-import com.hits.security.Client.UserAppClient;
+import com.hits.common.Client.UserAppClient;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtTokenUtils;
-    @Qualifier("com.hits.security.Client.UserAppClient")
+    @Qualifier("com.hits.common.Client.UserAppClient")
     private final UserAppClient userAppClient;
 
     @Override
@@ -57,7 +57,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 userDto = userAppClient.getUser(login);
             }
 
-            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null) {
+            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null && userDto.getIsConfirmed()) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDto,
                         null,

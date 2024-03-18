@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 public interface IForumService {
     ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest);
@@ -34,4 +35,6 @@ public interface IForumService {
     ResponseEntity<?> getCategoriesWithSubstring(String substring);
     ResponseEntity<?> getThemesWithSubstring(String substring);
     ResponseEntity<?> getMessagesWithSubstring(String substring);
+    ResponseEntity<?> checkTheme(UUID themeId);
+    ResponseEntity<?> getThemesById(List<UUID> themesId);
 }

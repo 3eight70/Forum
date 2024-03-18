@@ -6,6 +6,7 @@ import com.hits.user.Models.Entities.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,12 @@ public class UserMapper {
                 LocalDateTime.now(),
                 userRegisterModel.getEmail(),
                 userRegisterModel.getLogin(),
-                userRegisterModel.getPassword()
+                userRegisterModel.getPassword(),
+                null,
+                false,
+                false,
+                new ArrayList<>(),
+                null
         );
     }
 
@@ -26,6 +32,8 @@ public class UserMapper {
                 user.getCreateTime(),
                 user.getEmail(),
                 user.getLogin(),
+                user.getIsConfirmed(),
+                user.getIsBanned(),
                 user.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
