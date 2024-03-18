@@ -3,7 +3,6 @@ package com.hits.user.Services;
 import com.hits.common.Client.ForumAppClient;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
-import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.common.Models.User.UserDto;
 import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
@@ -17,7 +16,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +26,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import static com.hits.common.Consts.VERIFY_USER;
 
@@ -79,6 +74,12 @@ public class UserService implements UserDetailsService, IUserService {
 
         userRepository.save(user);
 
+//        String token = jwtTokenUtils.generateToken(user);
+//        jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
+//        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+//
+//        return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));    Расскоментируйте, если хотите тестить без подтверждения по почте
+//                                                                                        и закомментируйте кусок ниже
         sendVerificationEmail(user, "http://localhost:8080");
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "Письмо с подтверждением отправлено"), HttpStatus.OK);

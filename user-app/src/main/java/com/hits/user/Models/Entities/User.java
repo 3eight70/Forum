@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter

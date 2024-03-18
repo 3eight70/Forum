@@ -1,6 +1,7 @@
 package com.hits.forum.Services;
 
 import com.hits.common.Models.Response.Response;
+import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Mappers.ForumMapper;
 import com.hits.forum.Models.Dto.Category.CategoryDto;
@@ -13,7 +14,6 @@ import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
 import com.hits.forum.Models.Dto.Responses.MessageResponse;
 import com.hits.forum.Models.Dto.Responses.PageResponse;
 import com.hits.forum.Models.Dto.Responses.ThemeResponse;
-import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;

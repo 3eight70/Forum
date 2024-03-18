@@ -1,8 +1,8 @@
 package com.hits.user.Controllers;
 
+import com.hits.common.Client.UserAppClient;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
-import com.hits.common.Client.UserAppClient;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;

@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import static com.hits.common.Consts.CHECK_THEME;
 import static com.hits.common.Consts.GET_THEMES_BY_ID;
