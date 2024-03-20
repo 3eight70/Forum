@@ -50,14 +50,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 jwt = authHeader.substring(7);
 
                 tokenInRedis = userAppClient.validateToken(jwt);
-                login = jwtTokenUtils.getUserLogin(jwt);
+
+                if (tokenInRedis) {
+                    login = jwtTokenUtils.getUserLogin(jwt);
+                }
             }
 
             if (login != null && !login.isEmpty()) {
                 userDto = userAppClient.getUser(login);
             }
 
-            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null && userDto.getIsConfirmed()) {
+            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null && userDto.getIsConfirmed() && !userDto.getIsBanned()) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDto,
                         null,

@@ -36,5 +36,8 @@ public class UserDto {
     @NotNull
     private Boolean isBanned;
 
+    @NotNull
+    private Role role;
+
     private List<String> authorities;
 }

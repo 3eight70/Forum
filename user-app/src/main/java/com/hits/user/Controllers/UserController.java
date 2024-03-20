@@ -136,4 +136,40 @@ public class UserController implements UserAppClient {
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(BAN_USER)
+    public ResponseEntity<?> banUser(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam(name = "userId") UUID userId){
+        try {
+            return userService.banUser(user, userId);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(GIVE_MODERATOR)
+    public ResponseEntity<?> giveModeratorRole(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam(name = "userId") UUID userId){
+        try {
+            return userService.giveModeratorRole(user, userId);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping(DELETE_MODERATOR)
+    public ResponseEntity<?> deleteModeratorRole(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam(name = "userId") UUID userId){
+        try {
+            return userService.deleteModeratorRole(user, userId);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

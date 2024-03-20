@@ -374,8 +374,17 @@ public class ForumService implements IForumService {
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null){
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Темы с данным id не существует"), HttpStatus.BAD_REQUEST);
+           return notFoundResponse("Темы с данным id не существует");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> checkCategory(UUID categoryId){
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
+
+        if (forumCategory == null){
+            return notFoundResponse("Категории с данным id не существует");
         }
 
         return ResponseEntity.ok().build();

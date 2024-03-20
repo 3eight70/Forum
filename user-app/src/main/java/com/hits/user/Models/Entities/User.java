@@ -1,5 +1,6 @@
 package com.hits.user.Models.Entities;
 
+import com.hits.common.Models.User.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -12,10 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Setter
 @Getter
@@ -53,6 +51,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Boolean isBanned;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @ElementCollection
     @CollectionTable(name = "user_favorite_themes", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "theme_id")
@@ -66,10 +68,17 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities(){
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
-    }
+    public Collection<GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
 
+        String roleName = this.role.name();
+
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + roleName);
+
+        authorities.add(authority);
+
+        return authorities;
+    }
     @Override
     public String getUsername() {
         return email;

@@ -7,7 +7,9 @@ import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Models.Entities.User;
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
@@ -23,4 +25,7 @@ public interface IUserService {
     ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId);
     ResponseEntity<?> getFavoriteThemes(UserDto userDto);
     ResponseEntity<?> verifyUser(UUID userId, String code);
+    ResponseEntity<?> banUser(UserDto user, UUID userId);
+    ResponseEntity<?> giveModeratorRole(UserDto user, UUID userId);
+    ResponseEntity<?> deleteModeratorRole(UserDto user, UUID userId);
 }

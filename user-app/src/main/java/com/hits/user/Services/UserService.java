@@ -3,6 +3,7 @@ package com.hits.user.Services;
 import com.hits.common.Client.ForumAppClient;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
+import com.hits.common.Models.User.Role;
 import com.hits.common.Models.User.UserDto;
 import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
@@ -74,15 +75,17 @@ public class UserService implements UserDetailsService, IUserService {
 
         userRepository.save(user);
 
-//        String token = jwtTokenUtils.generateToken(user);
-//        jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
-//        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
-//
-//        return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));    Расскоментируйте, если хотите тестить без подтверждения по почте
-//                                                                                        и закомментируйте кусок ниже
-        sendVerificationEmail(user, "http://localhost:8080");
+        String token = jwtTokenUtils.generateToken(user);
+        jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
-        return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "Письмо с подтверждением отправлено"), HttpStatus.OK);
+        return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));
+//        Расскоментируйте, если хотите тестить c подтверждением по почте
+//        и закомментируйте кусок выше, но в таком случае, нужно в бдшке будет isConfirmed ставить true
+
+//        sendVerificationEmail(user, "http://localhost:8080");
+//
+//        return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "Письмо с подтверждением отправлено"), HttpStatus.OK);
     }
 
     public ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken){
@@ -165,8 +168,8 @@ public class UserService implements UserDetailsService, IUserService {
                     "Пользователь успешно удалил тему из избранного"), HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Темы с данным id нет в избранном пользователя"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
+                    "Темы с данным id нет в избранном пользователя"), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -194,6 +197,51 @@ public class UserService implements UserDetailsService, IUserService {
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                     "Почта пользователя уже подтверждена"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<?> banUser(UserDto user, UUID userId){
+        User userToBan = userRepository.findUserById(userId);
+
+        if (userToBan == null){
+            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
+                    "Пользователя с данным id не существует"), HttpStatus.NOT_FOUND);
+        }
+
+        userToBan.setIsBanned(true);
+        userRepository.saveAndFlush(userToBan);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Пользователь успешно заблокирован"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> giveModeratorRole(UserDto userDto, UUID userId){
+        User user = userRepository.findUserById(userId);
+
+        if (user == null){
+            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
+                    "Пользователя с данным id не существует"), HttpStatus.NOT_FOUND);
+        }
+
+        user.setRole(Role.MODERATOR);
+        userRepository.saveAndFlush(user);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Роль модератора успешно выдана"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> deleteModeratorRole(UserDto userDto, UUID userId){
+        User user = userRepository.findUserById(userId);
+
+        if (user == null){
+            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
+                    "Пользователя с данным id не существует"), HttpStatus.NOT_FOUND);
+        }
+
+        user.setRole(Role.USER);
+        userRepository.saveAndFlush(user);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Роль модератора успешно удалена"), HttpStatus.OK);
     }
 
     private void sendVerificationEmail(User user, String siteURL)

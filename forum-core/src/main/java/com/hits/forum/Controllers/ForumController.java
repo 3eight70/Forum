@@ -238,9 +238,19 @@ public class ForumController implements ForumAppClient {
     }
 
     @Override
-    public ResponseEntity<?> checkTheme(UUID themeId) {
+    public ResponseEntity<?> checkTheme(@RequestParam(name = "themeId") UUID themeId) {
         try {
             return forumService.checkTheme(themeId);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> checkCategory(@RequestParam(name = "themeId") UUID categoryId) {
+        try {
+            return forumService.checkCategory(categoryId);
         }
         catch (Exception e){
             return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);

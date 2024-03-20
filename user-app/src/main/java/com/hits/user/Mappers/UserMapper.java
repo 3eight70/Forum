@@ -1,5 +1,6 @@
 package com.hits.user.Mappers;
 
+import com.hits.common.Models.User.Role;
 import com.hits.common.Models.User.UserDto;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.User;
@@ -21,6 +22,7 @@ public class UserMapper {
                 null,
                 false,
                 false,
+                Role.USER,
                 new ArrayList<>(),
                 null
         );
@@ -34,6 +36,7 @@ public class UserMapper {
                 user.getLogin(),
                 user.getIsConfirmed(),
                 user.getIsBanned(),
+                user.getRole(),
                 user.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)

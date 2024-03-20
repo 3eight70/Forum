@@ -36,5 +36,6 @@ public interface IForumService {
     ResponseEntity<?> getThemesWithSubstring(String substring);
     ResponseEntity<?> getMessagesWithSubstring(String substring);
     ResponseEntity<?> checkTheme(UUID themeId);
+    ResponseEntity<?> checkCategory(UUID categoryId);
     ResponseEntity<?> getThemesById(List<UUID> themesId);
 }
