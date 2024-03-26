@@ -1,10 +1,14 @@
 package com.hits.user.Services;
 
 import com.hits.common.Client.ForumAppClient;
+import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
 import com.hits.common.Models.User.Role;
 import com.hits.common.Models.User.UserDto;
+import com.hits.user.Exceptions.AccountNotConfirmedException;
+import com.hits.user.Exceptions.UserAlreadyExistsException;
 import com.hits.user.Mappers.UserMapper;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
@@ -17,6 +21,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,19 +58,19 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Transactional
     public ResponseEntity<?> registerNewUser(UserRegisterModel userRegisterModel)
-            throws MessagingException, UnsupportedEncodingException{
+            throws MessagingException, UnsupportedEncodingException, UserAlreadyExistsException{
         User user = userRepository.findByEmail(userRegisterModel.getEmail());
 
         if (user != null){
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Пользователь с указанной почтой уже существует"), HttpStatus.BAD_REQUEST);
+            throw new UserAlreadyExistsException(String.format("Пользователь с почтой %s уже существует",
+                    userRegisterModel.getEmail()));
         }
 
         user = userRepository.findByLogin(userRegisterModel.getLogin());
 
         if (user != null){
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Пользователь с указанным логином уже существует"), HttpStatus.BAD_REQUEST);
+            throw new UserAlreadyExistsException(String.format("Пользователь с логином %s уже существует",
+                    userRegisterModel.getLogin()));
         }
 
 
@@ -88,12 +93,12 @@ public class UserService implements UserDetailsService, IUserService {
 //        return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "Письмо с подтверждением отправлено"), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken){
+    public ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken)
+            throws AccountNotConfirmedException {
         User user = userRepository.findByEmail(loginCredentials.getEmail());
 
         if (!user.getIsConfirmed()){
-            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
-                    "Сперва подтвердите аккаунт"), HttpStatus.UNAUTHORIZED);
+            throw new AccountNotConfirmedException("Сперва подтвердите аккаунт");
         }
 
         String token = jwtTokenUtils.generateToken(user);
@@ -120,25 +125,24 @@ public class UserService implements UserDetailsService, IUserService {
                 "Пользователь успешно вышел из аккаунт"), HttpStatus.OK);
     }
 
-    public UserDto getUserFromLogin(String login) {
+    public UserDto getUserFromLogin(String login) throws NotFoundException{
         User user = userRepository.findByLogin(login);
 
         if (user == null){
-            return null;
+            throw new NotFoundException(String.format("Пользователя с логином=%s не существует", login));
         }
 
         return UserMapper.userToUserDto(user);
     }
 
-    public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId){
+    public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
         User user = userRepository.findByLogin(userDto.getLogin());
         ResponseEntity<?> checkTheme = forumAppClient.checkTheme(themeId);
 
         if (checkTheme.getStatusCode() == HttpStatus.OK){
             List<UUID> favoriteThemes = user.getFavoriteThemes();
             if (favoriteThemes.contains(themeId)){
-                return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                        "Тема с данным id уже находится в избранном пользователя"), HttpStatus.BAD_REQUEST);
+                throw new BadRequestException(String.format("Тема с id=%s уже находится в избранном пользователя", themeId));
             }
 
             favoriteThemes.add(themeId);
@@ -148,15 +152,14 @@ public class UserService implements UserDetailsService, IUserService {
                     "Пользователь успешно добавил тему в избранное"), HttpStatus.OK);
         }
         else if (checkTheme.getStatusCode() == HttpStatus.BAD_REQUEST) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Темы с данным id не существует"), HttpStatus.BAD_REQUEST);
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId){
+    public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
         User user = userRepository.findByLogin(userDto.getLogin());
 
         if (user.getFavoriteThemes().contains(themeId)){
@@ -168,8 +171,7 @@ public class UserService implements UserDetailsService, IUserService {
                     "Пользователь успешно удалил тему из избранного"), HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                    "Темы с данным id нет в избранном пользователя"), HttpStatus.NOT_FOUND);
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
     }
 
@@ -179,19 +181,26 @@ public class UserService implements UserDetailsService, IUserService {
         return ResponseEntity.ok(forumAppClient.getThemesById(user.getFavoriteThemes()).getBody());
     }
 
-    public ResponseEntity<?> verifyUser(UUID userId, String code){
+    public ResponseEntity<?> verifyUser(UUID userId, String code) throws NotFoundException, BadRequestException{
         User user = userRepository.findUserById(userId);
 
+        if (user == null){
+            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
+        }
+
         if (!user.getIsConfirmed()){
-            user.setIsConfirmed(true);
-            user.setVerificationCode(null);
-            userRepository.saveAndFlush(user);
+            if (code.equals(user.getVerificationCode())) {
+                user.setIsConfirmed(true);
+                user.setVerificationCode(null);
+                userRepository.saveAndFlush(user);
 
-            String token = jwtTokenUtils.generateToken(user);
-            jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+                String token = jwtTokenUtils.generateToken(user);
+                jwtTokenUtils.saveToken(jwtTokenUtils.getIdFromToken(token), "Valid");
+                RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
-            return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));
+                return ResponseEntity.ok(new TokenResponse(token, refreshToken.getToken()));
+            }
+            throw new BadRequestException("Неверный код подтверждения аккаунта");
         }
         else{
             return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
@@ -199,12 +208,15 @@ public class UserService implements UserDetailsService, IUserService {
         }
     }
 
-    public ResponseEntity<?> banUser(UserDto user, UUID userId){
+    public ResponseEntity<?> banUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException{
         User userToBan = userRepository.findUserById(userId);
 
         if (userToBan == null){
-            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                    "Пользователя с данным id не существует"), HttpStatus.NOT_FOUND);
+            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
+        }
+
+        if (userToBan.getIsBanned()){
+            throw new BadRequestException(String.format("Пользователь с id=%s уже заблокирован", userId));
         }
 
         userToBan.setIsBanned(true);
@@ -214,12 +226,15 @@ public class UserService implements UserDetailsService, IUserService {
                 "Пользователь успешно заблокирован"), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> giveModeratorRole(UserDto userDto, UUID userId){
+    public ResponseEntity<?> giveModeratorRole(UserDto userDto, UUID userId) throws NotFoundException{
         User user = userRepository.findUserById(userId);
 
         if (user == null){
-            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                    "Пользователя с данным id не существует"), HttpStatus.NOT_FOUND);
+            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
+        }
+
+        if (user.getRole() == Role.MODERATOR){
+            throw new BadRequestException("Пользователь уже имеет роль модератора");
         }
 
         user.setRole(Role.MODERATOR);
@@ -229,12 +244,15 @@ public class UserService implements UserDetailsService, IUserService {
                 "Роль модератора успешно выдана"), HttpStatus.OK);
     }
 
-    public ResponseEntity<?> deleteModeratorRole(UserDto userDto, UUID userId){
+    public ResponseEntity<?> deleteModeratorRole(UserDto userDto, UUID userId) throws NotFoundException {
         User user = userRepository.findUserById(userId);
 
         if (user == null){
-            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                    "Пользователя с данным id не существует"), HttpStatus.NOT_FOUND);
+            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
+        }
+
+        if (user.getRole() != Role.MODERATOR){
+            throw new BadRequestException("Пользователь не имеет роли модератора");
         }
 
         user.setRole(Role.USER);

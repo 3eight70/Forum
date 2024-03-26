@@ -27,6 +27,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(REGISTER_USER, LOGIN_USER).anonymous()
                         .requestMatchers(LOGOUT_USER).authenticated()
                         .requestMatchers(EDIT_CATEGORY, DELETE_CATEGORY).authenticated()
                         .requestMatchers(HttpMethod.POST, CREATE_CATEGORY).authenticated()

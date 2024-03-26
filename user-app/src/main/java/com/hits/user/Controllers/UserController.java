@@ -1,14 +1,19 @@
 package com.hits.user.Controllers;
 
 import com.hits.common.Client.UserAppClient;
+import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
+import com.hits.user.Exceptions.AccountNotConfirmedException;
+import com.hits.user.Exceptions.UserAlreadyExistsException;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
 import com.hits.user.Services.IUserService;
 import feign.FeignException;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +27,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import static com.hits.common.Consts.*;
@@ -35,39 +41,21 @@ public class UserController implements UserAppClient {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping(REGISTER_USER)
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel){
-        userRegisterModel.setPassword(passwordEncoder.encode(userRegisterModel.getPassword()));
-
-        try{
-            return userService.registerNewUser(userRegisterModel);
-        }
-        catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Данные введены некорректно"), HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) throws MessagingException,
+            UnsupportedEncodingException,
+            UserAlreadyExistsException  {
+        userRegisterModel.setPassword(passwordEncoder.encode(userRegisterModel.getPassword())) ;
+        return userService.registerNewUser(userRegisterModel);
     }
 
     @PostMapping(LOGIN_USER)
-    public ResponseEntity<?> loginUser(@RequestBody LoginCredentials loginCredentials){
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getEmail(), loginCredentials.getPassword()));
+    public ResponseEntity<?> loginUser(@RequestBody LoginCredentials loginCredentials) throws AccountNotConfirmedException {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getEmail(), loginCredentials.getPassword()));
 
-            if (authentication.isAuthenticated()){
-                RefreshToken refreshToken = refreshTokenService.checkRefreshToken(loginCredentials);
+        if (authentication.isAuthenticated()){
+            RefreshToken refreshToken = refreshTokenService.checkRefreshToken(loginCredentials);
 
-                return userService.loginUser(loginCredentials, refreshToken);
-            }
-        }
-        catch (BadCredentialsException | UsernameNotFoundException e) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Неправильный логин или пароль"), HttpStatus.BAD_REQUEST);
-        }
-        catch (RuntimeException e){
-            return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), "Действие токена истекло"), HttpStatus.UNAUTHORIZED);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return userService.loginUser(loginCredentials, refreshToken);
         }
 
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -75,101 +63,67 @@ public class UserController implements UserAppClient {
 
     @PostMapping(LOGOUT_USER)
     public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token){
-        try {
-            return userService.logoutUser(token);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return userService.logoutUser(token);
     }
 
     @Override
     public Boolean validateToken(@RequestParam(name = "token") String token){
-            return userService.validateToken(token);
+        return userService.validateToken(token);
     }
 
     @Override
-    public UserDto getUser(@RequestParam(name = "login") String login){
+    public UserDto getUser(@RequestParam(name = "login") String login) throws NotFoundException{
         return userService.getUserFromLogin(login);
     }
 
     @PostMapping(ADD_TO_FAVORITE)
-    public ResponseEntity<?> addThemeToFavorite(@AuthenticationPrincipal UserDto userDto, @RequestParam(name = "themeId") UUID themeId){
+    public ResponseEntity<?> addThemeToFavorite(@AuthenticationPrincipal UserDto userDto,
+                                                @RequestParam(name = "themeId") UUID themeId) throws NotFoundException{
         try {
             return userService.addThemeToFavorite(userDto, themeId);
         }
         catch (FeignException.BadRequest e){
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), "Темы с указанным id не существует"), HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "Темы с указанным id не существует"), HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping(DELETE_FROM_FAVORITE)
-    public ResponseEntity<?> deleteThemeFromFavorite(@AuthenticationPrincipal UserDto userDto, @RequestParam(name = "themeId") UUID themeId){
-        try {
-            return userService.deleteThemeFromFavorite(userDto, themeId);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<?> deleteThemeFromFavorite(@AuthenticationPrincipal UserDto userDto,
+                                                     @RequestParam(name = "themeId") UUID themeId) throws NotFoundException{
+        return userService.deleteThemeFromFavorite(userDto, themeId);
     }
 
     @GetMapping(GET_FAVORITE)
     public ResponseEntity<?> getFavoriteThemes(@AuthenticationPrincipal UserDto userDto){
-        try {
-            return userService.getFavoriteThemes(userDto);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return userService.getFavoriteThemes(userDto);
     }
 
     @GetMapping(VERIFY_USER)
     public ResponseEntity<?> verifyUser(
             @RequestParam(name = "id") UUID userId,
-            @RequestParam(name = "code") String code){
-        try {
-            return userService.verifyUser(userId, code);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            @RequestParam(name = "code") String code) throws NotFoundException, BadRequestException {
+        return userService.verifyUser(userId, code);
     }
 
     @PostMapping(BAN_USER)
     public ResponseEntity<?> banUser(
             @AuthenticationPrincipal UserDto user,
-            @RequestParam(name = "userId") UUID userId){
-        try {
-            return userService.banUser(user, userId);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            @RequestParam(name = "userId") UUID userId) throws NotFoundException, BadRequestException {
+        return userService.banUser(user, userId);
     }
 
     @PostMapping(GIVE_MODERATOR)
     public ResponseEntity<?> giveModeratorRole(
             @AuthenticationPrincipal UserDto user,
-            @RequestParam(name = "userId") UUID userId){
-        try {
-            return userService.giveModeratorRole(user, userId);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            @RequestParam(name = "userId") UUID userId) throws NotFoundException {
+
+        return userService.giveModeratorRole(user, userId);
     }
 
     @DeleteMapping(DELETE_MODERATOR)
     public ResponseEntity<?> deleteModeratorRole(
             @AuthenticationPrincipal UserDto user,
-            @RequestParam(name = "userId") UUID userId){
-        try {
-            return userService.deleteModeratorRole(user, userId);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            @RequestParam(name = "userId") UUID userId) throws NotFoundException{
+        return userService.deleteModeratorRole(user, userId);
     }
 }

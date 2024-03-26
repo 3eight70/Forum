@@ -2,25 +2,25 @@ package com.hits.forum.Exceptions;
 
 import com.hits.common.Models.Response.Response;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleValidationException(MethodArgumentNotValidException ex) {
-        FieldError fieldError = ex.getBindingResult().getFieldError();
-        String errorMessage = fieldError != null ? fieldError.getDefaultMessage() : "Ошибка валидации";
+        String errorMessage = ex.getMessage();
         int status = HttpStatus.BAD_REQUEST.value();
 
         return new ResponseEntity<>(new Response(status, errorMessage), HttpStatus.BAD_REQUEST);
@@ -29,8 +29,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleMessageNotReadableException(HttpMessageNotReadableException e){
-        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                "Отсутствует тело запроса"), HttpStatus.BAD_REQUEST);
+        Response response = new Response(HttpStatus.BAD_REQUEST.value(),
+                "Отсутствует тело запроса");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
