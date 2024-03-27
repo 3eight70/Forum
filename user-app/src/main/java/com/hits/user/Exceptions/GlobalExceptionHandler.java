@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
 
-import javax.naming.ServiceUnavailableException;
-
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -28,7 +26,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleValidationException(MethodArgumentNotValidException e) {
         FieldError fieldError = e.getBindingResult().getFieldError();
-        String errorMessage = fieldError != null ? "поле '" + fieldError.getField() + "' " + fieldError.getDefaultMessage() : "Ошибка валидации";
+        String errorMessage = fieldError != null ? fieldError.getDefaultMessage() : "Ошибка валидации";
+
         int status = HttpStatus.BAD_REQUEST.value();
         log.error(e.getMessage(), e);
 
@@ -55,6 +54,14 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
                 "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Response> handleExpiredTokenException(ExpiredTokenException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(FeignException.Unauthorized.class)

@@ -17,11 +17,12 @@ import com.hits.user.Models.Entities.User;
 import com.hits.user.Repositories.RedisRepository;
 import com.hits.user.Repositories.UserRepository;
 import com.hits.user.Utils.JwtTokenUtils;
+import feign.FeignException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,7 +110,12 @@ public class UserService implements UserDetailsService, IUserService {
     }
 
     public Boolean validateToken(String token){
-        return jwtTokenUtils.validateToken(token);
+        try {
+            return jwtTokenUtils.validateToken(token);
+        }
+        catch (ExpiredJwtException | FeignException.Unauthorized e){
+            return false;     //Костыль, потому что пока не получается нормально ловить Feign ошибки
+        }
     }
 
     public ResponseEntity<?> logoutUser(String token){
@@ -137,9 +143,15 @@ public class UserService implements UserDetailsService, IUserService {
 
     public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
         User user = userRepository.findByLogin(userDto.getLogin());
-        ResponseEntity<?> checkTheme = forumAppClient.checkTheme(themeId);
+        ResponseEntity<?> checkTheme;
+        try {
+             checkTheme = forumAppClient.checkTheme(themeId);
+        }
+        catch (FeignException.NotFound e){
+            throw new NotFoundException(String.format("Темы с указанным id не существует", themeId));
+        }
 
-        if (checkTheme.getStatusCode() == HttpStatus.OK){
+        if (checkTheme != null && checkTheme.getStatusCode() == HttpStatus.OK){
             List<UUID> favoriteThemes = user.getFavoriteThemes();
             if (favoriteThemes.contains(themeId)){
                 throw new BadRequestException(String.format("Тема с id=%s уже находится в избранном пользователя", themeId));
@@ -150,9 +162,6 @@ public class UserService implements UserDetailsService, IUserService {
 
             return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                     "Пользователь успешно добавил тему в избранное"), HttpStatus.OK);
-        }
-        else if (checkTheme.getStatusCode() == HttpStatus.BAD_REQUEST) {
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),

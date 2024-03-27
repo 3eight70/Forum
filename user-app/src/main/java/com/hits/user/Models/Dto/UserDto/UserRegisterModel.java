@@ -12,15 +12,15 @@ import lombok.RequiredArgsConstructor;
 public class UserRegisterModel {
     @Size(min = 1, message = "Минимальная длина не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+", message = "Неверный адрес электронной почты")
-    @NotNull
+    @NotNull(message = "Адрес почты должен быть указан")
     private String email;
 
     @Size(min = 1, message = "Минимальная длина не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
-    @NotNull
+    @NotNull(message = "Логин должен быть указан")
     private String login;
 
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")
-    @NotNull
+    @NotNull(message = "Пароль должен быть указан")
     private String password;
 }

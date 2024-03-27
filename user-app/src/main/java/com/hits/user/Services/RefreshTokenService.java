@@ -1,6 +1,7 @@
 package com.hits.user.Services;
 
 import com.hits.common.Models.Response.TokenResponse;
+import com.hits.user.Exceptions.ExpiredTokenException;
 import com.hits.user.Models.Dto.Token.RefreshRequestDto;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
 import com.hits.user.Models.Entities.RefreshToken;
@@ -75,6 +76,6 @@ public class RefreshTokenService implements IRefreshTokenService{
 
                     return ResponseEntity.ok(new TokenResponse(accessToken, refreshRequestDto.getToken()));
                 })
-                .orElseThrow(() -> new RuntimeException("Данного токена нет в базе данных"));
+                .orElseThrow(() -> new ExpiredTokenException("Срок действия токена истек"));
     }
 }

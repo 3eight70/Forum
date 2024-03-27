@@ -5,9 +5,6 @@ jwt:
   secret: AbdaasdasdasdasfasgasASFASF
   expiration: 1h
 
-refresh:
-  expiration: 1d
-
 spring:
   application:
     name: FORUM-SERVICE

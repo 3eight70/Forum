@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ThemeRequest {
     @Size(min = 5, message = "Минимальная длина названия темы равна 5")
+    @NotNull(message = "Минимальная длина названия темы равна 5")
     private String themeName;
 
     @NotNull(message = "id категории должен быть указан")

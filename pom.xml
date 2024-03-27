@@ -37,6 +37,7 @@
 		<registry.version>4.1.0</registry.version>
 		<webflux.version>3.2.2</webflux.version>
 		<feign.version>4.1.0</feign.version>
+		<json.version>20240303</json.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -64,6 +65,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-validation</artifactId>
 				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>${json.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

@@ -1,5 +1,9 @@
 package com.hits.forum.Services;
 
+import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.ForbiddenException;
+import com.hits.common.Exceptions.NotFoundException;
+import com.hits.common.Exceptions.ObjectAlreadyExistsException;
 import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
@@ -13,18 +17,18 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IForumService {
-    ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest);
-    ResponseEntity<?> createTheme(UserDto user, ThemeRequest createThemeRequest);
-    ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest);
-    ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest);
-    ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest);
-    ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest);
-    ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId);
-    ResponseEntity<?> deleteTheme(UserDto user, UUID themeId);
-    ResponseEntity<?> deleteMessage(UserDto user, UUID messageId);
+    ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest) throws ObjectAlreadyExistsException, NotFoundException, BadRequestException;
+    ResponseEntity<?> createTheme(UserDto user, ThemeRequest createThemeRequest) throws ObjectAlreadyExistsException, NotFoundException, BadRequestException;
+    ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest) throws NotFoundException;
+    ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest) throws BadRequestException, NotFoundException, ForbiddenException;
+    ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest) throws BadRequestException, NotFoundException, ForbiddenException;
+    ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest) throws NotFoundException, ForbiddenException;
+    ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId) throws NotFoundException, ForbiddenException;
+    ResponseEntity<?> deleteTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
+    ResponseEntity<?> deleteMessage(UserDto user, UUID messageId) throws NotFoundException, ForbiddenException;
     ResponseEntity<?> getAllThemes(Integer page, Integer size, SortOrder sortOrder);
     ResponseEntity<?> getCategories(SortOrder sortOrder);
-    ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder);
+    ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder) throws NotFoundException;
     ResponseEntity<?> getMessagesWithFilters(
             String content,
             LocalDateTime timeFrom,
@@ -35,7 +39,7 @@ public interface IForumService {
     ResponseEntity<?> getCategoriesWithSubstring(String substring);
     ResponseEntity<?> getThemesWithSubstring(String substring);
     ResponseEntity<?> getMessagesWithSubstring(String substring);
-    ResponseEntity<?> checkTheme(UUID themeId);
-    ResponseEntity<?> checkCategory(UUID categoryId);
+    ResponseEntity<?> checkTheme(UUID themeId) throws NotFoundException;
+    ResponseEntity<?> checkCategory(UUID categoryId) throws NotFoundException;
     ResponseEntity<?> getThemesById(List<UUID> themesId);
 }

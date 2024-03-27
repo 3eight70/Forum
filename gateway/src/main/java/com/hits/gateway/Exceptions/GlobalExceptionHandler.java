@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.net.UnknownHostException;
+
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -19,5 +21,14 @@ public class GlobalExceptionHandler {
         Response response = new Response(HttpStatus.SERVICE_UNAVAILABLE.value(),
                 "Сервис недоступен");
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(UnknownHostException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Response> handleUnknownHostException(UnknownHostException e) {
+        log.error(e.getMessage(), e);
+        Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Неизвестное имя хоста");
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

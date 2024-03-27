@@ -19,11 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +47,7 @@ public class UserController implements UserAppClient {
     }
 
     @PostMapping(LOGIN_USER)
-    public ResponseEntity<?> loginUser(@RequestBody LoginCredentials loginCredentials) throws AccountNotConfirmedException {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginCredentials loginCredentials) throws AccountNotConfirmedException {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getEmail(), loginCredentials.getPassword()));
 
         if (authentication.isAuthenticated()){
@@ -67,7 +65,7 @@ public class UserController implements UserAppClient {
     }
 
     @Override
-    public Boolean validateToken(@RequestParam(name = "token") String token){
+    public Boolean validateToken(@RequestParam(name = "token") String token) {
         return userService.validateToken(token);
     }
 

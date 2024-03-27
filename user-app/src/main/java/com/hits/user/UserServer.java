@@ -2,9 +2,7 @@ package com.hits.user;
 
 import com.hits.common.Client.ForumAppClient;
 import com.hits.common.Client.UserAppClient;
-import com.hits.user.Decoder.CustomErrorDecoder;
 import feign.Logger;
-import feign.codec.ErrorDecoder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

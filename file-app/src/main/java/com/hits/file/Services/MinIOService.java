@@ -1,15 +1,15 @@
 package com.hits.file.Services;
 
+import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.User.UserDto;
 import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
-import com.hits.file.Models.Dto.Response.Response;
 import com.hits.file.Models.Entities.File;
 import com.hits.file.Repositories.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,8 @@ public class MinIOService implements IMinIOService{
     private final S3Client s3Client;
     private final FileRepository fileRepository;
 
-    public ResponseEntity<?> uploadFile(UserDto user, MultipartFile file) throws IOException {
+    public ResponseEntity<?> uploadFile(UserDto user, MultipartFile file)
+            throws IOException, BadRequestException{
         String filename = file.getOriginalFilename();
         File newFile;
 
@@ -45,8 +46,7 @@ public class MinIOService implements IMinIOService{
 
             if(s3Client.listObjects(ListObjectsRequest.builder().bucket(login).build()).contents().stream()
                     .anyMatch(object -> object.key().equals(filename))){
-                return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                        "Вы уже загрузили файл с таким же названием"), HttpStatus.BAD_REQUEST);
+                throw new BadRequestException("Вы уже загрузили файл с таким же названием");
             }
 
             PutObjectRequest obj = PutObjectRequest.builder()
@@ -65,12 +65,12 @@ public class MinIOService implements IMinIOService{
         return ResponseEntity.ok(newFile.getId());
     }
 
-    public ResponseEntity<?> downloadFile(UserDto user, UUID id){
+    public ResponseEntity<?> downloadFile(UserDto user, UUID id)
+    throws NotFoundException {
         File file = fileRepository.findFileByIdAndUserId(id, user.getId());
 
         if (file == null){
-            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                    "Файл с данным id не найден"), HttpStatus.NOT_FOUND);
+            throw new NotFoundException(String.format("Файл с id=%s не найден", id));
         }
 
         byte[] fileBytes = file.getFileContent();

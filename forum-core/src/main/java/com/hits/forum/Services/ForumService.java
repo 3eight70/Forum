@@ -1,5 +1,9 @@
 package com.hits.forum.Services;
 
+import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.ForbiddenException;
+import com.hits.common.Exceptions.NotFoundException;
+import com.hits.common.Exceptions.ObjectAlreadyExistsException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.common.Models.User.UserDto;
@@ -48,27 +52,27 @@ public class ForumService implements IForumService {
     private String secret;
 
     @Transactional
-    public ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest) {
-        ForumCategory forumCategory = categoryRepository.findByCategoryName(createCategoryRequest.getCategoryName());
+    public ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest)
+    throws ObjectAlreadyExistsException, NotFoundException, BadRequestException{
+        String categoryName = createCategoryRequest.getCategoryName();
+        ForumCategory forumCategory = categoryRepository.findByCategoryName(categoryName);
 
         if (forumCategory != null) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Категория с данным названием уже существует"), HttpStatus.BAD_REQUEST);
+           throw new ObjectAlreadyExistsException(String.format("Категория с названием=%s уже существует", categoryName));
         }
 
         forumCategory = ForumMapper.categoryRequestToForumCategory(user.getLogin(), createCategoryRequest);
 
-        if (createCategoryRequest.getParentId() != null) {
+        UUID parentId = createCategoryRequest.getParentId();
+        if (parentId != null) {
             ForumCategory parent = categoryRepository.findForumCategoryById(createCategoryRequest.getParentId());
 
             if (parent == null) {
-                return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                        "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+                throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", parentId));
             }
 
             if (!parent.getThemes().isEmpty()){
-                return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                        "У данной категории уже присутствуют топики"), HttpStatus.BAD_REQUEST);
+                throw new BadRequestException("У данной категории уже присутствуют топики");
             }
             parent.getChildCategories().add(forumCategory);
             categoryRepository.saveAndFlush(parent);
@@ -81,22 +85,22 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createTheme(UserDto user, ThemeRequest createThemeRequest) {
-        ForumTheme forumTheme = themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId());
+    public ResponseEntity<?> createTheme(UserDto user, ThemeRequest createThemeRequest)
+            throws ObjectAlreadyExistsException, NotFoundException, BadRequestException {
+        String themeName = createThemeRequest.getThemeName();
+        UUID categoryId = createThemeRequest.getCategoryId();
+        ForumTheme forumTheme = themeRepository.findByThemeNameAndCategoryId(themeName, categoryId);
 
         if (forumTheme != null) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "В данной категории уже существует тема с данным названием"), HttpStatus.BAD_REQUEST);
+            throw new ObjectAlreadyExistsException(String.format("В данной категории уже существует тема с названием=%s", themeName));
         }
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(createThemeRequest.getCategoryId());
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
         if (forumCategory == null) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+            throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId));
         }
         else if (!forumCategory.getChildCategories().isEmpty()){
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Вы не можете создать топик не в категории нижнего уровня"), HttpStatus.BAD_REQUEST);
+           throw new BadRequestException("Вы не можете создать топик не в категории нижнего уровня");
         }
 
         forumTheme = ForumMapper.themeRequestToForumTheme(user.getLogin(), createThemeRequest);
@@ -108,12 +112,12 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest) {
-        ForumTheme forumTheme = themeRepository.findForumThemeById(createMessageRequest.getThemeId());
+    public ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest) throws NotFoundException {
+        UUID themeId = createMessageRequest.getThemeId();
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Тема-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+            throw new NotFoundException(String.format("Тема-родитель с id=%s не существует", themeId));
         }
 
         ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(user.getLogin(), createMessageRequest, forumTheme.getCategoryId());
@@ -125,40 +129,35 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest) {
+    public ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest)
+    throws BadRequestException, NotFoundException, ForbiddenException{
         UUID parentId = createCategoryRequest.getParentId();
 
         if (parentId != null && parentId.equals(categoryId)) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Категория не может быть родителем для самой себя"), HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Категория не может быть родителем для самой себя");
         }
         ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
-
         if (forumCategory == null) {
-            return notFoundResponse("Категории с данным id не существует");
+            throw new NotFoundException(String.format("Категории с id=%s не существует", categoryId));
         }
 
         if (!Objects.equals(user.getLogin(), forumCategory.getAuthorLogin())) {
-            return forbiddenResponse();
+            throw new ForbiddenException();
         }
 
         if (parentId != null) {
             ForumCategory parent = categoryRepository.findForumCategoryById(parentId);
 
-
             if (parent == null) {
-                return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                        "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+                throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", parentId));
             } else {
                 if (!parent.getThemes().isEmpty()){
-                    return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                            "У данной категории уже присутствуют топики"), HttpStatus.BAD_REQUEST);
+                   throw new BadRequestException("У данной категории уже присутствуют топики");
                 }
                 UUID parentOfParentId = parent.getParentId();
                 if (parentOfParentId != null && parentOfParentId.equals(categoryId)) {
-                    return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                            "Категории не могут одновременно быть родителями друг друга"), HttpStatus.BAD_REQUEST);
+                    throw new BadRequestException("Категории не могут одновременно быть родителями друг друга");
                 }
 
                 parent.getChildCategories().add(forumCategory);
@@ -169,8 +168,7 @@ public class ForumService implements IForumService {
         ForumCategory checkCategory = categoryRepository.findByCategoryName(createCategoryRequest.getCategoryName());
 
         if (checkCategory != null && !Objects.equals(forumCategory.getCategoryName(), checkCategory.getCategoryName())) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Категория с указанным названием уже существует"), HttpStatus.BAD_REQUEST);
+            throw new BadRequestException(String.format("Категория с указанным названием уже существует"));
         }
 
         forumCategory.setParentId(parentId);
@@ -184,34 +182,33 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest) {
+    public ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest)
+    throws BadRequestException, NotFoundException, ForbiddenException {
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
-            return notFoundResponse("Темы с данным id не существует");
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         if (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin())) {
-            return forbiddenResponse();
+            throw new ForbiddenException();
         }
 
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(createThemeRequest.getCategoryId());
+        UUID categoryId = createThemeRequest.getCategoryId();
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
         if (forumCategory != null) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Категория-родитель с указанным id не существует"), HttpStatus.BAD_REQUEST);
+            throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId));
         }
         else if (!forumCategory.getChildCategories().isEmpty()){
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Вы не можете создать топик не в категории нижнего уровня"), HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Вы не можете создать топик не в категории нижнего уровня");
         }
 
         ForumTheme checkTheme = themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId());
 
         if (checkTheme != null && !Objects.equals(forumTheme.getThemeName(), checkTheme.getThemeName())
                 && checkTheme.getCategoryId() != forumTheme.getCategoryId()) {
-            return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                    "Тема с указанным названием в данной категории уже существует"), HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Тема с указанным названием в данной категории уже существует");
         }
 
         forumTheme.setThemeName(createThemeRequest.getThemeName());
@@ -225,15 +222,16 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest) {
+    public ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest)
+    throws NotFoundException, ForbiddenException{
         ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
 
         if (forumMessage == null) {
-            return notFoundResponse("Сообщения с данным id не существует");
+            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
         }
 
         if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
-            return forbiddenResponse();
+            throw new ForbiddenException();
         }
 
 
@@ -247,15 +245,16 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId) {
+    public ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId)
+            throws NotFoundException, ForbiddenException{
         ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
         if (forumCategory == null) {
-            return notFoundResponse("Категории с данным id не существует");
+            throw new NotFoundException(String.format("Категории с id=%s не существует",categoryId));
         }
 
         if (!Objects.equals(user.getLogin(), forumCategory.getAuthorLogin())) {
-            return forbiddenResponse();
+            throw new ForbiddenException();
         }
 
         categoryRepository.delete(forumCategory);
@@ -265,16 +264,16 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteTheme(UserDto user, UUID themeId) {
+    public ResponseEntity<?> deleteTheme(UserDto user, UUID themeId)
+            throws NotFoundException, ForbiddenException{
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
-            return notFoundResponse("Темы с данным id не существует");
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         if (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin())) {
-            return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
-                    "Изменение чужих данных запрещено"), HttpStatus.FORBIDDEN);
+           throw new ForbiddenException();
         }
 
         themeRepository.delete(forumTheme);
@@ -284,16 +283,16 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> deleteMessage(UserDto user, UUID messageId) {
+    public ResponseEntity<?> deleteMessage(UserDto user, UUID messageId)
+            throws NotFoundException, ForbiddenException{
         ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
 
         if (forumMessage == null) {
-            return notFoundResponse("Сообщения с данным id не существует");
+            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
         }
 
         if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
-            return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
-                    "Изменение чужих данных запрещено"), HttpStatus.FORBIDDEN);
+            throw new ForbiddenException();
         }
 
         messageRepository.delete(forumMessage);
@@ -338,11 +337,12 @@ public class ForumService implements IForumService {
         return ResponseEntity.ok(categories);
     }
 
-    public ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder){
+    public ResponseEntity<?> getMessages(UUID themeId, Integer page, Integer size, SortOrder sortOrder)
+    throws NotFoundException{
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
-            return notFoundResponse("Темы с данным id не существует");
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         Sort sort = Sort.by(getComparator(sortOrder));
@@ -370,21 +370,23 @@ public class ForumService implements IForumService {
         ));
     }
 
-    public ResponseEntity<?> checkTheme(UUID themeId){
+    public ResponseEntity<?> checkTheme(UUID themeId)
+    throws NotFoundException{
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null){
-           return notFoundResponse("Темы с данным id не существует");
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<?> checkCategory(UUID categoryId){
+    public ResponseEntity<?> checkCategory(UUID categoryId)
+    throws NotFoundException{
         ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
         if (forumCategory == null){
-            return notFoundResponse("Категории с данным id не существует");
+            throw new NotFoundException(String.format("Категории с id=%s не существует", categoryId));
         }
 
         return ResponseEntity.ok().build();
@@ -455,15 +457,5 @@ public class ForumService implements IForumService {
             case NameAsc -> Sort.Order.asc("categoryName");
             case NameDesc -> Sort.Order.desc("categoryName");
         };
-    }
-
-    private ResponseEntity<?> notFoundResponse(String message) {
-        return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                message), HttpStatus.NOT_FOUND);
-    }
-
-    private ResponseEntity<?> forbiddenResponse() {
-        return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
-                "Изменение чужих данных запрещено"), HttpStatus.FORBIDDEN);
     }
 }
