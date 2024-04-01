@@ -33,14 +33,18 @@ public class User implements UserDetails {
     private LocalDateTime createTime;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 1, message = "Минимальная длина не менее 1 символа")
+    @Size(min = 1, message = "Минимальная длина электронной почты не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+", message = "Неверный адрес электронной почты")
     private String email;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 1, message = "Минимальная длина не менее 1 символа")
+    @Size(min = 1, message = "Минимальная длина логина не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
     private String login;
+
+    @Column(unique = true, nullable = false)
+    @Pattern(regexp = "^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$", message = "Телефон должен быть указан в формате +7 (xxx) xxx-xx-xx")
+    private String phoneNumber;
 
     @Column(length = 1000, nullable = false)
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")

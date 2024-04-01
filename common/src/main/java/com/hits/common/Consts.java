@@ -4,6 +4,7 @@ public class Consts {
     public static final String UPLOAD_FILE = "/api/file/upload";
     public static final String DOWNLOAD_FILE = "/api/file/download";
     public static final String GET_FILES = "/api/file/get";
+    public static final String GET_FILE_INFO = "/api/file/info";
     public static final String REFRESH_TOKEN = "/api/account/refreshToken";
     public static final String REGISTER_USER = "/api/account/register";
     public static final String LOGIN_USER = "/api/account/login";
@@ -14,6 +15,7 @@ public class Consts {
     public static final String BAN_USER = "/api/account/admin/ban";
     public static final String GIVE_MODERATOR = "/api/account/admin/give/moderator";
     public static final String DELETE_MODERATOR = "/api/account/admin/delete/moderator";
+    public static final String GIVE_CATEGORY = "/api/account/admin/give/category";
     public static final String ADD_TO_FAVORITE = "/api/account/favorite/add";
     public static final String DELETE_FROM_FAVORITE = "/api/account/favorite/delete";
     public static final String GET_FAVORITE = "/api/account/favorite";
@@ -31,6 +33,7 @@ public class Consts {
     public static final String DELETE_THEME = "/api/forum/category/theme/delete";
     public static final String CHECK_THEME = "/api/forum/category/theme";
     public static final String CHECK_CATEGORY = "/api/forum/category";
+    public static final String ARCHIVE_THEME = "/api/forum/category/theme/archive";
     public static final String DELETE_MESSAGE = "/api/forum/theme/message/delete";
     public static final String GET_MESSAGES = "/api/forum/theme/{themeId}/message/get";
     public static final String GET_MESSAGES_WITH_FILTERS = "/api/forum/message/get";

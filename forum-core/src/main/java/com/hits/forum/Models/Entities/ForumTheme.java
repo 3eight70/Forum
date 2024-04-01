@@ -37,6 +37,9 @@ public class ForumTheme {
     @Column(nullable = false)
     private UUID categoryId;
 
+    @Column(nullable = false)
+    private Boolean isArchived = false;
+
     @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL)
     private List<ForumMessage> messages;
 }

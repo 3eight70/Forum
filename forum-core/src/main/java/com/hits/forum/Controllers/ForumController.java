@@ -154,6 +154,22 @@ public class ForumController implements ForumAppClient {
         return forumService.getMessagesWithSubstring(content);
     }
 
+    @PostMapping(ARCHIVE_THEME)
+    ResponseEntity<?> archiveTheme(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam(value = "themeId") UUID themeId)
+            throws NotFoundException, ForbiddenException {
+        return forumService.archiveTheme(user, themeId);
+    }
+
+    @DeleteMapping(ARCHIVE_THEME)
+    ResponseEntity<?> unArchiveTheme(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam(value = "themeId") UUID themeId)
+            throws NotFoundException, ForbiddenException {
+        return forumService.unArchiveTheme(user, themeId);
+    }
+
     @Override
     public ResponseEntity<?> checkTheme(@RequestParam(name = "themeId") UUID themeId)
             throws NotFoundException{
@@ -161,7 +177,7 @@ public class ForumController implements ForumAppClient {
     }
 
     @Override
-    public ResponseEntity<?> checkCategory(@RequestParam(name = "themeId") UUID categoryId)
+    public ResponseEntity<?> checkCategory(@RequestParam(name = "categoryId") UUID categoryId)
             throws NotFoundException{
         return forumService.checkCategory(categoryId);
     }

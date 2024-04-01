@@ -34,11 +34,14 @@ public class MinIOController {
             @AuthenticationPrincipal UserDto user,
             @PathVariable("filename") UUID fileId)
     throws NotFoundException {
-        return minIOService.downloadFile(user, fileId);
+        return minIOService.downloadFile(fileId);
     }
 
     @GetMapping(GET_FILES)
     public ResponseEntity<?> getFiles(@AuthenticationPrincipal UserDto user) throws IOException{
        return minIOService.getAllFiles(user);
     }
+
+//    @GetMapping(GET_FILE_INFO)
+//    public File getFileInfo
 }

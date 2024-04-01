@@ -39,5 +39,7 @@ public class UserDto {
     @NotNull
     private Role role;
 
+    private UUID manageCategoryId;
+
     private List<String> authorities;
 }

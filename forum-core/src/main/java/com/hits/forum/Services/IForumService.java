@@ -42,4 +42,6 @@ public interface IForumService {
     ResponseEntity<?> checkTheme(UUID themeId) throws NotFoundException;
     ResponseEntity<?> checkCategory(UUID categoryId) throws NotFoundException;
     ResponseEntity<?> getThemesById(List<UUID> themesId);
+    ResponseEntity<?> archiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
+    ResponseEntity<?> unArchiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
 }

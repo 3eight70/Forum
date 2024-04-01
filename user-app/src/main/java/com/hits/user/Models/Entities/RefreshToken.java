@@ -18,8 +18,10 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String token;
 
+    @Column(nullable = false)
     private Instant expiryTime;
 
     @OneToOne

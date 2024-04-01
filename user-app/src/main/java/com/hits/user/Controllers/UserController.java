@@ -121,7 +121,15 @@ public class UserController implements UserAppClient {
     @DeleteMapping(DELETE_MODERATOR)
     public ResponseEntity<?> deleteModeratorRole(
             @AuthenticationPrincipal UserDto user,
-            @RequestParam(name = "userId") UUID userId) throws NotFoundException{
+            @RequestParam(name = "userId") UUID userId) throws NotFoundException {
         return userService.deleteModeratorRole(user, userId);
+    }
+
+    @PostMapping(GIVE_CATEGORY)
+    public ResponseEntity<?> giveCategoryToModerator(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam(name = "userId") UUID userId,
+            @RequestParam(name = "categoryId") UUID categoryId) throws NotFoundException, BadRequestException {
+        return userService.giveCategoryToModerator(user, userId, categoryId);
     }
 }

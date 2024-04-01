@@ -20,6 +20,10 @@ public class UserRegisterModel {
     @NotNull(message = "Логин должен быть указан")
     private String login;
 
+    @Pattern(regexp = "^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$", message = "Телефон должен быть указан в формате +7 (xxx) xxx-xx-xx")
+    @NotNull(message = "Номер телефона должен быть указан")
+    private String phoneNumber;
+
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")
     @NotNull(message = "Пароль должен быть указан")
     private String password;

@@ -23,7 +23,7 @@ public class File {
     @Id
     private UUID id;
 
-    @Column(name = "download_time", nullable = false)
+    @Column(name = "upload_time", nullable = false)
     private LocalDateTime uploadTime = LocalDateTime.now();
 
     @Column(name = "name", nullable = false)

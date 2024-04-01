@@ -1,0 +1,88 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="v1-1" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="create_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"
+                             checkConstraint="REGEXP_LIKE(email, '[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+')"/>
+            </column>
+            <column name="login" type="varchar(255)">
+                <constraints nullable="false" unique="true"
+                             checkConstraint="REGEXP_LIKE(login, '[a-zA-Z0-9]+')"/>
+            </column>
+            <column name="phone_number" type="varchar(20)">
+                <constraints nullable="false" unique="true"
+                             checkConstraint="REGEXP_LIKE(phone_number, '^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$')"/>
+            </column>
+            <column name="password" type="varchar(1000)">
+                <constraints nullable="false"
+                             checkConstraint="REGEXP_LIKE(password, '^(?=.*\\d).{6,}$')"/>
+            </column>
+            <column name="verification_code" type="varchar(255)"/>
+            <column name="is_confirmed" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_banned" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="manage_category_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="v1-2" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_favorite_themes"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_favorite_themes">
+            <column name="user_id" type="uuid">
+                <constraints references="users(id)" foreignKeyName="fk_user_favorite_themes_user_id"/>
+            </column>
+            <column name="theme_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="v1-3" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="refresh_tokens"/>
+            </not>
+        </preConditions>
+        <createTable tableName="refresh_tokens">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="token" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints foreignKeyName="fk_refresh_tokens_user_id"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="refresh_tokens" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="id"
+                                 constraintName="fk_refresh_tokens_user_id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

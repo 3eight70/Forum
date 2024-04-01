@@ -85,6 +85,7 @@ public class ForumMapper {
                 userLogin,
                 themeRequest.getThemeName(),
                 themeRequest.getCategoryId(),
+                false,
                 new ArrayList<>()
         );
     }

@@ -11,6 +11,6 @@ import java.util.UUID;
 
 public interface IMinIOService {
     ResponseEntity<?> uploadFile(UserDto user, MultipartFile file) throws IOException, BadRequestException;
-    ResponseEntity<?> downloadFile(UserDto user, UUID id) throws NotFoundException;
+    ResponseEntity<?> downloadFile(UUID id) throws NotFoundException;
     ResponseEntity<?> getAllFiles(UserDto user) throws IOException;
 }

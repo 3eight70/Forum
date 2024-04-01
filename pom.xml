@@ -38,6 +38,7 @@
 		<webflux.version>3.2.2</webflux.version>
 		<feign.version>4.1.0</feign.version>
 		<json.version>20240303</json.version>
+		<liquibase.version>4.27.0</liquibase.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -60,6 +61,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-security</artifactId>
 				<version>${spring-boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-core</artifactId>
+				<version>${liquibase.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

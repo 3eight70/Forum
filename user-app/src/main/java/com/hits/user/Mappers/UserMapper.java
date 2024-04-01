@@ -18,6 +18,7 @@ public class UserMapper {
                 LocalDateTime.now(),
                 userRegisterModel.getEmail(),
                 userRegisterModel.getLogin(),
+                userRegisterModel.getPhoneNumber(),
                 userRegisterModel.getPassword(),
                 null,
                 false,
@@ -37,6 +38,7 @@ public class UserMapper {
                 user.getIsConfirmed(),
                 user.getIsBanned(),
                 user.getRole(),
+                user.getManageCategoryId(),
                 user.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)

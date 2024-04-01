@@ -6,6 +6,7 @@ import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Theme.ThemeDto;
+import com.hits.common.Models.User.Role;
 import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Mappers.ForumMapper;
 import com.hits.forum.Models.Dto.Category.CategoryDto;
@@ -119,6 +120,9 @@ public class ForumService implements IForumService {
         if (forumTheme == null) {
             throw new NotFoundException(String.format("Тема-родитель с id=%s не существует", themeId));
         }
+        else if (forumTheme.getIsArchived()){
+            throw new BadRequestException("Категория находится в архиве");
+        }
 
         ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(user.getLogin(), createMessageRequest, forumTheme.getCategoryId());
 
@@ -140,10 +144,6 @@ public class ForumService implements IForumService {
 
         if (forumCategory == null) {
             throw new NotFoundException(String.format("Категории с id=%s не существует", categoryId));
-        }
-
-        if (!Objects.equals(user.getLogin(), forumCategory.getAuthorLogin())) {
-            throw new ForbiddenException();
         }
 
         if (parentId != null) {
@@ -189,15 +189,21 @@ public class ForumService implements IForumService {
         if (forumTheme == null) {
             throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
+        else if (forumTheme.getIsArchived()){
+            throw new BadRequestException("Тема находится в архиве");
+        }
 
-        if (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin())) {
-            throw new ForbiddenException();
+        if (user.getRole() != Role.ADMIN) {
+            if  (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin()) ||
+                    user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumTheme.getCategoryId()) {
+                throw new ForbiddenException();
+            }
         }
 
         UUID categoryId = createThemeRequest.getCategoryId();
         ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
 
-        if (forumCategory != null) {
+        if (forumCategory == null) {
             throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId));
         }
         else if (!forumCategory.getChildCategories().isEmpty()){
@@ -233,7 +239,11 @@ public class ForumService implements IForumService {
         if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
             throw new ForbiddenException();
         }
+        ForumTheme forumTheme = themeRepository.findForumThemeById(forumMessage.getThemeId());
 
+        if (forumTheme.getIsArchived()){
+            throw new BadRequestException("Категория находится в архиве");
+        }
 
         forumMessage.setModifiedTime(LocalDateTime.now());
         forumMessage.setContent(editMessageRequest.getContent());
@@ -253,10 +263,6 @@ public class ForumService implements IForumService {
             throw new NotFoundException(String.format("Категории с id=%s не существует",categoryId));
         }
 
-        if (!Objects.equals(user.getLogin(), forumCategory.getAuthorLogin())) {
-            throw new ForbiddenException();
-        }
-
         categoryRepository.delete(forumCategory);
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
@@ -272,8 +278,10 @@ public class ForumService implements IForumService {
             throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
-        if (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin())) {
-           throw new ForbiddenException();
+        if (user.getRole() != Role.ADMIN) {
+            if  (user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumTheme.getCategoryId()) {
+                throw new ForbiddenException();
+            }
         }
 
         themeRepository.delete(forumTheme);
@@ -291,8 +299,16 @@ public class ForumService implements IForumService {
             throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
         }
 
-        if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
-            throw new ForbiddenException();
+        if (user.getRole() != Role.ADMIN) {
+            if  (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin()) ||
+                    user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumMessage.getCategoryId()) {
+                throw new ForbiddenException();
+            }
+        }
+        ForumTheme forumTheme = themeRepository.findForumThemeById(forumMessage.getThemeId());
+
+        if (forumTheme.getIsArchived()){
+            throw new BadRequestException("Категория находится в архиве");
         }
 
         messageRepository.delete(forumMessage);
@@ -448,6 +464,52 @@ public class ForumService implements IForumService {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(themes);
+    }
+
+    public ResponseEntity<?> archiveTheme(UserDto userDto, UUID themeId){
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+
+        if (forumTheme == null) {
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
+        }
+        else if (forumTheme.getIsArchived()){
+            throw new BadRequestException("Тема уже заархивирована");
+        }
+
+        if (userDto.getRole() != Role.ADMIN) {
+            if (userDto.getManageCategoryId() != forumTheme.getCategoryId() || userDto.getRole() != Role.MODERATOR){
+                throw new ForbiddenException();
+            }
+        }
+
+        forumTheme.setIsArchived(true);
+        themeRepository.save(forumTheme);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Тема успешно заархивирована"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> unArchiveTheme(UserDto userDto, UUID themeId){
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+
+        if (forumTheme == null) {
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
+        }
+        else if (!forumTheme.getIsArchived()){
+            throw new BadRequestException("Тема и так не находится в архиве");
+        }
+
+        if (userDto.getRole() != Role.ADMIN) {
+            if (userDto.getManageCategoryId() != forumTheme.getCategoryId() || userDto.getRole() != Role.MODERATOR){
+                throw new ForbiddenException();
+            }
+        }
+
+        forumTheme.setIsArchived(false);
+        themeRepository.save(forumTheme);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Тема успешно разархивирована"), HttpStatus.OK);
     }
 
     private Sort.Order getComparator(SortOrder sortOrder) {

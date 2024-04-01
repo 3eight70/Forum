@@ -1,0 +1,82 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="v1-1" author="Vasilev Danil">
+        <createTable tableName="categories">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="create_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_time" type="datetime"/>
+            <column name="author_login" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_name" type="varchar(255)">
+                <constraints nullable="false" checkConstraint="LENGTH(category_name) >= 5"/>
+            </column>
+            <column name="parent_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="v1-2" author="Vasilev Danil">
+        <createTable tableName="themes">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="create_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_time" type="datetime"/>
+            <column name="author_login" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="theme_name" type="varchar(255)">
+                <constraints nullable="false" checkConstraint="LENGTH(theme_name) >= 5"/>
+            </column>
+            <column name="category_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="themes" baseColumnNames="category_id"
+                                 referencedTableName="categories" referencedColumnNames="id"
+                                 constraintName="fk_themes_category_id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="v1-3" author="Vasilev Danil">
+        <createTable tableName="messages">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="create_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_time" type="datetime"/>
+            <column name="author_login" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="varchar(1000)">
+                <constraints nullable="false" checkConstraint="LENGTH(content) >= 1"/>
+            </column>
+            <column name="theme_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="messages" baseColumnNames="theme_id"
+                                 referencedTableName="themes" referencedColumnNames="id"
+                                 constraintName="fk_messages_theme_id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="messages" baseColumnNames="category_id"
+                                 referencedTableName="categories" referencedColumnNames="id"
+                                 constraintName="fk_messages_category_id"
+                                 onUpdate="CASCADE" onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

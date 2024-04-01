@@ -3,6 +3,7 @@ package com.hits.security.Configurations;
 import com.hits.common.Client.UserAppClient;
 import com.hits.common.Models.User.UserDto;
 import com.hits.common.Utils.JwtUtils;
+import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
@@ -72,7 +73,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
-        catch (UsernameNotFoundException | ExpiredJwtException | SignatureException e){
+        catch (UsernameNotFoundException | ExpiredJwtException | SignatureException | FeignException.Unauthorized e){
 
         }
         if (request.getMethod().equals("OPTIONS")) {

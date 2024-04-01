@@ -32,4 +32,5 @@ public interface IUserService {
     ResponseEntity<?> banUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException;
     ResponseEntity<?> giveModeratorRole(UserDto user, UUID userId) throws NotFoundException;
     ResponseEntity<?> deleteModeratorRole(UserDto user, UUID userId) throws NotFoundException;
+    ResponseEntity<?> giveCategoryToModerator(UserDto user, UUID userId, UUID categoryId) throws NotFoundException, BadRequestException;
 }

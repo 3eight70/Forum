@@ -65,9 +65,9 @@ public class MinIOService implements IMinIOService{
         return ResponseEntity.ok(newFile.getId());
     }
 
-    public ResponseEntity<?> downloadFile(UserDto user, UUID id)
+    public ResponseEntity<?> downloadFile(UUID id)
     throws NotFoundException {
-        File file = fileRepository.findFileByIdAndUserId(id, user.getId());
+        File file = fileRepository.findFileById(id);
 
         if (file == null){
             throw new NotFoundException(String.format("Файл с id=%s не найден", id));

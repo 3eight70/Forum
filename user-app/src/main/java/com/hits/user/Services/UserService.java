@@ -3,6 +3,7 @@ package com.hits.user.Services;
 import com.hits.common.Client.ForumAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
+import com.hits.common.Exceptions.UnknownException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Response.TokenResponse;
 import com.hits.common.Models.User.Role;
@@ -114,7 +115,7 @@ public class UserService implements UserDetailsService, IUserService {
             return jwtTokenUtils.validateToken(token);
         }
         catch (ExpiredJwtException | FeignException.Unauthorized e){
-            return false;     //Костыль, потому что пока не получается нормально ловить Feign ошибки
+            return false;
         }
     }
 
@@ -148,7 +149,7 @@ public class UserService implements UserDetailsService, IUserService {
              checkTheme = forumAppClient.checkTheme(themeId);
         }
         catch (FeignException.NotFound e){
-            throw new NotFoundException(String.format("Темы с указанным id не существует", themeId));
+            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
         }
 
         if (checkTheme != null && checkTheme.getStatusCode() == HttpStatus.OK){
@@ -164,8 +165,7 @@ public class UserService implements UserDetailsService, IUserService {
                     "Пользователь успешно добавил тему в избранное"), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Что-то пошло не так"), HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new UnknownException();
     }
 
     public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
@@ -269,6 +269,39 @@ public class UserService implements UserDetailsService, IUserService {
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Роль модератора успешно удалена"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> giveCategoryToModerator(UserDto userDto, UUID userId, UUID categoryId)
+            throws NotFoundException, BadRequestException {
+        User user = userRepository.findUserById(userId);
+
+        if (user == null){
+            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
+        }
+
+        if (user.getRole() == Role.ADMIN){
+            throw new BadRequestException("Пользователь является администратором");
+        }
+        else if (user.getRole() != Role.MODERATOR){
+            throw new BadRequestException(String.format("Пользователь с id=%s не является модератором", userId));
+        }
+
+        ResponseEntity<?> checkCategory;
+        try {
+            checkCategory = forumAppClient.checkCategory(categoryId);
+        }
+        catch (FeignException.NotFound e){
+            throw new NotFoundException(String.format("Категории с id=%s не существует", categoryId));
+        }
+
+        if (checkCategory != null && checkCategory.getStatusCode() == HttpStatus.OK){
+            user.setManageCategoryId(categoryId);
+
+            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                    "Модератор успешно назначен на категорию"), HttpStatus.OK);
+        }
+
+        throw new UnknownException();
     }
 
     private void sendVerificationEmail(User user, String siteURL)
