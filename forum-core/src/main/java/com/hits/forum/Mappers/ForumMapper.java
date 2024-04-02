@@ -101,7 +101,7 @@ public class ForumMapper {
                 content,
                 themeId,
                 categoryId,
-                null
+                new ArrayList<>()
         );
     }
 

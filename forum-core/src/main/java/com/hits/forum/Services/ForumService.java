@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -143,17 +144,17 @@ public class ForumService implements IForumService {
                 themeId, forumTheme.getCategoryId());
         UUID messageId = forumMessage.getId();
 
+
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
-                UUID fileId = fileAppClient.uploadFile(messageId, file); //выкидывает Failed to parse multipart servlet request
+                UUID fileId = fileAppClient.uploadFile(messageId.toString(), file);
                 File currentFile = ForumMapper.multipartFileToFile(file, fileId);
-                fileRepository.save(currentFile);
-                forumMessage.getFiles().add(currentFile);
+                fileRepository.saveAndFlush(currentFile);
+                forumMessage.getFiles().add(currentFile); //Данная реализация не работает, файл не сохраняется
             }
         }
 
         messageRepository.saveAndFlush(forumMessage);
-
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Сообщение успешно создано"), HttpStatus.OK);

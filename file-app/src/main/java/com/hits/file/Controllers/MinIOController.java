@@ -7,9 +7,12 @@ import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.User.UserDto;
 import com.hits.file.Services.IMinIOService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,15 +22,16 @@ import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class MinIOController implements FileAppClient {
     private final IMinIOService minIOService;
 
-    @PostMapping(UPLOAD_FILE + "/{messageId}")
+    @PostMapping(value = UPLOAD_FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public UUID uploadFile(
-            @PathVariable("messageId") UUID messageId,
-            @RequestParam("file") MultipartFile file)
+            @RequestPart("messageId") String messageId,
+            @RequestPart("file") MultipartFile file)
     throws IOException, BadRequestException {
-        return minIOService.uploadFile(messageId, file);
+        return minIOService.uploadFile(UUID.fromString(messageId), file);
     }
 
     @PostMapping(DOWNLOAD_FILE + "/{filename}")
