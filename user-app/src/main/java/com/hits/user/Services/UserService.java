@@ -1,6 +1,6 @@
 package com.hits.user.Services;
 
-import com.hits.common.Client.ForumAppClient;
+import com.hits.security.Client.ForumAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.UnknownException;
@@ -11,7 +11,9 @@ import com.hits.common.Models.User.UserDto;
 import com.hits.user.Exceptions.AccountNotConfirmedException;
 import com.hits.user.Exceptions.UserAlreadyExistsException;
 import com.hits.user.Mappers.UserMapper;
+import com.hits.user.Models.Dto.UserDto.CreateUserModel;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
+import com.hits.user.Models.Dto.UserDto.UserEditModel;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Models.Entities.User;
@@ -46,39 +48,33 @@ public class UserService implements UserDetailsService, IUserService {
     private final JwtTokenUtils jwtTokenUtils;
     private final IRefreshTokenService refreshTokenService;
     private final RedisRepository redisRepository;
-    @Qualifier("com.hits.common.Client.ForumAppClient")
+    @Qualifier("com.hits.security.Client.ForumAppClient")
     private final ForumAppClient forumAppClient;
     private final JavaMailSender mailSender;
 
     @Transactional
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException{
-        return userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с указанным email не найден"));
+    public User loadUserByUsername(String login) throws UsernameNotFoundException{
+        return userRepository.findUserByLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с указанным логином не найден"));
     }
 
 
     @Transactional
     public ResponseEntity<?> registerNewUser(UserRegisterModel userRegisterModel)
             throws MessagingException, UnsupportedEncodingException, UserAlreadyExistsException{
-        User user = userRepository.findByEmail(userRegisterModel.getEmail());
+        String email = userRegisterModel.getEmail();
+        String login = userRegisterModel.getLogin();
+        String phoneNumber = userRegisterModel.getPhoneNumber();
 
-        if (user != null){
-            throw new UserAlreadyExistsException(String.format("Пользователь с почтой %s уже существует",
-                    userRegisterModel.getEmail()));
-        }
+        User user = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber);
 
-        user = userRepository.findByLogin(userRegisterModel.getLogin());
-
-        if (user != null){
-            throw new UserAlreadyExistsException(String.format("Пользователь с логином %s уже существует",
-                    userRegisterModel.getLogin()));
-        }
-
+        checkUser(user, email, login, phoneNumber);
 
         user = UserMapper.userRegisterModelToUser(userRegisterModel);
         String verificationCode = UUID.randomUUID().toString();
         user.setVerificationCode(verificationCode);
+        user.setLogin(user.getLogin().toLowerCase());
 
         userRepository.save(user);
 
@@ -97,7 +93,7 @@ public class UserService implements UserDetailsService, IUserService {
 
     public ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken)
             throws AccountNotConfirmedException {
-        User user = userRepository.findByEmail(loginCredentials.getEmail());
+        User user = userRepository.findByLogin(loginCredentials.getLogin());
 
         if (!user.getIsConfirmed()){
             throw new AccountNotConfirmedException("Сперва подтвердите аккаунт");
@@ -265,6 +261,7 @@ public class UserService implements UserDetailsService, IUserService {
         }
 
         user.setRole(Role.USER);
+        user.setManageCategoryId(null);
         userRepository.saveAndFlush(user);
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
@@ -304,6 +301,56 @@ public class UserService implements UserDetailsService, IUserService {
         throw new UnknownException();
     }
 
+    public ResponseEntity<?> createUser(CreateUserModel createUserModel) {
+        String email = createUserModel.getEmail();
+        String login = createUserModel.getLogin();
+        String phoneNumber = createUserModel.getPhoneNumber();
+
+        User user = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber);
+
+        checkUser(user, email, login, phoneNumber);
+
+        user = UserMapper.createUserModelToUser(createUserModel);
+        user.setLogin(user.getLogin().toLowerCase());
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Пользователь успешно создан"), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> editUser(UserEditModel userEditModel, UUID userId){
+        User user = userRepository.findUserById(userId);
+
+        if (user == null){
+            throw new NotFoundException(String.format("Пользователь с id=%s не найден", userId));
+        }
+
+        String email = userEditModel.getEmail();
+        String phoneNumber = userEditModel.getPhoneNumber();
+
+        User userCheckEmail = userRepository.findByEmail(email);
+        User userCheckPhone = userRepository.findByPhoneNumber(phoneNumber);
+
+        if (userCheckEmail != user) {
+            checkUser(userCheckEmail, email, null, phoneNumber);
+        }
+
+        if (userCheckPhone != user) {
+            checkUser(userCheckPhone, email, null, phoneNumber);
+        }
+
+        user.setEmail(email);
+        user.setPassword(userEditModel.getPassword());
+        user.setRole(userEditModel.getRole());
+        user.setPhoneNumber(phoneNumber);
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Пользователь успешно отредактирован"), HttpStatus.OK);
+    }
+
     private void sendVerificationEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
@@ -331,5 +378,22 @@ public class UserService implements UserDetailsService, IUserService {
         helper.setText(content, true);
 
         mailSender.send(message);
+    }
+
+    private void checkUser (User user, String email, String login, String phoneNumber){
+        if (user != null){
+            if (user.getEmail().equals(email)) {
+                throw new UserAlreadyExistsException(String.format("Пользователь с почтой %s уже существует",
+                        email));
+            }
+            else if (user.getLogin().equals(login)){
+                throw new UserAlreadyExistsException(String.format("Пользователь с логином %s уже существует",
+                        login));
+            }
+            else if (user.getPhoneNumber().equals(phoneNumber)){
+                throw new UserAlreadyExistsException(String.format("Пользователь с телефонным номером %s уже существует",
+                        phoneNumber));
+            }
+        }
     }
 }

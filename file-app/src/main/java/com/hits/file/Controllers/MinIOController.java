@@ -1,6 +1,7 @@
 package com.hits.file.Controllers;
 
 
+import com.hits.security.Client.FileAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.User.UserDto;
@@ -18,15 +19,15 @@ import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
-public class MinIOController {
+public class MinIOController implements FileAppClient {
     private final IMinIOService minIOService;
 
-    @PostMapping(UPLOAD_FILE)
-    public ResponseEntity<?> uploadFile(
-            @AuthenticationPrincipal UserDto user,
+    @PostMapping(UPLOAD_FILE + "/{messageId}")
+    public UUID uploadFile(
+            @PathVariable("messageId") UUID messageId,
             @RequestParam("file") MultipartFile file)
     throws IOException, BadRequestException {
-        return minIOService.uploadFile(user, file);
+        return minIOService.uploadFile(messageId, file);
     }
 
     @PostMapping(DOWNLOAD_FILE + "/{filename}")
@@ -38,8 +39,8 @@ public class MinIOController {
     }
 
     @GetMapping(GET_FILES)
-    public ResponseEntity<?> getFiles(@AuthenticationPrincipal UserDto user) throws IOException{
-       return minIOService.getAllFiles(user);
+    public ResponseEntity<?> getFiles(UUID messageId) throws IOException{
+       return minIOService.getAllFiles(messageId);
     }
 
 //    @GetMapping(GET_FILE_INFO)

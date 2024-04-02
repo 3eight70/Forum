@@ -1,9 +1,6 @@
 package com.hits.forum.Exceptions;
 
-import com.hits.common.Exceptions.BadRequestException;
-import com.hits.common.Exceptions.ForbiddenException;
-import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Exceptions.ObjectAlreadyExistsException;
+import com.hits.common.Exceptions.*;
 import com.hits.common.Models.Response.Response;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.io.IOException;
 
 @RestControllerAdvice
 @Slf4j
@@ -84,11 +83,25 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<Response> handleIOException(IOException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ошибка загрузки файла"),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<Response> handleForbiddenException(ForbiddenException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
                 "У вас нет прав доступа"), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(FileLimitException.class)
+    public ResponseEntity<Response> handleFileLimitException(FileLimitException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                "Загружайте не более 5 файлов"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

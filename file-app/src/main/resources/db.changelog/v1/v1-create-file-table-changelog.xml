@@ -27,7 +27,7 @@
             <column name="file_content" type="varbinary">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="uuid">
+            <column name="message_id" type="uuid">
                 <constraints nullable="false"/>
             </column>
         </createTable>

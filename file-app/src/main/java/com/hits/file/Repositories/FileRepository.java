@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface FileRepository extends JpaRepository<File, UUID> {
     File findFileById(UUID id);
 
-    List<File> findAllByUserId(UUID userId);
+    List<File> findAllByMessageId(UUID messageId);
 }

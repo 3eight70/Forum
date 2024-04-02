@@ -13,6 +13,7 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 2MB
+      enabled: true
   application:
     name: FILE-SERVICE
   datasource:

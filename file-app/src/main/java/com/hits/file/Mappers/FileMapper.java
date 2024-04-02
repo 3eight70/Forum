@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class FileMapper {
-    public static File multipartFileToFile(MultipartFile file, UserDto user) throws IOException {
+    public static File multipartFileToFile(MultipartFile file, UUID messageId) throws IOException {
         return new File(UUID.randomUUID(),
                 LocalDateTime.now(),
                 file.getOriginalFilename(),
                 file.getContentType(),
                 file.getSize(),
                 file.getBytes(),
-                user.getId()
+                messageId
         );
     }
 

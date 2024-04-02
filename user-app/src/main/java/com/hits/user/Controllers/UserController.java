@@ -1,13 +1,16 @@
 package com.hits.user.Controllers;
 
-import com.hits.common.Client.UserAppClient;
+import com.hits.security.Client.UserAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
 import com.hits.user.Exceptions.AccountNotConfirmedException;
 import com.hits.user.Exceptions.UserAlreadyExistsException;
+import com.hits.user.Mappers.UserMapper;
+import com.hits.user.Models.Dto.UserDto.CreateUserModel;
 import com.hits.user.Models.Dto.UserDto.LoginCredentials;
+import com.hits.user.Models.Dto.UserDto.UserEditModel;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Services.IRefreshTokenService;
@@ -48,7 +51,7 @@ public class UserController implements UserAppClient {
 
     @PostMapping(LOGIN_USER)
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginCredentials loginCredentials) throws AccountNotConfirmedException {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getEmail(), loginCredentials.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getLogin(), loginCredentials.getPassword()));
 
         if (authentication.isAuthenticated()){
             RefreshToken refreshToken = refreshTokenService.checkRefreshToken(loginCredentials);
@@ -131,5 +134,29 @@ public class UserController implements UserAppClient {
             @RequestParam(name = "userId") UUID userId,
             @RequestParam(name = "categoryId") UUID categoryId) throws NotFoundException, BadRequestException {
         return userService.giveCategoryToModerator(user, userId, categoryId);
+    }
+
+    @PostMapping(CREATE_USER)
+    public ResponseEntity<?> createUser(
+            @AuthenticationPrincipal UserDto user,
+            @Valid @RequestBody CreateUserModel createUserModel
+            ) {
+        createUserModel.setPassword(passwordEncoder.encode(createUserModel.getPassword()));
+        return userService.createUser(createUserModel);
+    }
+
+    @PutMapping(EDIT_USER)
+    public ResponseEntity<?> editUser(
+            @AuthenticationPrincipal UserDto user,
+            @Valid @RequestBody UserEditModel userEditModel,
+            @RequestParam(name = "userId") UUID userId
+            ) {
+        userEditModel.setPassword(passwordEncoder.encode(userEditModel.getPassword()));
+        return userService.editUser(userEditModel, userId);
+    }
+
+    @GetMapping(GET_PROFILE)
+    public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDto userDto){
+        return ResponseEntity.ok(UserMapper.userDtoToUserModel(userDto));
     }
 }

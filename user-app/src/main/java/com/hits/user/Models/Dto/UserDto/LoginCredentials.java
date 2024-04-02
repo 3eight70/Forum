@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginCredentials {
-    @NotNull(message = "Адрес почты должен быть указан")
-    @Size(min = 1, message = "Минимальная длина адреса почты равна 1")
-    private String email;
+    @NotNull(message = "Логин должен быть указан")
+    @Size(min = 1, message = "Минимальная длина логина равна 1")
+    private String login;
 
     @NotNull(message = "Пароль должен быть указан")
     @Size(min = 1, message = "Минимальная длина пароля равна 1")

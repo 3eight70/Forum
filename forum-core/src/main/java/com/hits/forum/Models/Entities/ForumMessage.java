@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 @Setter
 @Getter
@@ -38,4 +39,12 @@ public class ForumMessage {
 
     @Column(nullable = false)
     private UUID categoryId;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "message_file",
+            joinColumns = @JoinColumn(name = "file_id"),
+            inverseJoinColumns = @JoinColumn(name = "message_id")
+    )
+    private List<File> files;
 }

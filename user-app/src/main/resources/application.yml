@@ -6,12 +6,12 @@ jwt:
   expiration: 1h
 
 refresh:
-  expiration: 1s
+  expiration: 1d
 
 spring:
   liquibase:
     enabled: true
-    change-log: db.changelog/main-changelog.xml
+    change-log: db/changelog/main-changelog.xml
 
   application:
     name: USER-SERVICE

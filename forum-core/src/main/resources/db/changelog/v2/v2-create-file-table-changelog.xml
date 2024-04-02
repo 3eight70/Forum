@@ -11,8 +11,24 @@
             <column name="file_name" type="varchar(255)">
                 <constraints nullable="false" checkConstraint="LENGTH(file_name) > 0"/>
             </column>
-            <column name="file_size" type="varchar(255)">
+            <column name="file_size" type="bigint">
                 <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="v2-2" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="message_file"/>
+            </not>
+        </preConditions>
+        <createTable tableName="message_file">
+            <column name="file_id" type="uuid">
+                <constraints references="files(file_id)" foreignKeyName="fk_message_file_file_id"/>
+            </column>
+            <column name="message_id" type="uuid">
+                <constraints references="messages(id)" foreignKeyName="fk_message_file_message_id"/>
             </column>
         </createTable>
     </changeSet>

@@ -8,7 +8,7 @@ jwt:
 spring:
   liquibase:
     enabled: true
-    change-log: db.changelog/main-changelog.xml
+    change-log: db/changelog/main-changelog.xml
   application:
     name: FORUM-SERVICE
   datasource:

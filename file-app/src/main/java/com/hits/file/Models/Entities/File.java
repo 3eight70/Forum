@@ -39,6 +39,6 @@ public class File {
     @Column(name = "file_content", nullable = false)
     private byte[] fileContent;
 
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
+    @Column(name = "message_id", nullable = false)
+    private UUID messageId;
 }

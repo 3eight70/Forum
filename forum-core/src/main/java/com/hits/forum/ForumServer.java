@@ -1,6 +1,7 @@
 package com.hits.forum;
 
-import com.hits.common.Client.UserAppClient;
+import com.hits.security.Client.FileAppClient;
+import com.hits.security.Client.UserAppClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(clients = UserAppClient.class)
+@EnableFeignClients(clients = {UserAppClient.class, FileAppClient.class})
 @ComponentScan(basePackages = {"com.hits.forum", "com.hits.security"})
 public class ForumServer {
     public static void main(String[] args) {

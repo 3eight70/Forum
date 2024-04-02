@@ -79,4 +79,11 @@
                                  onUpdate="CASCADE" onDelete="CASCADE"/>
     </changeSet>
 
+    <changeSet id="v1-4" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="categories"/>
+        </preConditions>
+        <loadData tableName="categories" file="db/data/category-data.csv"/>
+    </changeSet>
+
 </databaseChangeLog>

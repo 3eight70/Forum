@@ -8,9 +8,11 @@ import com.hits.forum.Models.Dto.Message.MessageDto;
 import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
+import com.hits.forum.Models.Entities.File;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;
 import com.hits.forum.Models.Entities.ForumTheme;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -90,15 +92,16 @@ public class ForumMapper {
         );
     }
 
-    public static ForumMessage messageRequestToForumTheme(String userLogin, MessageRequest messageRequest, UUID categoryId){
+    public static ForumMessage messageRequestToForumTheme(String userLogin, String content, UUID themeId, UUID categoryId){
         return new ForumMessage(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
                 null,
                 userLogin,
-                messageRequest.getContent(),
-                messageRequest.getThemeId(),
-                categoryId
+                content,
+                themeId,
+                categoryId,
+                null
         );
     }
 
@@ -109,6 +112,14 @@ public class ForumMapper {
                 forumTheme.getModifiedTime(),
                 forumTheme.getThemeName(),
                 forumTheme.getCategoryId()
+        );
+    }
+
+    public static File multipartFileToFile(MultipartFile file, UUID messageId){
+        return new File(
+                messageId,
+                file.getOriginalFilename(),
+                file.getSize()
         );
     }
 }

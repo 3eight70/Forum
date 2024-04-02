@@ -1,9 +1,6 @@
 package com.hits.forum.Services;
 
-import com.hits.common.Exceptions.BadRequestException;
-import com.hits.common.Exceptions.ForbiddenException;
-import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Exceptions.ObjectAlreadyExistsException;
+import com.hits.common.Exceptions.*;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.common.Models.User.Role;
@@ -20,21 +17,28 @@ import com.hits.forum.Models.Dto.Responses.MessageResponse;
 import com.hits.forum.Models.Dto.Responses.PageResponse;
 import com.hits.forum.Models.Dto.Responses.ThemeResponse;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
+import com.hits.forum.Models.Entities.File;
 import com.hits.forum.Models.Entities.ForumCategory;
 import com.hits.forum.Models.Entities.ForumMessage;
 import com.hits.forum.Models.Entities.ForumTheme;
 import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Repositories.CategoryRepository;
+import com.hits.forum.Repositories.FileRepository;
 import com.hits.forum.Repositories.MessageRepository;
 import com.hits.forum.Repositories.ThemeRepository;
+import com.hits.security.Client.FileAppClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +52,9 @@ public class ForumService implements IForumService {
     private final CategoryRepository categoryRepository;
     private final ThemeRepository themeRepository;
     private final MessageRepository messageRepository;
+    @Qualifier("com.hits.security.Client.FileAppClient")
+    private final FileAppClient fileAppClient;
+    private final FileRepository fileRepository;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -113,8 +120,16 @@ public class ForumService implements IForumService {
     }
 
     @Transactional
-    public ResponseEntity<?> createMessage(UserDto user, MessageRequest createMessageRequest) throws NotFoundException {
-        UUID themeId = createMessageRequest.getThemeId();
+    public ResponseEntity<?> createMessage(UserDto user, String content, UUID themeId, List<MultipartFile> files)
+            throws NotFoundException, IOException, BadRequestException {
+        if (files != null && files.size() > 5){
+            throw new FileLimitException();
+        }
+
+        if (content.isEmpty()){
+            throw new BadRequestException("Минимальная длина сообщения равна 1");
+        }
+
         ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
 
         if (forumTheme == null) {
@@ -124,9 +139,21 @@ public class ForumService implements IForumService {
             throw new BadRequestException("Категория находится в архиве");
         }
 
-        ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(user.getLogin(), createMessageRequest, forumTheme.getCategoryId());
+        ForumMessage forumMessage = ForumMapper.messageRequestToForumTheme(user.getLogin(), content,
+                themeId, forumTheme.getCategoryId());
+        UUID messageId = forumMessage.getId();
+
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                UUID fileId = fileAppClient.uploadFile(messageId, file); //выкидывает Failed to parse multipart servlet request
+                File currentFile = ForumMapper.multipartFileToFile(file, fileId);
+                fileRepository.save(currentFile);
+                forumMessage.getFiles().add(currentFile);
+            }
+        }
 
         messageRepository.saveAndFlush(forumMessage);
+
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Сообщение успешно создано"), HttpStatus.OK);

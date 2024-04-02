@@ -1,6 +1,6 @@
 package com.hits.security.Configurations;
 
-import com.hits.common.Client.UserAppClient;
+import com.hits.security.Client.UserAppClient;
 import com.hits.common.Models.User.UserDto;
 import com.hits.common.Utils.JwtUtils;
 import feign.FeignException;
@@ -61,10 +61,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 userDto = userAppClient.getUser(login);
             }
 
-            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis && userDto != null && userDto.getIsConfirmed() && !userDto.getIsBanned()) {
+            if (login != null && SecurityContextHolder.getContext().getAuthentication() == null && tokenInRedis
+                    && userDto != null && userDto.getIsConfirmed() && !userDto.getIsBanned()) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDto,
-                        null,
+                        jwt,
                         userDto.getAuthorities()
                                 .stream()
                                 .map(SimpleGrantedAuthority::new)
@@ -73,7 +74,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
-        catch (UsernameNotFoundException | ExpiredJwtException | SignatureException | FeignException.Unauthorized e){
+        catch (UsernameNotFoundException | ExpiredJwtException | SignatureException
+               | FeignException.Unauthorized | FeignException.ServiceUnavailable e){
 
         }
         if (request.getMethod().equals("OPTIONS")) {

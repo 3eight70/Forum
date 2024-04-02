@@ -1,6 +1,6 @@
 package com.hits.forum.Controllers;
 
-import com.hits.common.Client.ForumAppClient;
+import com.hits.security.Client.ForumAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
@@ -17,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -48,8 +50,11 @@ public class ForumController implements ForumAppClient {
     @PostMapping(SEND_MESSAGE)
     public ResponseEntity<?> sendMessage(
             @AuthenticationPrincipal UserDto user,
-            @Valid @RequestBody MessageRequest messageRequest) throws NotFoundException {
-        return forumService.createMessage(user, messageRequest);
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "themeId") String themeId,
+            @RequestParam(name = "file", required = false) List<MultipartFile> files)
+            throws NotFoundException, IOException {
+        return forumService.createMessage(user, content,UUID.fromString(themeId), files);
     }
 
     @PutMapping(EDIT_CATEGORY)
@@ -182,7 +187,7 @@ public class ForumController implements ForumAppClient {
         return forumService.checkCategory(categoryId);
     }
 
-    @Override
+    @GetMapping(GET_THEMES_BY_ID)
     public ResponseEntity<?> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId){
         return forumService.getThemesById(themesId);
     }

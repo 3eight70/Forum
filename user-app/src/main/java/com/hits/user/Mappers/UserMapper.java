@@ -2,6 +2,8 @@ package com.hits.user.Mappers;
 
 import com.hits.common.Models.User.Role;
 import com.hits.common.Models.User.UserDto;
+import com.hits.user.Models.Dto.UserDto.CreateUserModel;
+import com.hits.user.Models.Dto.UserDto.UserModel;
 import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +28,35 @@ public class UserMapper {
                 Role.USER,
                 new ArrayList<>(),
                 null
+        );
+    }
+
+    public static User createUserModelToUser(CreateUserModel createUserModel){
+        return new User(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                createUserModel.getEmail(),
+                createUserModel.getLogin(),
+                createUserModel .getPhoneNumber(),
+                createUserModel.getPassword(),
+                null,
+                true,
+                false,
+                createUserModel.getRole() == null ? Role.USER : createUserModel.getRole(),
+                new ArrayList<>(),
+                null
+        );
+    }
+
+    public static UserModel userDtoToUserModel(UserDto userDto){
+        return new UserModel(
+                userDto.getId(),
+                userDto.getCreateTime(),
+                userDto.getEmail(),
+                userDto.getLogin(),
+                userDto.getIsConfirmed(),
+                userDto.getRole(),
+                userDto.getManageCategoryId()
         );
     }
 

@@ -1,5 +1,6 @@
 package com.hits.user.Services;
 
+import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.TokenResponse;
 import com.hits.user.Exceptions.ExpiredTokenException;
 import com.hits.user.Models.Dto.Token.RefreshRequestDto;
@@ -43,9 +44,9 @@ public class RefreshTokenService implements IRefreshTokenService{
     }
 
     @Transactional
-    public RefreshToken createRefreshToken(String email){
+    public RefreshToken createRefreshToken(String login){
         RefreshToken refreshToken = RefreshToken.builder()
-                .user(userRepository.findByEmail(email))
+                .user(userRepository.findByLogin(login))
                 .token(UUID.randomUUID().toString())
                 .expiryTime(Instant.now().plus(lifetime))
                 .build();
@@ -55,7 +56,11 @@ public class RefreshTokenService implements IRefreshTokenService{
 
     @Transactional
     public RefreshToken checkRefreshToken(LoginCredentials loginCredentials){
-        User user = userRepository.findByEmail(loginCredentials.getEmail());
+        User user = userRepository.findByLogin(loginCredentials.getLogin());
+
+        if (user == null){
+            throw new NotFoundException("Пользователь не найден");
+        }
 
         refreshRepository.findByUserId(user.getId())
                 .map(this::verifyExpiration)

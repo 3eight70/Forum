@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 public interface IMinIOService {
-    ResponseEntity<?> uploadFile(UserDto user, MultipartFile file) throws IOException, BadRequestException;
+    UUID uploadFile(UUID messageId, MultipartFile file) throws IOException, BadRequestException;
     ResponseEntity<?> downloadFile(UUID id) throws NotFoundException;
-    ResponseEntity<?> getAllFiles(UserDto user) throws IOException;
+    ResponseEntity<?> getAllFiles(UUID messageId) throws IOException;
 }

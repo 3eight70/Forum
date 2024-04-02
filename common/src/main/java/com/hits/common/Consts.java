@@ -9,10 +9,13 @@ public class Consts {
     public static final String REGISTER_USER = "/api/account/register";
     public static final String LOGIN_USER = "/api/account/login";
     public static final String LOGOUT_USER = "/api/account/logout";
+    public static final String GET_PROFILE = "/api/account";
     public static final String VERIFY_USER = "/api/account/verify";
     public static final String VALIDATE_TOKEN = "/api/token/validate";
     public static final String GET_USER = "/api/account/user";
     public static final String BAN_USER = "/api/account/admin/ban";
+    public static final String CREATE_USER = "/api/account/admin/create/user";
+    public static final String EDIT_USER = "/api/account/admin/edit/user";
     public static final String GIVE_MODERATOR = "/api/account/admin/give/moderator";
     public static final String DELETE_MODERATOR = "/api/account/admin/delete/moderator";
     public static final String GIVE_CATEGORY = "/api/account/admin/give/category";

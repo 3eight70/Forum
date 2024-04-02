@@ -27,5 +27,5 @@ public class File {
     private String fileName;
 
     @Column(nullable = false)
-    private String fileSize;
+    private Long fileSize;
 }

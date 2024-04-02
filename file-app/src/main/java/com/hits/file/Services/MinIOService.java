@@ -32,37 +32,35 @@ public class MinIOService implements IMinIOService{
     private final S3Client s3Client;
     private final FileRepository fileRepository;
 
-    public ResponseEntity<?> uploadFile(UserDto user, MultipartFile file)
+    public UUID uploadFile(UUID messageId, MultipartFile file)
             throws IOException, BadRequestException{
         String filename = file.getOriginalFilename();
         File newFile;
 
         try {
-            String login = user.getLogin().toLowerCase(); //Будет некорректно работать, если юзеры имеют одинаковые логины
-                                                          //с отличием в заглавных буквах
-            if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(login))){
-                s3Client.createBucket(CreateBucketRequest.builder().bucket(login).build());
+            if (s3Client.listBuckets().buckets().stream().noneMatch(bucket -> bucket.name().equals(messageId.toString()))){
+                s3Client.createBucket(CreateBucketRequest.builder().bucket(messageId.toString()).build());
             }
 
-            if(s3Client.listObjects(ListObjectsRequest.builder().bucket(login).build()).contents().stream()
+            if(s3Client.listObjects(ListObjectsRequest.builder().bucket(messageId.toString()).build()).contents().stream()
                     .anyMatch(object -> object.key().equals(filename))){
                 throw new BadRequestException("Вы уже загрузили файл с таким же названием");
             }
 
             PutObjectRequest obj = PutObjectRequest.builder()
-                    .bucket(login)
+                    .bucket(messageId.toString())
                     .key(filename)
                     .build();
             s3Client.putObject(obj, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            newFile = FileMapper.multipartFileToFile(file, user);
+            newFile = FileMapper.multipartFileToFile(file, messageId);
             fileRepository.save(newFile);
         }
         catch (S3Exception e) {
             throw new IOException("Ошибка при загрузке файла в MinIO");
         }
 
-        return ResponseEntity.ok(newFile.getId());
+        return newFile.getId();
     }
 
     public ResponseEntity<?> downloadFile(UUID id)
@@ -86,8 +84,8 @@ public class MinIOService implements IMinIOService{
                 .body(new InputStreamResource(inputStream));
     }
 
-    public ResponseEntity<?> getAllFiles(UserDto user){
-        List<FileDto> files = fileRepository.findAllByUserId(user.getId())
+    public ResponseEntity<?> getAllFiles(UUID messageId){
+        List<FileDto> files = fileRepository.findAllByMessageId(messageId)
                 .stream()
                 .map(FileMapper::fileToFileDto)
                 .toList();
