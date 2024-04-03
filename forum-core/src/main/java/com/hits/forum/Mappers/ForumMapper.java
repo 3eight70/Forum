@@ -1,11 +1,10 @@
 package com.hits.forum.Mappers;
 
+import com.hits.common.Models.Message.MessageDto;
 import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.forum.Models.Dto.Category.CategoryDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Category.CategoryWithSubstring;
-import com.hits.forum.Models.Dto.Message.MessageDto;
-import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Entities.File;
@@ -29,6 +28,19 @@ public class ForumMapper {
                 categoryRequest.getCategoryName(),
                 categoryRequest.getParentId(),
                 new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
+    public static MessageDto forumMessageToMessageDto(ForumMessage forumMessage){
+        return new MessageDto(
+                forumMessage.getId(),
+                forumMessage.getCreateTime(),
+                forumMessage.getModifiedTime(),
+                forumMessage.getAuthorLogin(),
+                forumMessage.getContent(),
+                forumMessage.getCategoryId(),
+                forumMessage.getThemeId(),
                 new ArrayList<>()
         );
     }
@@ -57,16 +69,6 @@ public class ForumMapper {
         );
     }
 
-    public static MessageDto forumMessageToMessageDto(ForumMessage forumMessage){
-        return new MessageDto(
-                forumMessage.getId(),
-                forumMessage.getCreateTime(),
-                forumMessage.getModifiedTime(),
-                forumMessage.getAuthorLogin(),
-                forumMessage.getContent()
-        );
-    }
-
     public static MessageWithFiltersDto forumMessageToMessageWithFiltersDto(ForumMessage forumMessage){
         return new MessageWithFiltersDto(
                 forumMessage.getId(),
@@ -75,7 +77,8 @@ public class ForumMapper {
                 forumMessage.getCategoryId(),
                 forumMessage.getThemeId(),
                 forumMessage.getAuthorLogin(),
-                forumMessage.getContent()
+                forumMessage.getContent(),
+                forumMessage.getFiles()
         );
     }
 

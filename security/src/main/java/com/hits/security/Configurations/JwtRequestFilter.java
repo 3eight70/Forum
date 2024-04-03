@@ -1,10 +1,11 @@
 package com.hits.security.Configurations;
 
-import com.hits.security.Client.UserAppClient;
 import com.hits.common.Models.User.UserDto;
 import com.hits.common.Utils.JwtUtils;
+import com.hits.security.Client.UserAppClient;
 import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtUtils jwtTokenUtils;
-    @Qualifier("com.hits.common.Client.UserAppClient")
+    @Qualifier("com.hits.security.Client.UserAppClient")
     private final UserAppClient userAppClient;
 
     @Override
@@ -75,7 +76,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         catch (UsernameNotFoundException | ExpiredJwtException | SignatureException
-               | FeignException.Unauthorized | FeignException.ServiceUnavailable e){
+               | FeignException.Unauthorized | FeignException.ServiceUnavailable
+                | MalformedJwtException e){
 
         }
         if (request.getMethod().equals("OPTIONS")) {

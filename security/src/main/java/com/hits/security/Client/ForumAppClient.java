@@ -1,10 +1,9 @@
 package com.hits.security.Client;
 
-import com.hits.common.Models.User.UserDto;
+import com.hits.common.Models.Message.MessageDto;
 import com.hits.security.Configurations.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +19,9 @@ public interface ForumAppClient {
 
     @GetMapping(CHECK_CATEGORY)
     ResponseEntity<?> checkCategory(@RequestParam(name = "categoryId") UUID categoryId);
+
+    @GetMapping(SEND_MESSAGE)
+    ResponseEntity<MessageDto> checkMessage(@RequestParam(name = "messageId") UUID messageId);
 
     @GetMapping(GET_THEMES_BY_ID)
     ResponseEntity<?> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId);

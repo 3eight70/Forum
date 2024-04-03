@@ -1,6 +1,7 @@
 package com.hits.forum.Services;
 
 import com.hits.common.Exceptions.*;
+import com.hits.common.Models.Message.MessageDto;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.Theme.ThemeDto;
 import com.hits.common.Models.User.Role;
@@ -10,8 +11,6 @@ import com.hits.forum.Models.Dto.Category.CategoryDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Category.CategoryWithSubstring;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
-import com.hits.forum.Models.Dto.Message.MessageDto;
-import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Message.MessageWithFiltersDto;
 import com.hits.forum.Models.Dto.Responses.MessageResponse;
 import com.hits.forum.Models.Dto.Responses.PageResponse;
@@ -31,10 +30,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -144,13 +141,12 @@ public class ForumService implements IForumService {
                 themeId, forumTheme.getCategoryId());
         UUID messageId = forumMessage.getId();
 
-
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 UUID fileId = fileAppClient.uploadFile(messageId.toString(), file);
                 File currentFile = ForumMapper.multipartFileToFile(file, fileId);
                 fileRepository.saveAndFlush(currentFile);
-                forumMessage.getFiles().add(currentFile); //Данная реализация не работает, файл не сохраняется
+                forumMessage.getFiles().add(currentFile);
             }
         }
 
@@ -159,6 +155,30 @@ public class ForumService implements IForumService {
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Сообщение успешно создано"), HttpStatus.OK);
     }
+
+//    @Transactional
+//    public ResponseEntity<?> deleteAttachmentFromMessage(UserDto user, UUID attachmentId, UUID messageId) {
+//        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
+//
+//        if (forumMessage == null) {
+//            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
+//        }
+//
+//        if (user.getRole() != Role.ADMIN) {
+//            if  (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin()) ||
+//                    user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumMessage.getCategoryId()) {
+//                throw new ForbiddenException();
+//            }
+//        }
+//
+//        File file = fileRepository.findFileByFileId(attachmentId);
+//        if (forumMessage.getFiles().contains(file)) {
+//
+//        }
+//        else{
+//            throw new BadRequestException("Сообщение не содержит данного файла");
+//        }
+//    }
 
     @Transactional
     public ResponseEntity<?> editCategory(UserDto user, UUID categoryId, CategoryRequest createCategoryRequest)
@@ -434,6 +454,17 @@ public class ForumService implements IForumService {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<MessageDto> checkMessage(UUID messageId)
+            throws NotFoundException{
+       ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
+
+        if (forumMessage == null){
+            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
+        }
+
+        return ResponseEntity.ok(ForumMapper.forumMessageToMessageDto(forumMessage));
     }
 
     public ResponseEntity<?> getMessagesWithFilters(String content,

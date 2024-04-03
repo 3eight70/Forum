@@ -5,6 +5,8 @@ import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,22 @@ public class GlobalExceptionHandler {
                 "Срок действия токена истек"), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(MalformedJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Response> handleMalformedJwtException(MalformedJwtException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                "Структура jwt токена нарушена"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<Response> handleSignatureException(SignatureException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
+                "Подпись jwt токена нарушена"), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(ExpiredTokenException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Response> handleExpiredTokenException(ExpiredTokenException e) {
@@ -72,13 +90,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
+    @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Response> handleBadCredentialsExceptionAndUsernameNotFoundException(BadCredentialsException e, UsernameNotFoundException e1){
-        String errorMessage = e != null ? e.getMessage() : e1.getMessage();
-        log.error(errorMessage, e != null ? e : e1);
+    public ResponseEntity<Response> handleBadCredentialsException(BadCredentialsException e){
+        log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                 "Неправильный логин или пароль"), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Response> handleUsernameNotFoundException(UsernameNotFoundException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                "Указанный логин не найден"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)

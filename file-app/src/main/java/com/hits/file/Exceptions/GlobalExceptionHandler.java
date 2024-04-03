@@ -2,11 +2,14 @@ package com.hits.file.Exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.FileLimitException;
+import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,6 +38,21 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
                 "Неверная подпись токена авторизации"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileLimitException.class)
+    public ResponseEntity<Response> handleFileLimitException(FileLimitException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                "Загружайте не более 5 файлов"), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -86,6 +104,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response> handleNotFoundException(NotFoundException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Response> handleForbiddenException(ForbiddenException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.FORBIDDEN.value(),
+                "У вас нет прав доступа"), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,6 +1,5 @@
 package com.hits.file.Mappers;
 
-import com.hits.common.Models.User.UserDto;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Entities.File;
 import org.springframework.web.multipart.MultipartFile;

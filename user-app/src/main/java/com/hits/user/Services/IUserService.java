@@ -12,11 +12,8 @@ import com.hits.user.Models.Dto.UserDto.UserRegisterModel;
 import com.hits.user.Models.Entities.RefreshToken;
 import com.hits.user.Models.Entities.User;
 import jakarta.mail.MessagingException;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;

@@ -4,10 +4,10 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
+import com.hits.common.Models.Message.MessageDto;
 import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
-import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
 import org.springframework.http.ResponseEntity;
@@ -68,4 +68,5 @@ public interface IForumService {
     ResponseEntity<?> getThemesById(List<UUID> themesId);
     ResponseEntity<?> archiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
     ResponseEntity<?> unArchiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
+    ResponseEntity<MessageDto> checkMessage(UUID messageId) throws NotFoundException;
 }

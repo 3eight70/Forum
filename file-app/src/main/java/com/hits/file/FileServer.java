@@ -1,5 +1,6 @@
 package com.hits.file;
 
+import com.hits.security.Client.ForumAppClient;
 import com.hits.security.Client.UserAppClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(clients = UserAppClient.class)
+@EnableFeignClients(clients = {UserAppClient.class, ForumAppClient.class})
 @ComponentScan(basePackages = {"com.hits.file", "com.hits.security"})
 public class FileServer {
     public static void main(String[] args) {

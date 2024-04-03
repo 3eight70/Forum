@@ -1,17 +1,17 @@
 package com.hits.forum.Controllers;
 
-import com.hits.security.Client.ForumAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
+import com.hits.common.Models.Message.MessageDto;
 import com.hits.common.Models.User.UserDto;
 import com.hits.forum.Models.Dto.Category.CategoryRequest;
 import com.hits.forum.Models.Dto.Message.EditMessageRequest;
-import com.hits.forum.Models.Dto.Message.MessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Services.IForumService;
+import com.hits.security.Client.ForumAppClient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -190,5 +190,10 @@ public class ForumController implements ForumAppClient {
     @GetMapping(GET_THEMES_BY_ID)
     public ResponseEntity<?> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId){
         return forumService.getThemesById(themesId);
+    }
+
+    @GetMapping(SEND_MESSAGE)
+    public ResponseEntity<MessageDto> checkMessage(@RequestParam(name = "messageId") UUID messageId){
+        return forumService.checkMessage(messageId);
     }
 }

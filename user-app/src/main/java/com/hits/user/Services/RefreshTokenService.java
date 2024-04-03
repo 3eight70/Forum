@@ -67,7 +67,7 @@ public class RefreshTokenService implements IRefreshTokenService{
                 .ifPresent(refreshRepository::delete);
         refreshRepository.flush();
 
-        return createRefreshToken(user.getEmail());
+        return createRefreshToken(user.getLogin());
     }
 
     @Transactional

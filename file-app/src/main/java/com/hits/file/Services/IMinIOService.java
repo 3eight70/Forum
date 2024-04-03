@@ -2,7 +2,6 @@ package com.hits.file.Services;
 
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.User.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

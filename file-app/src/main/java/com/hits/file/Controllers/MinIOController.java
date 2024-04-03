@@ -1,18 +1,17 @@
 package com.hits.file.Controllers;
 
 
-import com.hits.security.Client.FileAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.User.UserDto;
 import com.hits.file.Services.IMinIOService;
+import com.hits.security.Client.FileAppClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -47,6 +46,4 @@ public class MinIOController implements FileAppClient {
        return minIOService.getAllFiles(messageId);
     }
 
-//    @GetMapping(GET_FILE_INFO)
-//    public File getFileInfo
 }

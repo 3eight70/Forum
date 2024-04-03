@@ -1,10 +1,10 @@
 package com.hits.user.Controllers;
 
-import com.hits.security.Client.UserAppClient;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
+import com.hits.security.Client.UserAppClient;
 import com.hits.user.Exceptions.AccountNotConfirmedException;
 import com.hits.user.Exceptions.UserAlreadyExistsException;
 import com.hits.user.Mappers.UserMapper;
@@ -35,7 +35,7 @@ import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController implements UserAppClient {
+public class    UserController implements UserAppClient {
     private final IUserService userService;
     private final AuthenticationManager authenticationManager;
     private final IRefreshTokenService refreshTokenService;

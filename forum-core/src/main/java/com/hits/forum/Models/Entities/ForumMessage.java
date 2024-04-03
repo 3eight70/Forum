@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -43,8 +43,8 @@ public class ForumMessage {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "message_file",
-            joinColumns = @JoinColumn(name = "file_id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id")
+            joinColumns = @JoinColumn(name = "message_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id")
     )
     private List<File> files;
 }
