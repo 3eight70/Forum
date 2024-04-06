@@ -11,7 +11,6 @@ import com.hits.file.Models.Entities.File;
 import com.hits.file.Repositories.FileRepository;
 import com.hits.security.Rest.Client.ForumAppClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

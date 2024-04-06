@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 import static com.hits.common.Consts.*;
-import static com.hits.common.Consts.EDIT_USER;
 
 @RestController
 @RequiredArgsConstructor

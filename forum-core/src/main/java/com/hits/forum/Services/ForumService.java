@@ -28,8 +28,6 @@ import com.hits.forum.Repositories.ThemeRepository;
 import com.hits.security.Rest.Client.FileAppClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;

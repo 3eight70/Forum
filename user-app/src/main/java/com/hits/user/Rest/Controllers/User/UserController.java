@@ -5,35 +5,19 @@ import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.Response.Response;
 import com.hits.common.Models.User.UserDto;
 import com.hits.security.Rest.Client.UserAppClient;
-import com.hits.user.Exceptions.AccountNotConfirmedException;
-import com.hits.user.Exceptions.UserAlreadyExistsException;
 import com.hits.user.Core.User.Mapper.UserMapper;
-import com.hits.user.Core.Auth.DTO.LoginCredentials;
-import com.hits.user.Core.Auth.DTO.UserRegisterModel;
-import com.hits.user.Core.RefreshToken.Entity.RefreshToken;
-import com.hits.user.Core.RefreshToken.Service.RefreshTokenService;
 import com.hits.user.Core.User.Service.UserService;
 import feign.FeignException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 import static com.hits.common.Consts.*;
@@ -47,11 +31,6 @@ public class UserController implements UserAppClient {
     @Operation(
             summary = "Получение информации пользователя",
             description = "Позволяет проверить, существует ли пользователь с указанным логином и получить информацию о нем")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200",)
-            }
-    )
     @Override
     public UserDto getUser(
             @RequestParam(name = "login") @Parameter(description = "Логин пользователя") String login

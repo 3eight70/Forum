@@ -3,8 +3,8 @@ package com.hits.user.Core.User.Mapper;
 import com.hits.common.Models.User.Role;
 import com.hits.common.Models.User.UserDto;
 import com.hits.user.Core.Admin.DTO.CreateUserModel;
-import com.hits.user.Core.User.DTO.UserModel;
 import com.hits.user.Core.Auth.DTO.UserRegisterModel;
+import com.hits.user.Core.User.DTO.UserModel;
 import com.hits.user.Core.User.Entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
