@@ -1,6 +1,7 @@
 package com.hits.user.Core.User.Entity;
 
 import com.hits.common.Models.User.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @Table(name="users")
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Сущность пользователя")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,31 +37,39 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     @Size(min = 1, message = "Минимальная длина электронной почты не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+", message = "Неверный адрес электронной почты")
+    @Schema(description = "Адрес электронной почты", example = "example@example.ru")
     private String email;
 
     @Column(unique = true, nullable = false)
     @Size(min = 1, message = "Минимальная длина логина не менее 1 символа")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
+    @Schema(description = "Логин пользователя", example = "example")
     private String login;
 
     @Column(unique = true, nullable = false)
     @Pattern(regexp = "^\\+7 \\(\\d{3}\\) \\d{3}-\\d{2}-\\d{2}$", message = "Телефон должен быть указан в формате +7 (xxx) xxx-xx-xx")
+    @Schema(description = "Телефонный номер", example = "+7 (777) 777-77-77")
     private String phoneNumber;
 
     @Column(length = 1000, nullable = false)
     @Pattern(regexp = "^(?=.*\\d).{6,}$", message = "Пароль должен содержать не менее 6 символов и 1 цифры")
+    @Schema(description = "Пароль пользователя", example = "qwerty12345")
     private String password;
 
+    @Schema(description = "Код подтверждения аккаунта")
     private String verificationCode;
 
     @Column(nullable = false)
+    @Schema(description = "Статус подтверждения аккаунта пользователя", example = "true")
     private Boolean isConfirmed;
 
     @Column(nullable = false)
+    @Schema(description = "Статус блокировки аккаунта пользователя", example = "false")
     private Boolean isBanned;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Schema(description = "Роль пользователя", example = "USER")
     private Role role;
 
     @ElementCollection
@@ -67,6 +77,7 @@ public class User implements UserDetails {
     @Column(name = "theme_id")
     private List<UUID> favoriteThemes;
 
+    @Schema(description = "Идентификатор категории, управляемой пользователем, являющимся модератором")
     private UUID manageCategoryId;
 
     @PrePersist

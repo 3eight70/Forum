@@ -7,6 +7,7 @@ import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MultipartException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ApiResponse(responseCode = "400", description = "Запрос не является multipart запросом")
     public ResponseEntity<Response> handleMultipartException(MultipartException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
@@ -53,6 +55,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(ExpiredJwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ApiResponse(responseCode = "401", description = "Токен просрочен")
     public ResponseEntity<Response> handleExpiredJwtException(ExpiredJwtException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
@@ -61,6 +64,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MalformedJwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ApiResponse(responseCode = "401", description = "Структура токена нарушен")
     public ResponseEntity<Response> handleMalformedJwtException(MalformedJwtException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
@@ -69,6 +73,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SignatureException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ApiResponse(responseCode = "401", description = "Подпись токена нарушена")
     public ResponseEntity<Response> handleSignatureException(SignatureException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
@@ -77,6 +82,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExpiredTokenException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ApiResponse(responseCode = "401", description = "Токен просрочен")
     public ResponseEntity<Response> handleExpiredTokenException(ExpiredTokenException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(),
@@ -92,6 +98,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ApiResponse(responseCode = "400", description = "Неправильный логин или пароль")
     public ResponseEntity<Response> handleBadCredentialsException(BadCredentialsException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
@@ -99,6 +106,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ApiResponse(responseCode = "400", description = "Пользователь с указанным логином не найден")
     public ResponseEntity<Response> handleUsernameNotFoundException(UsernameNotFoundException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
@@ -106,42 +115,52 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleBadRequestException(BadRequestException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Response> handleNotFoundException(NotFoundException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AccountNotConfirmedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ApiResponse(responseCode = "401", description = "Аккаунт не подтвержден")
     public ResponseEntity<Response> handleAccountNotConfirmedException(AccountNotConfirmedException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ApiResponse(responseCode = "401", description = "Токен невалиден")
     public ResponseEntity<Response> handleInvalidTokenException(InvalidTokenException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ApiResponse(responseCode = "500", description = "Что-то пошло не так")
     public ResponseEntity<Response> handleException(Exception e){
         log.error(e.getMessage(), e);
         Response response = new Response(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Что-то пошло не так");

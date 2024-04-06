@@ -7,6 +7,9 @@ import com.hits.user.Core.RefreshToken.Entity.RefreshToken;
 import com.hits.user.Core.RefreshToken.Service.RefreshTokenService;
 import com.hits.user.Exceptions.AccountNotConfirmedException;
 import com.hits.user.Exceptions.UserAlreadyExistsException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import static com.hits.common.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Авторизация", description = "Контроллер, отвечающий за авторизацию и аутенфикацию")
 public class AuthController {
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
@@ -34,6 +38,10 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping(REGISTER_USER)
+    @Operation(
+            summary = "Регистрация пользователя",
+            description = "Позволяет пользователю зарегистрироваться"
+    )
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) throws MessagingException,
             UnsupportedEncodingException,
             UserAlreadyExistsException {
@@ -43,6 +51,10 @@ public class AuthController {
     }
 
     @PostMapping(LOGIN_USER)
+    @Operation(
+            summary = "Авторизация пользователя",
+            description = "Позволяет пользователю авторизоваться"
+    )
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginCredentials loginCredentials) throws AccountNotConfirmedException {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginCredentials.getLogin(), loginCredentials.getPassword()));
 
@@ -56,6 +68,11 @@ public class AuthController {
     }
 
     @PostMapping(LOGOUT_USER)
+    @Operation(
+            summary = "Выход из аккаунта",
+            description = "Позволяет пользователю выйти из аккаунта"
+    )
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String token){
         return authService.logoutUser(token);
     }

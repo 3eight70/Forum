@@ -1,6 +1,7 @@
 package com.hits.user.Core.RefreshToken.Entity;
 
 import com.hits.user.Core.User.Entity.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,15 +16,19 @@ import java.util.UUID;
 @Entity
 @Table(name = "refresh_tokens")
 @Builder
+@Schema(description = "Сущность refresh токен")
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Schema(description = "Идентификатор токена")
     private UUID id;
 
     @Column(nullable = false)
+    @Schema(description = "access токен")
     private String token;
 
     @Column(nullable = false)
+    @Schema(description = "Время просрочки токена")
     private Instant expiryTime;
 
     @OneToOne
