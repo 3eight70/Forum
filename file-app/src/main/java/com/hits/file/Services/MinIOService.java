@@ -9,7 +9,7 @@ import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Entities.File;
 import com.hits.file.Repositories.FileRepository;
-import com.hits.security.Client.ForumAppClient;
+import com.hits.security.Rest.Client.ForumAppClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
@@ -34,7 +34,6 @@ import java.util.UUID;
 public class MinIOService implements IMinIOService{
     private final S3Client s3Client;
     private final FileRepository fileRepository;
-    @Qualifier("com.hits.security.Client.ForumAppClient")
     private final ForumAppClient forumAppClient;
 
     public UUID uploadFile(UUID messageId, MultipartFile file)

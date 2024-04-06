@@ -41,9 +41,15 @@
 		<liquibase.version>4.27.0</liquibase.version>
 		<fileupload.version>1.5</fileupload.version>
 		<io.version>2.16.0</io.version>
+		<openapi.version>2.5.0</openapi.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+				<version>${openapi.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-mail</artifactId>

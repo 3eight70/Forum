@@ -5,7 +5,7 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Models.User.UserDto;
 import com.hits.file.Services.IMinIOService;
-import com.hits.security.Client.FileAppClient;
+import com.hits.security.Rest.Client.FileAppClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

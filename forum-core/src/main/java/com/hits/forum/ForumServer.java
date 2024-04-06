@@ -1,7 +1,7 @@
 package com.hits.forum;
 
-import com.hits.security.Client.FileAppClient;
-import com.hits.security.Client.UserAppClient;
+import com.hits.security.Rest.Client.FileAppClient;
+import com.hits.security.Rest.Client.UserAppClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

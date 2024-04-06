@@ -11,7 +11,7 @@ import com.hits.forum.Models.Dto.Message.EditMessageRequest;
 import com.hits.forum.Models.Dto.Theme.ThemeRequest;
 import com.hits.forum.Models.Enums.SortOrder;
 import com.hits.forum.Services.IForumService;
-import com.hits.security.Client.ForumAppClient;
+import com.hits.security.Rest.Client.ForumAppClient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

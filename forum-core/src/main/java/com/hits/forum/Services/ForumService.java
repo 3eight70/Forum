@@ -25,9 +25,10 @@ import com.hits.forum.Repositories.CategoryRepository;
 import com.hits.forum.Repositories.FileRepository;
 import com.hits.forum.Repositories.MessageRepository;
 import com.hits.forum.Repositories.ThemeRepository;
-import com.hits.security.Client.FileAppClient;
+import com.hits.security.Rest.Client.FileAppClient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -50,7 +51,6 @@ public class ForumService implements IForumService {
     private final CategoryRepository categoryRepository;
     private final ThemeRepository themeRepository;
     private final MessageRepository messageRepository;
-    @Qualifier("com.hits.security.Client.FileAppClient")
     private final FileAppClient fileAppClient;
     private final FileRepository fileRepository;
 
