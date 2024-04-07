@@ -1,8 +1,8 @@
 package com.hits.user.Rest.Controllers.Admin;
 
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.User.UserDto;
 import com.hits.user.Core.Admin.DTO.CreateUserModel;
 import com.hits.user.Core.Admin.DTO.UserEditModel;
 import com.hits.user.Core.Admin.Service.AdminService;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static com.hits.common.Consts.*;
+import static com.hits.common.Core.Consts.*;
 
 @RestController
 @RequiredArgsConstructor

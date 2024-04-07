@@ -1,8 +1,8 @@
 package com.hits.user.Core.Admin.Service;
 
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.User.UserDto;
 import com.hits.user.Core.Admin.DTO.CreateUserModel;
 import com.hits.user.Core.Admin.DTO.UserEditModel;
 import org.springframework.http.ResponseEntity;

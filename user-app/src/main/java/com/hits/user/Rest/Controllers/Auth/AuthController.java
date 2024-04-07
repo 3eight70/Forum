@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 
-import static com.hits.common.Consts.*;
+import static com.hits.common.Core.Consts.*;
 
 @RestController
 @RequiredArgsConstructor

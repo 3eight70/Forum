@@ -1,7 +1,7 @@
 package com.hits.user.Core.Auth.Service;
 
-import com.hits.common.Models.Response.Response;
-import com.hits.common.Models.Response.TokenResponse;
+import com.hits.common.Core.Response.Response;
+import com.hits.common.Core.Response.TokenResponse;
 import com.hits.user.Core.Auth.DTO.LoginCredentials;
 import com.hits.user.Core.Auth.DTO.UserRegisterModel;
 import com.hits.user.Core.RefreshToken.Entity.RefreshToken;

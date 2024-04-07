@@ -14,7 +14,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.hits.common.Consts.*;
+import static com.hits.common.Core.Consts.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor

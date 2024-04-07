@@ -1,7 +1,7 @@
 package com.hits.forum.Exceptions;
 
+import com.hits.common.Core.Response.Response;
 import com.hits.common.Exceptions.*;
-import com.hits.common.Models.Response.Response;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

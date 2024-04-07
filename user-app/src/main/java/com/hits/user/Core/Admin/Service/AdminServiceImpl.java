@@ -1,11 +1,11 @@
 package com.hits.user.Core.Admin.Service;
 
+import com.hits.common.Core.Response.Response;
+import com.hits.common.Core.User.DTO.Role;
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.UnknownException;
-import com.hits.common.Models.Response.Response;
-import com.hits.common.Models.User.Role;
-import com.hits.common.Models.User.UserDto;
 import com.hits.security.Rest.Client.ForumAppClient;
 import com.hits.user.Core.Admin.DTO.CreateUserModel;
 import com.hits.user.Core.Admin.DTO.UserEditModel;

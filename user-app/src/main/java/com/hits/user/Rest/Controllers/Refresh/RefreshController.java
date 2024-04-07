@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.hits.common.Consts.REFRESH_TOKEN;
+import static com.hits.common.Core.Consts.REFRESH_TOKEN;
 
 @RestController
 @RequiredArgsConstructor

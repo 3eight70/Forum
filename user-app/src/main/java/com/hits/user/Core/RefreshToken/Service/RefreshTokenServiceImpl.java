@@ -1,7 +1,7 @@
 package com.hits.user.Core.RefreshToken.Service;
 
+import com.hits.common.Core.Response.TokenResponse;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.Response.TokenResponse;
 import com.hits.user.Core.Auth.DTO.LoginCredentials;
 import com.hits.user.Core.RefreshToken.DTO.RefreshRequestDto;
 import com.hits.user.Core.RefreshToken.Entity.RefreshToken;

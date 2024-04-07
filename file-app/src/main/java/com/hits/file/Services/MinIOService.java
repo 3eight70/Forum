@@ -1,10 +1,10 @@
 package com.hits.file.Services;
 
+import com.hits.common.Core.Message.DTO.MessageDto;
+import com.hits.common.Core.Response.Response;
+import com.hits.common.Core.User.DTO.Role;
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.*;
-import com.hits.common.Models.Message.MessageDto;
-import com.hits.common.Models.Response.Response;
-import com.hits.common.Models.User.Role;
-import com.hits.common.Models.User.UserDto;
 import com.hits.file.Mappers.FileMapper;
 import com.hits.file.Models.Dto.FileDto.FileDto;
 import com.hits.file.Models.Entities.File;

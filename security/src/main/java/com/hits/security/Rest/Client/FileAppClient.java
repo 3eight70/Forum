@@ -1,6 +1,6 @@
 package com.hits.security.Rest.Client;
 
-import com.hits.common.Models.User.UserDto;
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.security.Rest.Configurations.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.UUID;
 
-import static com.hits.common.Consts.DOWNLOAD_FILE;
-import static com.hits.common.Consts.UPLOAD_FILE;
+import static com.hits.common.Core.Consts.DOWNLOAD_FILE;
+import static com.hits.common.Core.Consts.UPLOAD_FILE;
 
 @FeignClient(name = "FILE-SERVICE", configuration = FeignClientConfiguration.class)
 public interface FileAppClient {

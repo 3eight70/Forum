@@ -1,13 +1,13 @@
 package com.hits.security.Rest.Client;
 
-import com.hits.common.Models.User.UserDto;
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.security.Rest.Configurations.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import static com.hits.common.Consts.GET_USER;
-import static com.hits.common.Consts.VALIDATE_TOKEN;
+import static com.hits.common.Core.Consts.GET_USER;
+import static com.hits.common.Core.Consts.VALIDATE_TOKEN;
 
 @FeignClient(name = "USER-SERVICE", configuration = FeignClientConfiguration.class)
 public interface UserAppClient {

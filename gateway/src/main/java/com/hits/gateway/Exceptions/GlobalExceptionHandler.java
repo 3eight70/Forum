@@ -1,6 +1,6 @@
 package com.hits.gateway.Exceptions;
 
-import com.hits.common.Models.Response.Response;
+import com.hits.common.Core.Response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

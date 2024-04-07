@@ -1,8 +1,8 @@
 package com.hits.user.Exceptions;
 
+import com.hits.common.Core.Response.Response;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.Response.Response;
 import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;

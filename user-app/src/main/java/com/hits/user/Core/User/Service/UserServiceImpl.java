@@ -1,11 +1,12 @@
 package com.hits.user.Core.User.Service;
 
+import com.hits.common.Core.Response.Response;
+import com.hits.common.Core.Response.TokenResponse;
+import com.hits.common.Core.Theme.DTO.ThemeDto;
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.UnknownException;
-import com.hits.common.Models.Response.Response;
-import com.hits.common.Models.Response.TokenResponse;
-import com.hits.common.Models.User.UserDto;
 import com.hits.security.Rest.Client.ForumAppClient;
 import com.hits.user.Core.RefreshToken.Entity.RefreshToken;
 import com.hits.user.Core.RefreshToken.Service.RefreshTokenService;
@@ -32,7 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
-import static com.hits.common.Consts.VERIFY_USER;
+import static com.hits.common.Core.Consts.VERIFY_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -104,10 +105,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
     }
 
-    public ResponseEntity<?> getFavoriteThemes(UserDto userDto){
+    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto){
         User user = userRepository.findByLogin(userDto.getLogin());
 
-        return ResponseEntity.ok(forumAppClient.getThemesById(user.getFavoriteThemes()).getBody());
+        List<ThemeDto> favoriteThemes;
+
+        try {
+            favoriteThemes = forumAppClient.getThemesById(user.getFavoriteThemes()).getBody();
+        }
+        catch (FeignException.InternalServerError e) {
+            throw new UnknownException();
+        }
+
+        return ResponseEntity.ok(favoriteThemes);
     }
 
     public ResponseEntity<?> verifyUser(UUID userId, String code) throws NotFoundException, BadRequestException{

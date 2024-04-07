@@ -1,9 +1,10 @@
 package com.hits.user.Rest.Controllers.User;
 
+import com.hits.common.Core.Response.Response;
+import com.hits.common.Core.Theme.DTO.ThemeDto;
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.Response.Response;
-import com.hits.common.Models.User.UserDto;
 import com.hits.security.Rest.Client.UserAppClient;
 import com.hits.user.Core.User.Mapper.UserMapper;
 import com.hits.user.Core.User.Service.UserService;
@@ -19,8 +20,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.List;
 
-import static com.hits.common.Consts.*;
+import static com.hits.common.Core.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -75,7 +77,7 @@ public class UserController implements UserAppClient {
     )
     @GetMapping(GET_FAVORITE)
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> getFavoriteThemes(@AuthenticationPrincipal UserDto userDto){
+    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(@AuthenticationPrincipal UserDto userDto){
         return userService.getFavoriteThemes(userDto);
     }
 

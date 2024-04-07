@@ -1,9 +1,9 @@
 package com.hits.file.Controllers;
 
 
+import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.User.UserDto;
 import com.hits.file.Services.IMinIOService;
 import com.hits.security.Rest.Client.FileAppClient;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.UUID;
 
-import static com.hits.common.Consts.*;
+import static com.hits.common.Core.Consts.*;
 
 @RestController
 @RequiredArgsConstructor

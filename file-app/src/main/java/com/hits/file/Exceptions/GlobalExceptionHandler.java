@@ -1,11 +1,11 @@
 package com.hits.file.Exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.hits.common.Core.Response.Response;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.FileLimitException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Models.Response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

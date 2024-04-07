@@ -1,6 +1,6 @@
 package com.hits.user.Core.User.Entity;
 
-import com.hits.common.Models.User.Role;
+import com.hits.common.Core.User.DTO.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;

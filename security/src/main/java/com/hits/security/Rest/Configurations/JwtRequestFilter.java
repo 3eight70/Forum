@@ -1,7 +1,7 @@
 package com.hits.security.Rest.Configurations;
 
-import com.hits.common.Models.User.UserDto;
-import com.hits.common.Utils.JwtUtils;
+import com.hits.common.Core.User.DTO.UserDto;
+import com.hits.common.Core.Utils.JwtUtils;
 import com.hits.security.Rest.Client.UserAppClient;
 import feign.FeignException;
 import io.jsonwebtoken.ExpiredJwtException;
