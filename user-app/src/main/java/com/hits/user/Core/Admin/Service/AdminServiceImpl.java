@@ -14,6 +14,7 @@ import com.hits.user.Core.User.Mapper.UserMapper;
 import com.hits.user.Core.User.Repository.UserRepository;
 import com.hits.user.Exceptions.UserAlreadyExistsException;
 import feign.FeignException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final ForumAppClient forumAppClient;
 
+    @Transactional
     public ResponseEntity<?> banUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException {
         User userToBan = userRepository.findUserById(userId);
 
@@ -45,6 +47,7 @@ public class AdminServiceImpl implements AdminService {
                 "Пользователь успешно заблокирован"), HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> giveModeratorRole(UserDto userDto, UUID userId) throws NotFoundException{
         User user = userRepository.findUserById(userId);
 
@@ -63,6 +66,7 @@ public class AdminServiceImpl implements AdminService {
                 "Роль модератора успешно выдана"), HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> deleteModeratorRole(UserDto userDto, UUID userId) throws NotFoundException {
         User user = userRepository.findUserById(userId);
 
@@ -82,6 +86,7 @@ public class AdminServiceImpl implements AdminService {
                 "Роль модератора успешно удалена"), HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> giveCategoryToModerator(UserDto userDto, UUID userId, UUID categoryId)
             throws NotFoundException, BadRequestException {
         User user = userRepository.findUserById(userId);
@@ -115,6 +120,7 @@ public class AdminServiceImpl implements AdminService {
         throw new UnknownException();
     }
 
+    @Transactional
     public ResponseEntity<?> createUser(CreateUserModel createUserModel) {
         String email = createUserModel.getEmail();
         String login = createUserModel.getLogin();
@@ -133,6 +139,7 @@ public class AdminServiceImpl implements AdminService {
                 "Пользователь успешно создан"), HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<?> editUser(UserEditModel userEditModel, UUID userId){
         User user = userRepository.findUserById(userId);
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class MessageMapper {
+public final class MessageMapper {
     public static ForumMessage messageRequestToForumTheme(String userLogin, String content, UUID themeId, UUID categoryId){
         return new ForumMessage(
                 UUID.randomUUID(),

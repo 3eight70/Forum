@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class CategoryMapper {
+public final class CategoryMapper {
     public static ForumCategory categoryRequestToForumCategory(String userLogin, CategoryRequest categoryRequest){
         return new ForumCategory(
                 UUID.randomUUID(),

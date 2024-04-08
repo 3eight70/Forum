@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class UserMapper {
+public final class UserMapper {
     public static User userRegisterModelToUser(UserRegisterModel userRegisterModel){
         return new User(
                 UUID.randomUUID(),

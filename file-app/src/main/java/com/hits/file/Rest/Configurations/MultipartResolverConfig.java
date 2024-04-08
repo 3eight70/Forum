@@ -1,4 +1,4 @@
-package com.hits.file.Configurations;
+package com.hits.file.Rest.Configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

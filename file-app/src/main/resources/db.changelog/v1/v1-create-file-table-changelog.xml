@@ -18,13 +18,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="content_type" type="varchar(1000)">
-                <constraints nullable="false" checkConstraint="size(content_type) > 0"/>
-            </column>
             <column name="size" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="file_content" type="varbinary">
                 <constraints nullable="false"/>
             </column>
             <column name="message_id" type="uuid">

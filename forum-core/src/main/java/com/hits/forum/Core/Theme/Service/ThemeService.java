@@ -6,9 +6,9 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
-import com.hits.forum.Core.Enums.SortOrder;
 import com.hits.forum.Core.Theme.DTO.ThemeRequest;
-import com.hits.forum.Core.Theme.DTO.ThemeResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface ThemeService {
             throws BadRequestException, NotFoundException, ForbiddenException;
     ResponseEntity<?> deleteTheme(UserDto user, UUID themeId)
             throws NotFoundException, ForbiddenException;
-    ResponseEntity<ThemeResponse> getAllThemes(Integer page, Integer size, SortOrder sortOrder);
+    ResponseEntity<Page<ThemeDto>> getAllThemes(Pageable pageable);
     ResponseEntity<List<ThemeDto>> getThemesWithSubstring(String substring);
     ResponseEntity<?> archiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
     ResponseEntity<?> unArchiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;

@@ -8,8 +8,8 @@ import com.hits.user.Core.User.Entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     User loadUserByUsername(String email) throws UsernameNotFoundException;

@@ -3,6 +3,8 @@ package com.hits.forum.Exceptions;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Exceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -34,6 +36,19 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
 
         return new ResponseEntity<>(new Response(status, errorMessage), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response> handleConstraintViolationException(ConstraintViolationException e) {
+        log.error(e.getMessage(), e);
+        String errorMessage = e.getConstraintViolations()
+                .stream()
+                .findFirst()
+                .map(ConstraintViolation::getMessageTemplate)
+                .orElse("Ошибка валидации");
+
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(), errorMessage), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

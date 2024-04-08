@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartException;
-import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.IOException;
 import java.security.SignatureException;
@@ -27,14 +26,6 @@ import java.security.SignatureException;
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
-    @ExceptionHandler(NoSuchKeyException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Response> handleNoSuchKeyException(NoSuchKeyException e){
-        log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(),
-                "Файла с данным id не существует"), HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(SignatureException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<Response> handleSignatureException(SignatureException e){

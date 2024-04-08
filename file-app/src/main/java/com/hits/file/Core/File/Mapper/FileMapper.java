@@ -1,21 +1,18 @@
-package com.hits.file.Mappers;
+package com.hits.file.Core.File.Mapper;
 
-import com.hits.file.Models.Dto.FileDto.FileDto;
-import com.hits.file.Models.Entities.File;
+import com.hits.file.Core.File.Models.FileDto;
+import com.hits.file.Core.File.Entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class FileMapper {
-    public static File multipartFileToFile(MultipartFile file, UUID messageId) throws IOException {
-        return new File(UUID.randomUUID(),
+public final class FileMapper {
+    public static File multipartFileToFile(MultipartFile file, UUID messageId, UUID fileId) {
+        return new File(fileId,
                 LocalDateTime.now(),
                 file.getOriginalFilename(),
-                file.getContentType(),
                 file.getSize(),
-                file.getBytes(),
                 messageId
         );
     }

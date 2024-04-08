@@ -12,8 +12,6 @@ import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import com.hits.forum.Core.Category.Entity.ForumCategory;
 import com.hits.forum.Core.Category.Mapper.CategoryMapper;
 import com.hits.forum.Core.Category.Repository.CategoryRepository;
-import com.hits.forum.Core.Enums.SortOrder;
-import com.hits.forum.Core.Utils.ComparatorProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -129,9 +127,8 @@ public class CategoryServiceImpl implements CategoryService{
                 "Категория успешно удалена"), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<CategoryDto>> getCategories(SortOrder sortOrder){
-        Sort sort = Sort.by(ComparatorProvider.getComparator(sortOrder));
-        List<CategoryDto> categories = categoryRepository.findAllByParentIdIsNull(sort)
+    public ResponseEntity<List<CategoryDto>> getCategories(Sort sortOrder){
+        List<CategoryDto> categories = categoryRepository.findAllByParentIdIsNull(sortOrder)
                 .stream()
                 .map(CategoryMapper::forumCategoryToCategoryDto)
                 .collect(Collectors.toList());

@@ -6,9 +6,7 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
-import com.hits.forum.Core.Enums.SortOrder;
 import com.hits.forum.Core.Theme.DTO.ThemeRequest;
-import com.hits.forum.Core.Theme.DTO.ThemeResponse;
 import com.hits.forum.Core.Theme.Service.ThemeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +14,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -77,11 +80,9 @@ public class ThemeController {
             summary = "Получение списка тем",
             description = "Позволяет получить список тем, с использованием пагинации и сортировки"
     )
-    public ResponseEntity<ThemeResponse> getThemes(
-            @RequestParam(name = "page", required = false, defaultValue = "0") @Parameter(description = "Номер страницы") Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "5") @Parameter(description = "Количество элементов на странице") Integer size,
-            @RequestParam(name = "sortOrder", required = false, defaultValue = "CreateDesc") @Parameter(description = "Вариант сортировки") SortOrder sortOrder){
-        return themeService.getAllThemes(page, size, sortOrder);
+    public ResponseEntity<Page<ThemeDto>> getThemes(
+            @ParameterObject @PageableDefault(sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable){
+        return themeService.getAllThemes(pageable);
     }
 
     @GetMapping(GET_THEMES_WITH_SUBSTRING)

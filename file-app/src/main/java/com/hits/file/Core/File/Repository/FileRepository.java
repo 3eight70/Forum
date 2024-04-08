@@ -1,6 +1,6 @@
-package com.hits.file.Repositories;
+package com.hits.file.Core.File.Repository;
 
-import com.hits.file.Models.Entities.File;
+import com.hits.file.Core.File.Entity.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +12,5 @@ public interface FileRepository extends JpaRepository<File, UUID> {
     File findFileById(UUID id);
 
     List<File> findAllByMessageId(UUID messageId);
+    File findFileByMessageIdAndNameContainsIgnoreCase(UUID messageId, String name);
 }

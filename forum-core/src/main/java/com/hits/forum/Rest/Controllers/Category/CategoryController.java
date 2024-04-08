@@ -9,13 +9,14 @@ import com.hits.forum.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import com.hits.forum.Core.Category.Service.CategoryService;
-import com.hits.forum.Core.Enums.SortOrder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class CategoryController {
             description = "Позволяет получить категории, отсортированные в нужном порядке"
     )
     public ResponseEntity<List<CategoryDto>> getCategories(
-            @RequestParam(name = "sortOrder", required = false, defaultValue = "NameAsc") @Parameter(description = "Сортировка") SortOrder sortOrder){
+            @SortDefault(sort = "categoryName", direction = Sort.Direction.ASC) @RequestParam(name = "sortOrder", required = false) @Parameter(description = "Сортировка") Sort sortOrder){
         return categoryService.getCategories(sortOrder);
     }
 

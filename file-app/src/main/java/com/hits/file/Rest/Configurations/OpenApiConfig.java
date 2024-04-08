@@ -1,4 +1,4 @@
-package com.hits.security.Rest.Configurations;
+package com.hits.file.Rest.Configurations;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;

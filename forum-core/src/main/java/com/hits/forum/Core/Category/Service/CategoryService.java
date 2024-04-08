@@ -8,7 +8,7 @@ import com.hits.common.Exceptions.ObjectAlreadyExistsException;
 import com.hits.forum.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
-import com.hits.forum.Core.Enums.SortOrder;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface CategoryService {
             throws BadRequestException, NotFoundException, ForbiddenException;
     ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId)
             throws NotFoundException, ForbiddenException;
-    ResponseEntity<List<CategoryDto>>  getCategories(SortOrder sortOrder);
+    ResponseEntity<List<CategoryDto>>  getCategories(Sort sortOrder);
     ResponseEntity<List<CategoryWithSubstring>>  getCategoriesWithSubstring(String substring);
     ResponseEntity<?> checkCategory(UUID categoryId) throws NotFoundException;
 }

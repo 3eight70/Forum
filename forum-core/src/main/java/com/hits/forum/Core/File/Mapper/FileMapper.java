@@ -5,10 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
-public class FileMapper {
-    public static File multipartFileToFile(MultipartFile file, UUID messageId){
+public final class FileMapper {
+    public static File multipartFileToFile(MultipartFile file){
         return new File(
-                messageId,
+                UUID.randomUUID(),
                 file.getOriginalFilename(),
                 file.getSize()
         );
