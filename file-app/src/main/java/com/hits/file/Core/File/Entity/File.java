@@ -31,6 +31,6 @@ public class File {
     @Column(name = "size", nullable = false)
     private Long size;
 
-    @Column(name = "message_id", nullable = false)
-    private UUID messageId;
+    @Column(name = "authorLogin", nullable = false)
+    private String authorLogin;
 }

@@ -46,7 +46,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Transactional
     public RefreshToken createRefreshToken(String login){
         RefreshToken refreshToken = RefreshToken.builder()
-                .user(userRepository.findByLogin(login))
+                .user(userRepository.findByLogin(login).get())
                 .token(UUID.randomUUID().toString())
                 .expiryTime(Instant.now().plus(lifetime))
                 .build();
@@ -56,11 +56,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Transactional
     public RefreshToken checkRefreshToken(LoginCredentials loginCredentials){
-        User user = userRepository.findByLogin(loginCredentials.getLogin());
-
-        if (user == null){
-            throw new NotFoundException("Пользователь не найден");
-        }
+        User user = userRepository.findByLogin(loginCredentials.getLogin())
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         refreshRepository.findByUserId(user.getId())
                 .map(this::verifyExpiration)

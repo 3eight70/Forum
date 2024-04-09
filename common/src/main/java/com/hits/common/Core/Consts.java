@@ -5,6 +5,7 @@ public class Consts {
     public static final String DOWNLOAD_FILE = "/api/file/download";
     public static final String DELETE_FILE = "/api/file/delete";
     public static final String GET_FILES = "/api/file/get";
+    public static final String CHECK_FILE = "/api/file/check";
     public static final String GET_FILE_INFO = "/api/file/info";
     public static final String REFRESH_TOKEN = "/api/account/refreshToken";
     public static final String REGISTER_USER = "/api/account/register";
@@ -36,6 +37,7 @@ public class Consts {
     public static final String DELETE_CATEGORY = "/api/forum/category/delete";
     public static final String DELETE_THEME = "/api/forum/category/theme/delete";
     public static final String DELETE_ATTACHMENT = "/api/forum/message/attachment/delete";
+    public static final String ADD_ATTACHMENT = "/api/forum/message/attachment/add";
     public static final String CHECK_THEME = "/api/forum/category/theme";
     public static final String CHECK_CATEGORY = "/api/forum/category";
     public static final String ARCHIVE_THEME = "/api/forum/category/theme/archive";

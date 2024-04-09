@@ -5,12 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface FileRepository extends JpaRepository<File, UUID> {
-    File findFileById(UUID id);
+    Optional<File> findFileById(UUID id);
 
-    List<File> findAllByMessageId(UUID messageId);
-    File findFileByMessageIdAndNameContainsIgnoreCase(UUID messageId, String name);
+    List<File> findAllByAuthorLogin(String authorLogin);
+    File findFileByAuthorLoginAndNameContainsIgnoreCase(String authorLogin, String name);
 }

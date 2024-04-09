@@ -34,21 +34,18 @@ public class CategoryServiceImpl implements CategoryService{
     public ResponseEntity<?> createCategory(UserDto user, CategoryRequest createCategoryRequest)
             throws ObjectAlreadyExistsException, NotFoundException, BadRequestException {
         String categoryName = createCategoryRequest.getCategoryName();
-        ForumCategory forumCategory = categoryRepository.findByCategoryName(categoryName);
-
-        if (forumCategory != null) {
-            throw new ObjectAlreadyExistsException(String.format("Категория с названием=%s уже существует", categoryName));
-        }
+        categoryRepository.findByCategoryName(categoryName)
+                .ifPresent(category -> {
+                    throw new ObjectAlreadyExistsException(String.format("Категория с названием=%s уже существует", categoryName));
+                });
+        ForumCategory forumCategory;
 
         forumCategory = CategoryMapper.categoryRequestToForumCategory(user.getLogin(), createCategoryRequest);
 
         UUID parentId = createCategoryRequest.getParentId();
         if (parentId != null) {
-            ForumCategory parent = categoryRepository.findForumCategoryById(createCategoryRequest.getParentId());
-
-            if (parent == null) {
-                throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", parentId));
-            }
+            ForumCategory parent = categoryRepository.findForumCategoryById(createCategoryRequest.getParentId())
+                    .orElseThrow(() -> new NotFoundException(String.format("Категория-родитель с id=%s не существует", parentId)));
 
             if (!parent.getThemes().isEmpty()){
                 throw new BadRequestException("У данной категории уже присутствуют топики");
@@ -71,36 +68,31 @@ public class CategoryServiceImpl implements CategoryService{
         if (parentId != null && parentId.equals(categoryId)) {
             throw new BadRequestException("Категория не может быть родителем для самой себя");
         }
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
-
-        if (forumCategory == null) {
-            throw new NotFoundException(String.format("Категории с id=%s не существует", categoryId));
-        }
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId)
+                .orElseThrow(() -> new NotFoundException(String.format("Категории с id=%s не существует", categoryId)));
 
         if (parentId != null) {
-            ForumCategory parent = categoryRepository.findForumCategoryById(parentId);
+            ForumCategory parent = categoryRepository.findForumCategoryById(parentId)
+                    .orElseThrow(() -> new NotFoundException(String.format("Категория-родитель с id=%s не существует", parentId)));
 
-            if (parent == null) {
-                throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", parentId));
-            } else {
-                if (!parent.getThemes().isEmpty()){
-                    throw new BadRequestException("У данной категории уже присутствуют топики");
-                }
-                UUID parentOfParentId = parent.getParentId();
-                if (parentOfParentId != null && parentOfParentId.equals(categoryId)) {
-                    throw new BadRequestException("Категории не могут одновременно быть родителями друг друга");
-                }
-
-                parent.getChildCategories().add(forumCategory);
-                categoryRepository.saveAndFlush(parent);
+            if (!parent.getThemes().isEmpty()){
+                throw new BadRequestException("У данной категории уже присутствуют топики");
             }
+            UUID parentOfParentId = parent.getParentId();
+            if (parentOfParentId != null && parentOfParentId.equals(categoryId)) {
+                throw new BadRequestException("Категории не могут одновременно быть родителями друг друга");
+            }
+
+            parent.getChildCategories().add(forumCategory);
+            categoryRepository.saveAndFlush(parent);
         }
 
-        ForumCategory checkCategory = categoryRepository.findByCategoryName(createCategoryRequest.getCategoryName());
-
-        if (checkCategory != null && !Objects.equals(forumCategory.getCategoryName(), checkCategory.getCategoryName())) {
-            throw new BadRequestException(String.format("Категория с указанным названием уже существует"));
-        }
+        categoryRepository.findByCategoryName(createCategoryRequest.getCategoryName())
+                .ifPresent(category -> {
+                    if (!Objects.equals(forumCategory.getCategoryName(), category.getCategoryName())) {
+                        throw new BadRequestException(String.format("Категория с указанным названием уже существует"));
+                    }
+                });
 
         forumCategory.setParentId(parentId);
         forumCategory.setCategoryName(createCategoryRequest.getCategoryName());
@@ -115,11 +107,8 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional
     public ResponseEntity<?> deleteCategory(UserDto user, UUID categoryId)
             throws NotFoundException, ForbiddenException{
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
-
-        if (forumCategory == null) {
-            throw new NotFoundException(String.format("Категории с id=%s не существует",categoryId));
-        }
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId)
+                .orElseThrow(() -> new NotFoundException(String.format("Категории с id=%s не существует",categoryId)));
 
         categoryRepository.delete(forumCategory);
 
@@ -138,11 +127,8 @@ public class CategoryServiceImpl implements CategoryService{
 
     public ResponseEntity<?> checkCategory(UUID categoryId)
             throws NotFoundException{
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
-
-        if (forumCategory == null){
-            throw new NotFoundException(String.format("Категории с id=%s не существует", categoryId));
-        }
+        categoryRepository.findForumCategoryById(categoryId)
+                .orElseThrow(() -> new NotFoundException(String.format("Категории с id=%s не существует", categoryId)));
 
         return ResponseEntity.ok().build();
     }

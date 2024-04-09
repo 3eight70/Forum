@@ -47,7 +47,8 @@ public class FeignController implements ForumAppClient {
     }
 
     @GetMapping(SEND_MESSAGE)
-    public ResponseEntity<MessageDto> checkMessage(@RequestParam(name = "messageId") UUID messageId){
+    public ResponseEntity<MessageDto> checkMessage(
+            @RequestParam(name = "messageId") UUID messageId) {
         return messageService.checkMessage(messageId);
     }
 }

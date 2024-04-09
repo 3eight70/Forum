@@ -16,7 +16,6 @@ import com.hits.forum.Core.Theme.Mapper.ThemeMapper;
 import com.hits.forum.Core.Theme.Repository.ThemeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -41,17 +40,16 @@ public class ThemeServiceImpl implements ThemeService{
             throws ObjectAlreadyExistsException, NotFoundException, BadRequestException {
         String themeName = createThemeRequest.getThemeName();
         UUID categoryId = createThemeRequest.getCategoryId();
-        ForumTheme forumTheme = themeRepository.findByThemeNameAndCategoryId(themeName, categoryId);
+        themeRepository.findByThemeNameAndCategoryId(themeName, categoryId)
+                .ifPresent(theme -> {
+                    throw new ObjectAlreadyExistsException(String.format("В данной категории уже существует тема с названием=%s", themeName));
+                });
+        ForumTheme forumTheme;
 
-        if (forumTheme != null) {
-            throw new ObjectAlreadyExistsException(String.format("В данной категории уже существует тема с названием=%s", themeName));
-        }
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId)
+                .orElseThrow(() -> new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId)));
 
-        if (forumCategory == null) {
-            throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId));
-        }
-        else if (!forumCategory.getChildCategories().isEmpty()){
+        if (!forumCategory.getChildCategories().isEmpty()){
             throw new BadRequestException("Вы не можете создать топик не в категории нижнего уровня");
         }
 
@@ -66,33 +64,30 @@ public class ThemeServiceImpl implements ThemeService{
     @Transactional
     public ResponseEntity<?> editTheme(UserDto user, UUID themeId, ThemeRequest createThemeRequest)
             throws BadRequestException, NotFoundException, ForbiddenException {
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
 
-        if (forumTheme == null) {
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
-        else if (forumTheme.getIsArchived()){
+        if (forumTheme.getIsArchived()){
             throw new BadRequestException("Тема находится в архиве");
         }
 
         checkAccess(user, forumTheme);
 
         UUID categoryId = createThemeRequest.getCategoryId();
-        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId);
+        ForumCategory forumCategory = categoryRepository.findForumCategoryById(categoryId)
+                .orElseThrow(() -> new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId)));
 
-        if (forumCategory == null) {
-            throw new NotFoundException(String.format("Категория-родитель с id=%s не существует", categoryId));
-        }
-        else if (!forumCategory.getChildCategories().isEmpty()){
+        if (!forumCategory.getChildCategories().isEmpty()){
             throw new BadRequestException("Вы не можете создать топик не в категории нижнего уровня");
         }
 
-        ForumTheme checkTheme = themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId());
-
-        if (checkTheme != null && !Objects.equals(forumTheme.getThemeName(), checkTheme.getThemeName())
-                && checkTheme.getCategoryId() != forumTheme.getCategoryId()) {
-            throw new BadRequestException("Тема с указанным названием в данной категории уже существует");
-        }
+        themeRepository.findByThemeNameAndCategoryId(createThemeRequest.getThemeName(), createThemeRequest.getCategoryId())
+                .ifPresent(theme -> {
+                    if (!Objects.equals(forumTheme.getThemeName(), theme.getThemeName())
+                            && theme.getCategoryId() != forumTheme.getCategoryId()) {
+                        throw new BadRequestException("Тема с указанным названием в данной категории уже существует");
+                    }
+                });
 
         forumTheme.setThemeName(createThemeRequest.getThemeName());
         forumTheme.setCategoryId(createThemeRequest.getCategoryId());
@@ -107,11 +102,8 @@ public class ThemeServiceImpl implements ThemeService{
     @Transactional
     public ResponseEntity<?> deleteTheme(UserDto user, UUID themeId)
             throws NotFoundException, ForbiddenException{
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
-
-        if (forumTheme == null) {
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
 
         checkAccess(user, forumTheme);
 
@@ -130,11 +122,8 @@ public class ThemeServiceImpl implements ThemeService{
 
     public ResponseEntity<?> checkTheme(UUID themeId)
             throws NotFoundException{
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
-
-        if (forumTheme == null){
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
+        themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
 
         return ResponseEntity.ok().build();
     }
@@ -150,12 +139,10 @@ public class ThemeServiceImpl implements ThemeService{
 
     @Transactional
     public ResponseEntity<?> archiveTheme(UserDto userDto, UUID themeId){
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
 
-        if (forumTheme == null) {
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
-        else if (forumTheme.getIsArchived()){
+        if (forumTheme.getIsArchived()){
             throw new BadRequestException("Тема уже заархивирована");
         }
 
@@ -170,12 +157,10 @@ public class ThemeServiceImpl implements ThemeService{
 
     @Transactional
     public ResponseEntity<?> unArchiveTheme(UserDto userDto, UUID themeId){
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
 
-        if (forumTheme == null) {
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
-        else if (!forumTheme.getIsArchived()){
+        if (!forumTheme.getIsArchived()){
             throw new BadRequestException("Тема и так не находится в архиве");
         }
 

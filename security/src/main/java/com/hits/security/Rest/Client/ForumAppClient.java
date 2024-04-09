@@ -2,6 +2,7 @@ package com.hits.security.Rest.Client;
 
 import com.hits.common.Core.Message.DTO.MessageDto;
 import com.hits.common.Core.Theme.DTO.ThemeDto;
+import com.hits.common.Exceptions.NotFoundException;
 import com.hits.security.Rest.Configurations.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,17 @@ import static com.hits.common.Core.Consts.*;
 @FeignClient(name = "FORUM-SERVICE", configuration = FeignClientConfiguration.class)
 public interface ForumAppClient {
     @GetMapping(CHECK_THEME)
-    ResponseEntity<?> checkTheme(@RequestParam(name = "themeId") UUID themeId);
+    ResponseEntity<?> checkTheme(@RequestParam(name = "themeId") UUID themeId)
+            throws NotFoundException;
 
     @GetMapping(CHECK_CATEGORY)
-    ResponseEntity<?> checkCategory(@RequestParam(name = "categoryId") UUID categoryId);
+    ResponseEntity<?> checkCategory(@RequestParam(name = "categoryId") UUID categoryId)
+            throws NotFoundException;
 
     @GetMapping(SEND_MESSAGE)
-    ResponseEntity<MessageDto> checkMessage(@RequestParam(name = "messageId") UUID messageId);
+    ResponseEntity<MessageDto> checkMessage(
+            @RequestParam(name = "messageId") UUID messageId)
+            throws NotFoundException;
 
     @GetMapping(GET_THEMES_BY_ID)
     ResponseEntity<List<ThemeDto>> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId);

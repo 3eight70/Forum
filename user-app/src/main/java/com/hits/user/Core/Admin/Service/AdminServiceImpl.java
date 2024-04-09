@@ -30,11 +30,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     public ResponseEntity<?> banUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException {
-        User userToBan = userRepository.findUserById(userId);
-
-        if (userToBan == null){
-            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
-        }
+        User userToBan = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));
 
         if (userToBan.getIsBanned()){
             throw new BadRequestException(String.format("Пользователь с id=%s уже заблокирован", userId));
@@ -48,12 +45,25 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Transactional
-    public ResponseEntity<?> giveModeratorRole(UserDto userDto, UUID userId) throws NotFoundException{
-        User user = userRepository.findUserById(userId);
+    public ResponseEntity<?> unbanUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException {
+        User userToUnBan = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));
 
-        if (user == null){
-            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
+        if (!userToUnBan.getIsBanned()){
+            throw new BadRequestException(String.format("Пользователь с id=%s не находится в блокировке", userId));
         }
+
+        userToUnBan.setIsBanned(false);
+        userRepository.saveAndFlush(userToUnBan);
+
+        return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                "Пользователь успешно разблокирован"), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<?> giveModeratorRole(UserDto userDto, UUID userId) throws NotFoundException{
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));
 
         if (user.getRole() == Role.MODERATOR){
             throw new BadRequestException("Пользователь уже имеет роль модератора");
@@ -68,11 +78,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     public ResponseEntity<?> deleteModeratorRole(UserDto userDto, UUID userId) throws NotFoundException {
-        User user = userRepository.findUserById(userId);
-
-        if (user == null){
-            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
-        }
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));
 
         if (user.getRole() != Role.MODERATOR){
             throw new BadRequestException("Пользователь не имеет роли модератора");
@@ -89,11 +96,8 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public ResponseEntity<?> giveCategoryToModerator(UserDto userDto, UUID userId, UUID categoryId)
             throws NotFoundException, BadRequestException {
-        User user = userRepository.findUserById(userId);
-
-        if (user == null){
-            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
-        }
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));
 
         if (user.getRole() == Role.ADMIN){
             throw new BadRequestException("Пользователь является администратором");
@@ -126,7 +130,7 @@ public class AdminServiceImpl implements AdminService {
         String login = createUserModel.getLogin();
         String phoneNumber = createUserModel.getPhoneNumber();
 
-        User user = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber);
+        User user = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber).get();
 
         checkUser(user, email, login, phoneNumber);
 
@@ -141,17 +145,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     public ResponseEntity<?> editUser(UserEditModel userEditModel, UUID userId){
-        User user = userRepository.findUserById(userId);
-
-        if (user == null){
-            throw new NotFoundException(String.format("Пользователь с id=%s не найден", userId));
-        }
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id=%s не найден", userId)));
 
         String email = userEditModel.getEmail();
         String phoneNumber = userEditModel.getPhoneNumber();
 
-        User userCheckEmail = userRepository.findByEmail(email);
-        User userCheckPhone = userRepository.findByPhoneNumber(phoneNumber);
+        User userCheckEmail = userRepository.findByEmail(email).get();
+        User userCheckPhone = userRepository.findByPhoneNumber(phoneNumber).get();
 
         if (userCheckEmail != user) {
             checkUser(userCheckEmail, email, null, phoneNumber);

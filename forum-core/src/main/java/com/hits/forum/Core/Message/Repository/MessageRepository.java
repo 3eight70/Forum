@@ -8,11 +8,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface MessageRepository extends JpaRepository<ForumMessage, UUID>, JpaSpecificationExecutor<ForumMessage> {
-    ForumMessage findForumMessageById(UUID id);
+    Optional<ForumMessage> findForumMessageById(UUID id);
     Page<ForumMessage> findAllByThemeId(UUID themeId, Pageable pageable);
     Long countAllByThemeId(UUID themeId);
     List<ForumMessage> findAllByContentContainingIgnoreCase(String content);

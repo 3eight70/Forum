@@ -1,11 +1,14 @@
 package com.hits.forum.Core.Message.Service;
 
+import com.hits.common.Core.File.DTO.FileDto;
 import com.hits.common.Core.Message.DTO.MessageDto;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
-import com.hits.common.Exceptions.*;
-import com.hits.forum.Core.Category.Repository.CategoryRepository;
+import com.hits.common.Exceptions.BadRequestException;
+import com.hits.common.Exceptions.FileLimitException;
+import com.hits.common.Exceptions.ForbiddenException;
+import com.hits.common.Exceptions.NotFoundException;
 import com.hits.forum.Core.File.Entity.File;
 import com.hits.forum.Core.File.Mapper.FileMapper;
 import com.hits.forum.Core.File.Repository.FileRepository;
@@ -42,43 +45,30 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService{
-    private final CategoryRepository categoryRepository;
     private final ThemeRepository themeRepository;
     private final MessageRepository messageRepository;
     private final FileRepository fileRepository;
     private final FileAppClient fileAppClient;
 
     @Transactional
-    public ResponseEntity<?> createMessage(UserDto user, String content, UUID themeId, List<MultipartFile> files)
-            throws NotFoundException, IOException, BadRequestException {
-        if (files != null && files.size() > 5){
-            throw new FileLimitException();
-        }
+    public ResponseEntity<?> createMessage(UserDto user, String content, UUID themeId)
+            throws NotFoundException, BadRequestException {
 
         if (content.isEmpty()){
             throw new BadRequestException("Минимальная длина сообщения равна 1");
         }
 
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId);
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Тема-родитель с id=%s не существует", themeId)));
 
-        if (forumTheme == null) {
-            throw new NotFoundException(String.format("Тема-родитель с id=%s не существует", themeId));
-        }
-        else if (forumTheme.getIsArchived()){
+        if (forumTheme.getIsArchived()){
             throw new BadRequestException("Категория находится в архиве");
         }
 
         ForumMessage forumMessage = MessageMapper.messageRequestToForumTheme(user.getLogin(), content,
                 themeId, forumTheme.getCategoryId());
 
-        List<File> filesToDatabase = mapMultipartList(files);
-
-        fileRepository.saveAll(filesToDatabase);
-
-        forumMessage.setFiles(filesToDatabase);
         messageRepository.saveAndFlush(forumMessage);
-
-        uploadFiles(files, filesToDatabase, forumMessage);
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Сообщение успешно создано"), HttpStatus.OK);
@@ -87,16 +77,20 @@ public class MessageServiceImpl implements MessageService{
     @Transactional
     public ResponseEntity<?> deleteAttachmentFromMessage(UserDto user, UUID attachmentId, UUID messageId)
             throws IOException, NotFoundException {
-        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
-
-        if (forumMessage == null) {
-            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
-        }
+        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId)
+                .orElseThrow(() -> new NotFoundException(String.format("Сообщения с id=%s не существует", messageId)));
 
         checkAccess(user, forumMessage);
 
-        File file = fileRepository.findFileByFileId(attachmentId);
-        if (forumMessage.getFiles().contains(file)) {
+        File file = fileRepository.findFileByFileId(attachmentId).
+                orElseThrow(() -> new NotFoundException(String.format("Файл с id=%s не найден", attachmentId)));
+        List<File> files = forumMessage.getFiles();
+
+        if (files.contains(file)) {
+            files.remove(file);
+            fileRepository.delete(file);
+            messageRepository.saveAndFlush(forumMessage);
+
             try{
                 fileAppClient.deleteFile(user, forumMessage.getId(), file.getFileId());
             }
@@ -110,40 +104,27 @@ public class MessageServiceImpl implements MessageService{
         else{
             throw new BadRequestException("Сообщение не содержит данного файла");
         }
-
     }
 
     @Transactional
-    public ResponseEntity<?> editMessage(UserDto user, UUID messageId, List<MultipartFile> files, EditMessageRequest editMessageRequest)
-            throws NotFoundException, ForbiddenException, IOException {
-        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
-
-        if (forumMessage == null) {
-            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
-        }
-
-        if (files != null && forumMessage.getFiles().size() + files.size() > 5){
-            throw new FileLimitException();
-        }
+    public ResponseEntity<?> editMessage(UserDto user, UUID messageId, EditMessageRequest editMessageRequest)
+            throws NotFoundException, ForbiddenException {
+        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId)
+                .orElseThrow(() -> new NotFoundException(String.format("Сообщения с id=%s не существует", messageId)));
 
         if (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin())) {
             throw new ForbiddenException();
         }
-        ForumTheme forumTheme = themeRepository.findForumThemeById(forumMessage.getThemeId());
+        ForumTheme forumTheme = themeRepository.findForumThemeById(forumMessage.getThemeId()).get();
 
         if (forumTheme.getIsArchived()){
             throw new BadRequestException("Категория находится в архиве");
         }
 
-        List<File> filesToDatabase = mapMultipartList(files);;
-
         forumMessage.setModifiedTime(LocalDateTime.now());
         forumMessage.setContent(editMessageRequest.getContent());
-        forumMessage.getFiles().addAll(filesToDatabase);
 
         messageRepository.saveAndFlush(forumMessage);
-
-        uploadFiles(files, filesToDatabase, forumMessage);
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Сообщение успешно изменено"), HttpStatus.OK);
@@ -152,14 +133,11 @@ public class MessageServiceImpl implements MessageService{
     @Transactional
     public ResponseEntity<?> deleteMessage(UserDto user, UUID messageId)
             throws NotFoundException, ForbiddenException{
-        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
-
-        if (forumMessage == null) {
-            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
-        }
+        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId)
+                .orElseThrow(() -> new NotFoundException(String.format("Сообщения с id=%s не существует", messageId)));
 
         checkAccess(user, forumMessage);
-        ForumTheme forumTheme = themeRepository.findForumThemeById(forumMessage.getThemeId());
+        ForumTheme forumTheme = themeRepository.findForumThemeById(forumMessage.getThemeId()).get();
 
         if (forumTheme.getIsArchived()){
             throw new BadRequestException("Категория находится в архиве");
@@ -180,11 +158,8 @@ public class MessageServiceImpl implements MessageService{
 
     public ResponseEntity<MessageDto> checkMessage(UUID messageId)
             throws NotFoundException{
-        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId);
-
-        if (forumMessage == null){
-            throw new NotFoundException(String.format("Сообщения с id=%s не существует", messageId));
-        }
+        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId)
+                .orElseThrow(() -> new NotFoundException(String.format("Сообщения с id=%s не существует", messageId)));
 
         return ResponseEntity.ok(MessageMapper.forumMessageToMessageDto(forumMessage));
     }
@@ -214,37 +189,52 @@ public class MessageServiceImpl implements MessageService{
         return ResponseEntity.ok(forumMessages);
     }
 
-    private List<File> mapMultipartList(List<MultipartFile> files){
-        List<File> filesToDatabase = new ArrayList<>();
+    @Transactional
+    public ResponseEntity<?> attachFilesToMessage(UserDto user, List<UUID> files, UUID messageId)
+            throws NotFoundException{
+        ForumMessage forumMessage = messageRepository.findForumMessageById(messageId)
+                .orElseThrow(() -> new NotFoundException(String.format("Сообщение с id=%s не найдено", messageId)));
 
-        if (files != null && !files.isEmpty()) {
-            filesToDatabase = files
-                    .stream()
-                    .map(FileMapper::multipartFileToFile)
-                    .toList();
+        if (!forumMessage.getAuthorLogin().equals(user.getLogin())){
+            throw new ForbiddenException();
         }
 
-        return filesToDatabase;
-    }
-
-    private void uploadFiles(List<MultipartFile> files, List<File> filesToDatabase, ForumMessage forumMessage) throws IOException{
         try {
-            if (files != null && !files.isEmpty()) {
-                for (int i = 0; i < files.size(); i++) {
-                    MultipartFile file = files.get(i);
-                    File fileFromDatabase = filesToDatabase.get(i);
-                    fileAppClient.uploadFile(forumMessage.getId().toString(), fileFromDatabase.getFileId().toString(), file);
+            List<File> attachments = new ArrayList<>();
+            List<UUID> attachmentIds = forumMessage.getFiles()
+                    .stream()
+                    .map(File::getFileId)
+                    .toList();
+
+            for (UUID id : files){
+                FileDto fileDto = fileAppClient.checkFile(id).getBody();
+                File file = FileMapper.fileDtoToFile(fileDto);
+
+                if (attachmentIds.contains(id)){
+                    throw new BadRequestException("Файл уже прикреплен к сообщению");
                 }
+
+                attachments.add(file);
+
+                fileRepository.saveAndFlush(file);
             }
+
+            forumMessage.getFiles().addAll(attachments);
+            messageRepository.saveAndFlush(forumMessage);
+
+            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                    "Вложения прикреплены"), HttpStatus.OK);
         }
         catch (FeignException.BadRequest e){
             throw new BadRequestException("Вы уже загрузили файл с таким же названием");
+        }
+        catch (FeignException.NotFound e){
+            throw new NotFoundException("Файл не найден");
         }
     }
 
     private void checkAccess(UserDto user, ForumMessage forumMessage){
         if (user.getRole() != Role.ADMIN) {
-            System.out.println(Objects.equals(user.getLogin(), forumMessage.getAuthorLogin()));
             if  (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin()) &&
                     (user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumMessage.getCategoryId())) {
                 throw new ForbiddenException();

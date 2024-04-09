@@ -102,4 +102,17 @@ public class AdminController {
         userEditModel.setPassword(passwordEncoder.encode(userEditModel.getPassword()));
         return adminService.editUser(userEditModel, userId);
     }
+
+    @DeleteMapping(BAN_USER)
+    @Operation(
+            summary = "Разблокировка пользователя",
+            description = "Позволяет администратору разблокировать пользователя"
+    )
+    public ResponseEntity<?> unbanUser(
+            @AuthenticationPrincipal UserDto user,
+            @RequestParam("userId") @Parameter(name = "Идентификатор пользователя") UUID userId)
+            throws NotFoundException, BadRequestException {
+
+        return adminService.unbanUser(user, userId);
+    }
 }

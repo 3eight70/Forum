@@ -22,6 +22,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,9 +41,10 @@ public class AuthServiceImpl implements AuthService {
         String login = userRegisterModel.getLogin();
         String phoneNumber = userRegisterModel.getPhoneNumber();
 
-        User user = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber);
+        Optional<User> userOptional = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber);
+        User user = userOptional.get();
 
-        if (user != null){
+        if (userOptional != null && userOptional.isPresent()){
             if (user.getEmail().equals(email)) {
                 throw new UserAlreadyExistsException(String.format("Пользователь с почтой %s уже существует",
                         email));
@@ -80,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public ResponseEntity<?> loginUser(LoginCredentials loginCredentials, RefreshToken refreshToken)
             throws AccountNotConfirmedException {
-        User user = userRepository.findByLogin(loginCredentials.getLogin());
+        User user = userRepository.findByLogin(loginCredentials.getLogin()).get();
 
         if (!user.getIsConfirmed()){
             throw new AccountNotConfirmedException("Сперва подтвердите аккаунт");

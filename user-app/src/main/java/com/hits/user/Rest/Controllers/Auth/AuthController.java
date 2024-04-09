@@ -47,6 +47,7 @@ public class AuthController {
             UserAlreadyExistsException {
         userRegisterModel.setPassword(passwordEncoder.encode(userRegisterModel.getPassword()));
         userRegisterModel.setLogin(userRegisterModel.getLogin().toLowerCase());
+
         return authService.registerNewUser(userRegisterModel);
     }
 

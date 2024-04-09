@@ -44,18 +44,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 
     public UserDto getUserFromLogin(String login) throws NotFoundException{
-        User user = userRepository.findByLogin(login);
-
-        if (user == null){
-            throw new NotFoundException(String.format("Пользователя с логином=%s не существует", login));
-        }
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с логином=%s не существует", login)));
 
         return UserMapper.userToUserDto(user);
     }
 
     @Transactional
     public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
-        User user = userRepository.findByLogin(userDto.getLogin());
+        User user = userRepository.findByLogin(userDto.getLogin()).get();
+
         ResponseEntity<?> checkTheme;
         try {
              checkTheme = forumAppClient.checkTheme(themeId);
@@ -82,7 +80,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Transactional
     public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
-        User user = userRepository.findByLogin(userDto.getLogin());
+        User user = userRepository.findByLogin(userDto.getLogin()).get();
 
         if (user.getFavoriteThemes().contains(themeId)){
             user.getFavoriteThemes().remove(themeId);
@@ -98,7 +96,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     public ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto){
-        User user = userRepository.findByLogin(userDto.getLogin());
+        User user = userRepository.findByLogin(userDto.getLogin()).get();
 
         List<ThemeDto> favoriteThemes;
 
@@ -114,11 +112,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Transactional
     public ResponseEntity<?> verifyUser(UUID userId, String code) throws NotFoundException, BadRequestException{
-        User user = userRepository.findUserById(userId);
-
-        if (user == null){
-            throw new NotFoundException(String.format("Пользователя с id=%s не существует", userId));
-        }
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));
 
         if (!user.getIsConfirmed()){
             if (code.equals(user.getVerificationCode())) {

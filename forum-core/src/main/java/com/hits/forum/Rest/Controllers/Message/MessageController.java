@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -45,11 +44,11 @@ public class MessageController {
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<?> sendMessage(
             @AuthenticationPrincipal UserDto user,
-            @RequestPart(name = "content") @Parameter(description = "Текст сообщения") String content,
-            @RequestPart(name = "themeId") @Parameter(description = "Идентификатор темы") String themeId,
-            @RequestPart(name = "file", required = false) @Parameter(description = "Список вложений") List<MultipartFile> files)
-            throws NotFoundException, IOException {
-        return messageService.createMessage(user, content, UUID.fromString(themeId), files);
+            @RequestParam(name = "content") @Parameter(description = "Текст сообщения") String content,
+            @RequestParam(name = "themeId") @Parameter(description = "Идентификатор темы") String themeId)
+            throws NotFoundException {
+
+        return messageService.createMessage(user, content, UUID.fromString(themeId));
     }
 
     @PutMapping(value = EDIT_MESSAGE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -61,10 +60,9 @@ public class MessageController {
     public ResponseEntity<?> editMessage(
             @AuthenticationPrincipal UserDto user,
             @RequestParam(name = "messageId") @Parameter(description = "Идентификатор сообщения") UUID messageId,
-            @RequestParam(name = "file", required = false) @Parameter(description = "Список вложений") List<MultipartFile> files,
             @RequestParam(name = "content") @Parameter(description = "Текст сообщения") EditMessageRequest editMessageRequest)
             throws NotFoundException, ForbiddenException, IOException {
-        return messageService.editMessage(user, messageId, files, editMessageRequest);
+        return messageService.editMessage(user, messageId, editMessageRequest);
     }
 
     @DeleteMapping(DELETE_MESSAGE)
@@ -123,5 +121,18 @@ public class MessageController {
             @RequestParam(name = "fileId") @Parameter(description = "Идентификатор файла") UUID fileId
             ) throws IOException, NotFoundException{
         return messageService.deleteAttachmentFromMessage(userDto, fileId, messageId);
+    }
+
+    @PostMapping(ADD_ATTACHMENT)
+    @Operation(
+            summary = "Добавление вложения к сообщению",
+            description = "Позволяет добавить вложение к сообщению"
+    )
+    public ResponseEntity<?> addAttachmentFromFile(
+            @AuthenticationPrincipal UserDto userDto,
+            @RequestParam(name = "messageId") @Parameter(description = "Идентификатор сообщения") UUID messageId,
+            @RequestParam(name = "fileId") @Parameter(description = "Идентификаторы файлов") List<UUID> fileId
+    ) throws IOException, NotFoundException{
+        return messageService.attachFilesToMessage(userDto, fileId, messageId);
     }
 }

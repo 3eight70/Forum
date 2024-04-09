@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.io.IOException;
 import java.security.SignatureException;
@@ -37,6 +38,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Response> handleHttpMediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException e){
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
+                e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response> handleMissingServletRequestPartException(MissingServletRequestPartException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
                 e.getMessage()), HttpStatus.BAD_REQUEST);

@@ -21,7 +21,7 @@
             <column name="size" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="message_id" type="uuid">
+            <column name="author_login" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

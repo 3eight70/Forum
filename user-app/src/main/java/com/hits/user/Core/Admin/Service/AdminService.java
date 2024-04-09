@@ -21,4 +21,6 @@ public interface AdminService {
     ResponseEntity<?> createUser(CreateUserModel createUserModel);
 
     ResponseEntity<?> editUser(UserEditModel userEditModel, UUID userId);
+
+    ResponseEntity<?> unbanUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException;
 }
