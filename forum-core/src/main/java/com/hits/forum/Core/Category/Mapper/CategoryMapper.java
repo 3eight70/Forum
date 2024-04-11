@@ -1,6 +1,6 @@
 package com.hits.forum.Core.Category.Mapper;
 
-import com.hits.forum.Core.Category.DTO.CategoryDto;
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import com.hits.forum.Core.Category.Entity.ForumCategory;

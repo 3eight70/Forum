@@ -77,8 +77,11 @@ public class User implements UserDetails {
     @Column(name = "theme_id")
     private List<UUID> favoriteThemes;
 
-    @Schema(description = "Идентификатор категории, управляемой пользователем, являющимся модератором")
-    private UUID manageCategoryId;
+    @Schema(description = "Идентификаторы категорий, управляемых пользователем, являющимся модератором")
+    @ElementCollection
+    @CollectionTable(name = "user_manage_categories", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "manage_category_id")
+    private List<UUID> manageCategoryId;
 
     @PrePersist
     private void init(){

@@ -85,4 +85,19 @@
                                  constraintName="fk_refresh_tokens_user_id"
                                  onDelete="CASCADE"/>
     </changeSet>
+
+    <changeSet id="v1-4" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_manage_categories"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_manage_categories">
+            <column name="user_id" type="uuid">
+                <constraints references="users(id)" foreignKeyName="fk_user_manage_categories_user_id"/>
+            </column>
+            <column name="manage_category_id" type="uuid"/>
+        </createTable>
+        <dropColumn tableName="users" columnName="manage_category_id"/>
+    </changeSet>
 </databaseChangeLog>

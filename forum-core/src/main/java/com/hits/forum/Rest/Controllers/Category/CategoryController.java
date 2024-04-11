@@ -5,7 +5,7 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
-import com.hits.forum.Core.Category.DTO.CategoryDto;
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import com.hits.forum.Core.Category.Service.CategoryService;

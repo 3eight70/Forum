@@ -1,5 +1,6 @@
 package com.hits.user.Core.Admin.Service;
 
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
@@ -20,7 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -106,7 +110,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException(String.format("Пользователь с id=%s не является модератором", userId));
         }
 
-        ResponseEntity<?> checkCategory;
+        ResponseEntity<CategoryDto> checkCategory;
         try {
             checkCategory = forumAppClient.checkCategory(categoryId);
         }
@@ -115,7 +119,13 @@ public class AdminServiceImpl implements AdminService {
         }
 
         if (checkCategory != null && checkCategory.getStatusCode() == HttpStatus.OK){
-            user.setManageCategoryId(categoryId);
+            List<UUID> manageCategoriesIds = new ArrayList<>();
+            manageCategoriesIds.addAll(Objects.requireNonNull(checkCategory.getBody()).getChildCategories()
+                    .stream()
+                    .map(CategoryDto::getId)
+                    .toList());
+            manageCategoriesIds.add(categoryId);
+            user.setManageCategoryId(manageCategoriesIds);
 
             return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                     "Модератор успешно назначен на категорию"), HttpStatus.OK);

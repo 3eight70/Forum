@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -45,6 +46,6 @@ public class UserModel {
     @Schema(description = "Роль пользователя", example = "USER")
     private Role role;
 
-    @Schema(description = "Идентификатор категории, управляемой пользователем, являющимся модератором")
-    private UUID manageCategoryId;
+    @Schema(description = "Идентификатор категорий, управляемых пользователем, являющимся модератором")
+    private List<UUID> manageCategoryId;
 }

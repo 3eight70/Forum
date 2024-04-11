@@ -1,5 +1,6 @@
 package com.hits.forum.Rest.Controllers.Feign;
 
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.common.Core.Message.DTO.MessageDto;
 import com.hits.common.Core.Theme.DTO.ThemeDto;
 import com.hits.common.Exceptions.NotFoundException;
@@ -36,7 +37,7 @@ public class FeignController implements ForumAppClient {
     }
 
     @Override
-    public ResponseEntity<?> checkCategory(@RequestParam(name = "categoryId") UUID categoryId)
+    public ResponseEntity<CategoryDto> checkCategory(@RequestParam(name = "categoryId") UUID categoryId)
             throws NotFoundException{
         return categoryService.checkCategory(categoryId);
     }

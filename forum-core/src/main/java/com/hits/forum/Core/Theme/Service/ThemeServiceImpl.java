@@ -165,7 +165,7 @@ public class ThemeServiceImpl implements ThemeService{
         }
 
         if (userDto.getRole() != Role.ADMIN) {
-            if (userDto.getManageCategoryId() != forumTheme.getCategoryId() || userDto.getRole() != Role.MODERATOR){
+            if (!userDto.getManageCategoryId().contains(forumTheme.getCategoryId()) || userDto.getRole() != Role.MODERATOR){
                 throw new ForbiddenException();
             }
         }
@@ -189,7 +189,7 @@ public class ThemeServiceImpl implements ThemeService{
     private void checkAccess(UserDto user, ForumTheme forumTheme){
         if (user.getRole() != Role.ADMIN) {
             if  (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin()) &&
-                    (user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumTheme.getCategoryId())) {
+                    (user.getRole() != Role.MODERATOR || !user.getManageCategoryId().contains(forumTheme.getCategoryId()))) {
                 throw new ForbiddenException();
             }
         }

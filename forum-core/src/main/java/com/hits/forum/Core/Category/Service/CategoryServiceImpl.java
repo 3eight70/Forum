@@ -6,7 +6,7 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
-import com.hits.forum.Core.Category.DTO.CategoryDto;
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import com.hits.forum.Core.Category.Entity.ForumCategory;
@@ -125,12 +125,12 @@ public class CategoryServiceImpl implements CategoryService{
         return ResponseEntity.ok(categories);
     }
 
-    public ResponseEntity<?> checkCategory(UUID categoryId)
+    public ResponseEntity<CategoryDto> checkCategory(UUID categoryId)
             throws NotFoundException{
-        categoryRepository.findForumCategoryById(categoryId)
+        ForumCategory forumCategory =  categoryRepository.findForumCategoryById(categoryId)
                 .orElseThrow(() -> new NotFoundException(String.format("Категории с id=%s не существует", categoryId)));
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(CategoryMapper.forumCategoryToCategoryDto(forumCategory));
     }
 
     public ResponseEntity<List<CategoryWithSubstring>> getCategoriesWithSubstring(String substring){

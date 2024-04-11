@@ -5,7 +5,7 @@ import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
-import com.hits.forum.Core.Category.DTO.CategoryDto;
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import org.springframework.data.domain.Sort;
@@ -23,5 +23,5 @@ public interface CategoryService {
             throws NotFoundException, ForbiddenException;
     ResponseEntity<List<CategoryDto>>  getCategories(Sort sortOrder);
     ResponseEntity<List<CategoryWithSubstring>>  getCategoriesWithSubstring(String substring);
-    ResponseEntity<?> checkCategory(UUID categoryId) throws NotFoundException;
+    ResponseEntity<CategoryDto> checkCategory(UUID categoryId) throws NotFoundException;
 }

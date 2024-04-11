@@ -49,8 +49,8 @@ public class UserDto {
     @Schema(description = "Роль пользователя", example = "USER")
     private Role role;
 
-    @Schema(description = "Идентификатор категории, управляемой пользователем, являющимся модератором")
-    private UUID manageCategoryId;
+    @Schema(description = "Идентификаторы категорий, управляемых пользователем, являющимся модератором")
+    private List<UUID> manageCategoryId;
 
     private List<String> authorities;
 }

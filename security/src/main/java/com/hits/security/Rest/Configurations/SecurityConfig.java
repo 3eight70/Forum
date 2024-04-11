@@ -38,11 +38,16 @@ public class SecurityConfig {
                         .requestMatchers(GET_FILES).authenticated()
                         .requestMatchers(GET_FAVORITE, ADD_TO_FAVORITE, DELETE_FROM_FAVORITE).authenticated()
                         .requestMatchers(DOWNLOAD_FILE+"/*", DOWNLOAD_FILE + "*").authenticated()
-                        .requestMatchers(UPLOAD_FILE).authenticated()
-                        .requestMatchers(BAN_USER, GIVE_MODERATOR, DELETE_MODERATOR, GIVE_CATEGORY).hasRole(ADMIN)
+                        .requestMatchers(UPLOAD_FILE, DELETE_FILE).authenticated()
+                        .requestMatchers(BAN_USER,
+                                GIVE_MODERATOR,
+                                DELETE_MODERATOR,
+                                GIVE_CATEGORY,
+                                CREATE_USER,
+                                EDIT_USER).hasRole(ADMIN)
                         .requestMatchers(ARCHIVE_THEME).hasAnyRole(ADMIN, MODERATOR)
-                        .requestMatchers(CREATE_USER, EDIT_USER).hasRole(ADMIN)
                         .requestMatchers(GET_PROFILE).authenticated()
+                        .requestMatchers(DELETE_ATTACHMENT).authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler())

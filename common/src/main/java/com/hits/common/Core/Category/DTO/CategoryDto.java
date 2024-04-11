@@ -1,4 +1,4 @@
-package com.hits.forum.Core.Category.DTO;
+package com.hits.common.Core.Category.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

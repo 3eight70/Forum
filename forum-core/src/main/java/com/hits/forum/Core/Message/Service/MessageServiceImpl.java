@@ -236,7 +236,7 @@ public class MessageServiceImpl implements MessageService{
     private void checkAccess(UserDto user, ForumMessage forumMessage){
         if (user.getRole() != Role.ADMIN) {
             if  (!Objects.equals(user.getLogin(), forumMessage.getAuthorLogin()) &&
-                    (user.getRole() != Role.MODERATOR || user.getManageCategoryId() != forumMessage.getCategoryId())) {
+                    (user.getRole() != Role.MODERATOR || !user.getManageCategoryId().contains(forumMessage.getCategoryId()) )) {
                 throw new ForbiddenException();
             }
         }
