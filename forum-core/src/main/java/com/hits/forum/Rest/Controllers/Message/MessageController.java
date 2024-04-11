@@ -132,7 +132,7 @@ public class MessageController {
             @AuthenticationPrincipal UserDto userDto,
             @RequestParam(name = "messageId") @Parameter(description = "Идентификатор сообщения") UUID messageId,
             @RequestParam(name = "fileId") @Parameter(description = "Идентификаторы файлов") List<UUID> fileId
-    ) throws IOException, NotFoundException{
+    ) throws NotFoundException{
         return messageService.attachFilesToMessage(userDto, fileId, messageId);
     }
 }

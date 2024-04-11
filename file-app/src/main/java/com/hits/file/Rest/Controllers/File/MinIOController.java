@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,21 +26,25 @@ import java.util.UUID;
 import static com.hits.common.Core.Consts.*;
 
 @RestController
-@RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Файл", description = "Позволяет работать с файловой системой")
 public class MinIOController implements FileAppClient {
     private final MinIOService minIOService;
 
+    @Autowired
+    public MinIOController (MinIOService minIOService){
+        this.minIOService = minIOService;
+    }
+
     @PostMapping(value = UPLOAD_FILE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Загрузка файла",
-            description = "Позволяет загрузить файл, прикрепленный к сообщению, в файловое хранилище"
+            description = "Позволяет загрузить файл в файловое хранилище"
     )
     @SecurityRequirement(name = "bearerAuth")
     public UUID uploadFile(
             @AuthenticationPrincipal UserDto user,
-            @RequestPart("file") MultipartFile file)
+            @RequestParam("file") MultipartFile file)
     throws IOException, BadRequestException {
         return minIOService.uploadFile(user, file);
     }

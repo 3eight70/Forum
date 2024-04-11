@@ -127,12 +127,14 @@ public class MinIOServiceImpl implements MinIOService {
         try {
             MessageDto messageDto = forumAppClient.checkMessage(messageId).getBody();
 
-            if (messageDto != null) {
-                if (user.getRole() != Role.ADMIN) {
-                    if (!Objects.equals(user.getLogin(), messageDto.getAuthorLogin()) &&
-                            user.getRole() != Role.MODERATOR && user.getManageCategoryId() != messageDto.getCategoryId()) {
-                        throw new ForbiddenException();
-                    }
+            if (messageDto == null){
+                throw new NotFoundException(String.format("Сообщение с id=%s не найдено", messageId));
+            }
+
+            if (user.getRole() != Role.ADMIN) {
+                if (!Objects.equals(user.getLogin(), messageDto.getAuthorLogin()) &&
+                        user.getRole() != Role.MODERATOR && user.getManageCategoryId().contains(messageDto.getCategoryId())) {
+                    throw new ForbiddenException();
                 }
             }
 
