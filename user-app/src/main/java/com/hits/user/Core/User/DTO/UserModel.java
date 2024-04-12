@@ -34,7 +34,7 @@ public class UserModel {
 
     @NotNull
     @Size(min = 1, message = "Минимальная длина не менее 1 символа")
-    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Логин должен состоять из букв и цифр")
+    @Pattern(regexp = "[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+|([a-zA-Z0-9]+)", message = "Логин должен состоять из букв и цифр")
     @Schema(description = "Логин пользователя", example = "example")
     private String login;
 

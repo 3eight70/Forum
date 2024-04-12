@@ -40,7 +40,7 @@ public class MinIOServiceImpl implements MinIOService {
     public UUID uploadFile(UserDto user,MultipartFile file)
             throws IOException, BadRequestException{
         String filename = file.getOriginalFilename();
-        String author = user.getLogin();
+        String author = user.getLogin().replace("@", "");
         File newFile;
 
         try {
@@ -55,13 +55,13 @@ public class MinIOServiceImpl implements MinIOService {
             }
 
             minioClient.putObject(PutObjectArgs.builder()
-                            .bucket(user.getLogin())
+                            .bucket(author)
                             .object(filename)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build());
 
-            newFile = FileMapper.multipartFileToFile(file, author);
+            newFile = FileMapper.multipartFileToFile(file, user.getLogin());
             fileRepository.save(newFile);
         }
         catch (MinioException e) {
@@ -85,7 +85,7 @@ public class MinIOServiceImpl implements MinIOService {
 
             InputStream stream = minioClient.getObject(
                     GetObjectArgs.builder()
-                            .bucket(file.getAuthorLogin())
+                            .bucket(file.getAuthorLogin().replace("@", ""))
                             .object(file.getName())
                             .build());
 
@@ -139,7 +139,7 @@ public class MinIOServiceImpl implements MinIOService {
             }
 
             minioClient.removeObject(RemoveObjectArgs.builder()
-                            .bucket(messageDto.getAuthorLogin())
+                            .bucket(messageDto.getAuthorLogin().replace("@", ""))
                             .object(file.getName())
                             .build());
 

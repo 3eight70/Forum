@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response> handleMissingServletRequestParameterException(MissingServletRequestParameterException e){
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new Response(HttpStatus.BAD_REQUEST.value(),
-                "Отсутствует необходимый параметр запроса"), HttpStatus.BAD_REQUEST);
+                "Отсутствует необходимый параметр запроса " + e.getParameterName()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)

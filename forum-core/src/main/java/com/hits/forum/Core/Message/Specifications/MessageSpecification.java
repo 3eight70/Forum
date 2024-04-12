@@ -15,15 +15,17 @@ public final class MessageSpecification {
         return ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("content"), "%" + content + "%"));
     }
 
-    public static Specification<ForumMessage> timeBetween(LocalDateTime timeFrom, LocalDateTime timeTo){
-        if (timeFrom != null && timeTo != null) {
-            return ((root, query, criteriaBuilder) -> criteriaBuilder.between(root.get("createTime"), timeFrom, timeTo));
-        }
-        else if (timeFrom != null){
-            return (((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("createTime"), timeFrom)));
-        }
-        else if (timeTo != null){
+    public static Specification<ForumMessage> timeLessOrEqualThan(LocalDateTime timeTo){
+        if (timeTo != null){
             return (((root, query, criteriaBuilder) -> criteriaBuilder.lessThanOrEqualTo(root.get("createTime"), timeTo)));
+        }
+
+        return null;
+    }
+
+    public static Specification<ForumMessage> timeGreaterOrEqualThan(LocalDateTime timeFrom){
+        if (timeFrom != null){
+            return (((root, query, criteriaBuilder) -> criteriaBuilder.greaterThanOrEqualTo(root.get("createTime"), timeFrom)));
         }
 
         return null;

@@ -170,7 +170,8 @@ public class MessageServiceImpl implements MessageService{
                 .and(MessageSpecification.themeIdEquals(request.getThemeId()))
                 .and(MessageSpecification.authorLoginLike(request.getAuthorLogin()))
                 .and(MessageSpecification.categoryIdEquals(request.getCategoryId()))
-                .and(MessageSpecification.timeBetween(request.getTimeFrom(), request.getTimeTo()));
+                .and(MessageSpecification.timeGreaterOrEqualThan(request.getTimeFrom()))
+                .and(MessageSpecification.timeLessOrEqualThan(request.getTimeTo()));
 
         List<MessageWithFiltersDto> list = messageRepository.findAll(specification)
                 .stream()

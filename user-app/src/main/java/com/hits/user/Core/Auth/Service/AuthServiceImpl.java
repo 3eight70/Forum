@@ -37,10 +37,11 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public ResponseEntity<?> registerNewUser(UserRegisterModel userRegisterModel)
             throws MessagingException, UnsupportedEncodingException, UserAlreadyExistsException {
-        userRegisterModel.setLogin(userRegisterModel.getLogin().toLowerCase());
+        String login = userRegisterModel.getLogin();
+        userRegisterModel.setLogin(login == null ? userRegisterModel.getEmail() : login.toLowerCase());
 
         String email = userRegisterModel.getEmail();
-        String login = userRegisterModel.getLogin();
+        login = userRegisterModel.getLogin();
         String phoneNumber = userRegisterModel.getPhoneNumber();
 
         Optional<User> userOptional = userRepository.findByEmailOrLoginOrPhoneNumber(email, login, phoneNumber);
