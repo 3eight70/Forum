@@ -24,7 +24,7 @@ public class RefreshToken {
     private UUID id;
 
     @Column(nullable = false)
-    @Schema(description = "access токен")
+    @Schema(description = "refresh токен")
     private String token;
 
     @Column(nullable = false)

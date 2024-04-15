@@ -48,8 +48,8 @@ public class JwtTokenUtils {
                 .compact();
     }
 
-    public String getUserLogin(String token) {
-        return getAllClaimsFromToken(token).getSubject();
+    public String getUserId(String token) {
+        return (String) getAllClaimsFromToken(token).get("userId");
     }
 
     public void saveToken(String key, String value) {

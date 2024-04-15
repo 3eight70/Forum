@@ -5,6 +5,7 @@ import com.hits.common.Core.Response.TokenResponse;
 import com.hits.user.Core.Auth.DTO.LoginCredentials;
 import com.hits.user.Core.Auth.DTO.UserRegisterModel;
 import com.hits.user.Core.RefreshToken.Entity.RefreshToken;
+import com.hits.user.Core.RefreshToken.Repository.RefreshRepository;
 import com.hits.user.Core.RefreshToken.Service.RefreshTokenService;
 import com.hits.user.Core.User.Entity.User;
 import com.hits.user.Core.User.Mapper.UserMapper;
@@ -33,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenUtils jwtTokenUtils;
     private final JavaMailSender mailSender;
+    private final RefreshRepository refreshRepository;
 
     @Transactional
     public ResponseEntity<?> registerNewUser(UserRegisterModel userRegisterModel)
@@ -103,11 +105,17 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public ResponseEntity<?> logoutUser(String token){
         String tokenId = "";
+        String userId = "";
 
         if (token != null) {
             token = token.substring(7);
             tokenId = jwtTokenUtils.getIdFromToken(token);
+            userId = jwtTokenUtils.getUserId(token);
         }
+        Optional<RefreshToken> refreshToken = refreshRepository.findByUserId(UUID.fromString(userId));
+
+        refreshToken.ifPresent(value -> refreshRepository.deleteRefreshTokenById(value.getId()));
+
         redisRepository.delete(tokenId);
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
