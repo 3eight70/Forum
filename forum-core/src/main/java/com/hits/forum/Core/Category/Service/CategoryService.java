@@ -1,11 +1,11 @@
 package com.hits.forum.Core.Category.Service;
 
+import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
-import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.forum.Core.Category.DTO.CategoryRequest;
 import com.hits.forum.Core.Category.DTO.CategoryWithSubstring;
 import org.springframework.data.domain.Sort;

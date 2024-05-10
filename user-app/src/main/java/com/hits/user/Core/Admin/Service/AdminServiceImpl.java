@@ -10,6 +10,7 @@ import com.hits.common.Exceptions.UnknownException;
 import com.hits.security.Rest.Client.ForumAppClient;
 import com.hits.user.Core.Admin.DTO.CreateUserModel;
 import com.hits.user.Core.Admin.DTO.UserEditModel;
+import com.hits.user.Core.Kafka.KafkaProducer;
 import com.hits.user.Core.User.Entity.User;
 import com.hits.user.Core.User.Mapper.UserMapper;
 import com.hits.user.Core.User.Repository.UserRepository;
@@ -21,16 +22,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final ForumAppClient forumAppClient;
+    private final KafkaProducer kafkaProducer;
 
     @Transactional
     public ResponseEntity<?> banUser(UserDto user, UUID userId) throws NotFoundException, BadRequestException {
@@ -43,6 +46,13 @@ public class AdminServiceImpl implements AdminService {
 
         userToBan.setIsBanned(true);
         userRepository.saveAndFlush(userToBan);
+
+        kafkaProducer.sendMessage(
+                "Блокировка",
+                "Вы были заблокированы",
+                userToBan.getLogin(),
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Пользователь успешно заблокирован"), HttpStatus.OK);
@@ -60,6 +70,13 @@ public class AdminServiceImpl implements AdminService {
         userToUnBan.setIsBanned(false);
         userRepository.saveAndFlush(userToUnBan);
 
+        kafkaProducer.sendMessage(
+                "Разблокировка",
+                "Вы были разблокированы",
+                userToUnBan.getLogin(),
+                LocalDateTime.now()
+        );
+
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Пользователь успешно разблокирован"), HttpStatus.OK);
     }
@@ -75,6 +92,13 @@ public class AdminServiceImpl implements AdminService {
 
         user.setRole(Role.MODERATOR);
         userRepository.saveAndFlush(user);
+
+        kafkaProducer.sendMessage(
+                "Смена роли",
+                "Вам была выдана роль модератора",
+                user.getLogin(),
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Роль модератора успешно выдана"), HttpStatus.OK);
@@ -92,6 +116,13 @@ public class AdminServiceImpl implements AdminService {
         user.setRole(Role.USER);
         user.setManageCategoryId(null);
         userRepository.saveAndFlush(user);
+
+        kafkaProducer.sendMessage(
+                "Смена роли",
+                "Вас сняли с роли модератора",
+                user.getLogin(),
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Роль модератора успешно удалена"), HttpStatus.OK);
@@ -126,6 +157,13 @@ public class AdminServiceImpl implements AdminService {
                     .toList());
             manageCategoriesIds.add(categoryId);
             user.setManageCategoryId(manageCategoriesIds);
+
+            kafkaProducer.sendMessage(
+                    "Назначение на категорию",
+                    String.format("Вас назначили на управлению категорией с id=%s", categoryId),
+                    user.getLogin(),
+                    LocalDateTime.now()
+            );
 
             return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                     "Модератор успешно назначен на категорию"), HttpStatus.OK);

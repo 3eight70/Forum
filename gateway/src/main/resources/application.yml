@@ -27,6 +27,11 @@ spring:
           filters:
             - AuthenticationFilter
 
+        - id: notification-service
+          uri: http://notification-app:8084
+          predicates:
+            - Path=/api/notification/**
+
 jwt:
   secret: AbdaasdasdasdasfasgasASFASF
 

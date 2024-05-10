@@ -90,7 +90,8 @@ public class ThemeController {
             summary = "Поиск тем по подстроке",
             description = "Позволяет получить список тем, используя поиск по подстроке"
     )
-    public ResponseEntity<List<ThemeDto>> getThemesWithSubstring(@RequestParam(value = "name") @Parameter(description = "Название темы") String name){
+    public ResponseEntity<List<ThemeDto>> getThemesWithSubstring(
+            @RequestParam(value = "name") @Parameter(description = "Название темы") String name){
         return themeService.getThemesWithSubstring(name);
     }
 

@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(ARCHIVE_THEME).hasAnyRole(ADMIN, MODERATOR)
                         .requestMatchers(GET_PROFILE).authenticated()
                         .requestMatchers(DELETE_ATTACHMENT).authenticated()
+                        .requestMatchers(GET_NOTIFICATIONS, GET_UNREAD_NOTIFICATIONS).authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler())

@@ -6,7 +6,6 @@ import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
-import com.hits.common.Exceptions.FileLimitException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.forum.Core.File.Entity.File;
@@ -32,7 +31,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
