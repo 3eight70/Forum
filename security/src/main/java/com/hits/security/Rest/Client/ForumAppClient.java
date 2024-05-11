@@ -24,7 +24,4 @@ public interface ForumAppClient {
 
     @GetMapping(SEND_MESSAGE)
     ResponseEntity<MessageDto> checkMessage(@RequestParam(name = "messageId") UUID messageId);
-
-    @GetMapping(GET_THEMES_BY_ID)
-    ResponseEntity<List<ThemeDto>> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId);
 }

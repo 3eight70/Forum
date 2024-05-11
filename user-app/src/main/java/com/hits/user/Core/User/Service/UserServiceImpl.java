@@ -51,66 +51,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Transactional
-    public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
-        User user = userRepository.findByLogin(userDto.getLogin()).get();
-
-        ResponseEntity<?> checkTheme;
-        try {
-             checkTheme = forumAppClient.checkTheme(themeId);
-        }
-        catch (FeignException.NotFound e){
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
-
-        if (checkTheme != null && checkTheme.getStatusCode() == HttpStatus.OK){
-            List<UUID> favoriteThemes = user.getFavoriteThemes();
-            if (favoriteThemes.contains(themeId)){
-                throw new BadRequestException(String.format("Тема с id=%s уже находится в избранном пользователя", themeId));
-            }
-
-            favoriteThemes.add(themeId);
-            userRepository.saveAndFlush(user);
-
-            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
-                    "Пользователь успешно добавил тему в избранное"), HttpStatus.OK);
-        }
-
-        throw new UnknownException();
-    }
-
-    @Transactional
-    public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
-        User user = userRepository.findByLogin(userDto.getLogin()).get();
-
-        if (user.getFavoriteThemes().contains(themeId)){
-            user.getFavoriteThemes().remove(themeId);
-
-            userRepository.saveAndFlush(user);
-
-            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
-                    "Пользователь успешно удалил тему из избранного"), HttpStatus.OK);
-        }
-        else{
-            throw new NotFoundException(String.format("Темы с id=%s не существует", themeId));
-        }
-    }
-
-    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto){
-        User user = userRepository.findByLogin(userDto.getLogin()).get();
-
-        List<ThemeDto> favoriteThemes;
-
-        try {
-            favoriteThemes = forumAppClient.getThemesById(user.getFavoriteThemes()).getBody();
-        }
-        catch (FeignException.InternalServerError e) {
-            throw new UnknownException();
-        }
-
-        return ResponseEntity.ok(favoriteThemes);
-    }
-
-    @Transactional
     public ResponseEntity<?> verifyUser(UUID userId, String code) throws NotFoundException, BadRequestException{
         User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format("Пользователя с id=%s не существует", userId)));

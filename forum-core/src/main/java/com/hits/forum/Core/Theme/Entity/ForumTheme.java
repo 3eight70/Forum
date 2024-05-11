@@ -43,4 +43,9 @@ public class ForumTheme {
 
     @OneToMany(mappedBy = "themeId", cascade = CascadeType.ALL)
     private List<ForumMessage> messages;
+
+    @ElementCollection
+    @CollectionTable(name = "user_favorite_themes", joinColumns = @JoinColumn(name = "theme_id"))
+    @Column(name = "user_id")
+    private List<UUID> usersWhoAddThemeToFavorite;
 }

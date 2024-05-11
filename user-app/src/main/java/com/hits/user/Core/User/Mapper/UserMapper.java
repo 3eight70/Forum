@@ -26,7 +26,6 @@ public final class UserMapper {
                 false,
                 false,
                 Role.USER,
-                new ArrayList<>(),
                 null
         );
     }
@@ -43,7 +42,6 @@ public final class UserMapper {
                 true,
                 false,
                 createUserModel.getRole() == null ? Role.USER : createUserModel.getRole(),
-                new ArrayList<>(),
                 null
         );
     }

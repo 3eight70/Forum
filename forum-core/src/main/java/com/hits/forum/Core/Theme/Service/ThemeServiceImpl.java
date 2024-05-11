@@ -4,16 +4,14 @@ import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.Theme.DTO.ThemeDto;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
-import com.hits.common.Exceptions.BadRequestException;
-import com.hits.common.Exceptions.ForbiddenException;
-import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Exceptions.ObjectAlreadyExistsException;
+import com.hits.common.Exceptions.*;
 import com.hits.forum.Core.Category.Entity.ForumCategory;
 import com.hits.forum.Core.Category.Repository.CategoryRepository;
 import com.hits.forum.Core.Theme.DTO.ThemeRequest;
 import com.hits.forum.Core.Theme.Entity.ForumTheme;
 import com.hits.forum.Core.Theme.Mapper.ThemeMapper;
 import com.hits.forum.Core.Theme.Repository.ThemeRepository;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -177,15 +175,6 @@ public class ThemeServiceImpl implements ThemeService{
                 "Тема успешно разархивирована"), HttpStatus.OK);
     }
 
-    public ResponseEntity<List<ThemeDto>> getThemesById(List<UUID> themesId){
-        List<ThemeDto> themes = themeRepository.findAllByIdIn(themesId)
-                .stream()
-                .map(ThemeMapper::forumThemeToThemeDto)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(themes);
-    }
-
     private void checkAccess(UserDto user, ForumTheme forumTheme){
         if (user.getRole() != Role.ADMIN) {
             if  (!Objects.equals(user.getLogin(), forumTheme.getAuthorLogin()) &&
@@ -193,5 +182,48 @@ public class ThemeServiceImpl implements ThemeService{
                 throw new ForbiddenException();
             }
         }
+    }
+
+    @Transactional
+    public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
+
+        if (!forumTheme.getUsersWhoAddThemeToFavorite().contains(userDto.getId())){
+           forumTheme.getUsersWhoAddThemeToFavorite().add(userDto.getId());
+           themeRepository.saveAndFlush(forumTheme);
+
+            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                    "Пользователь успешно добавил тему в избранное"), HttpStatus.OK);
+        }
+        else{
+            throw new BadRequestException(String.format("Тема с id=%s и так находится в избранном пользователя", themeId));
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
+        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
+                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
+
+        if (forumTheme.getUsersWhoAddThemeToFavorite().contains(userDto.getId())){
+            forumTheme.getUsersWhoAddThemeToFavorite().remove(userDto.getId());
+            themeRepository.saveAndFlush(forumTheme);
+
+            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
+                    "Пользователь успешно удалил тему из избранного"), HttpStatus.OK);
+        }
+        else{
+            throw new BadRequestException(String.format("Тема с id=%s не находится в избранном пользователя", themeId));
+        }
+    }
+
+    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto){
+        List<ThemeDto> themes = themeRepository.findAllByUsersWhoAddThemeToFavoriteContains(userDto.getId())
+                .stream()
+                .map(ThemeMapper::forumThemeToThemeDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(themes);
     }
 }

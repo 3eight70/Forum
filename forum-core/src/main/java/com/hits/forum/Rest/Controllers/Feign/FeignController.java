@@ -42,11 +42,6 @@ public class FeignController implements ForumAppClient {
         return categoryService.checkCategory(categoryId);
     }
 
-    @GetMapping(GET_THEMES_BY_ID)
-    public ResponseEntity<List<ThemeDto>> getThemesById(@RequestParam(name = "themeId") List<UUID> themesId){
-        return themeService.getThemesById(themesId);
-    }
-
     @GetMapping(SEND_MESSAGE)
     public ResponseEntity<MessageDto> checkMessage(
             @RequestParam(name = "messageId") UUID messageId) {

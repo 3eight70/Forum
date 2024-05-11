@@ -1,5 +1,6 @@
 package com.hits.forum.Rest.Controllers.Theme;
 
+import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.Theme.DTO.ThemeDto;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
@@ -8,6 +9,7 @@ import com.hits.common.Exceptions.NotFoundException;
 import com.hits.common.Exceptions.ObjectAlreadyExistsException;
 import com.hits.forum.Core.Theme.DTO.ThemeRequest;
 import com.hits.forum.Core.Theme.Service.ThemeService;
+import feign.FeignException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -119,5 +122,46 @@ public class ThemeController {
             @RequestParam(value = "themeId") @Parameter(description = "Идентификатор темы") UUID themeId)
             throws NotFoundException, ForbiddenException {
         return themeService.unArchiveTheme(user, themeId);
+    }
+
+    @Operation(
+            summary = "Добавление темы в избранное",
+            description = "Позволяет добавить тему в избранное пользователя"
+    )
+    @PostMapping(ADD_TO_FAVORITE)
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<?> addThemeToFavorite(
+            @AuthenticationPrincipal UserDto userDto,
+            @RequestParam(name = "themeId") @Parameter(description = "Идентификатор темы") UUID themeId
+    ) throws NotFoundException{
+        try {
+            return themeService.addThemeToFavorite(userDto, themeId);
+        }
+        catch (FeignException.BadRequest e){
+            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "Темы с указанным id не существует"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Operation(
+            summary = "Удаление темы из избранного",
+            description = "Позволяет удалить тему из избранного"
+    )
+    @DeleteMapping(DELETE_FROM_FAVORITE)
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<?> deleteThemeFromFavorite(
+            @AuthenticationPrincipal UserDto userDto,
+            @RequestParam(name = "themeId") @Parameter(description = "Идентификатор темы") UUID themeId
+    ) throws NotFoundException{
+        return themeService.deleteThemeFromFavorite(userDto, themeId);
+    }
+
+    @Operation(
+            summary = "Получение списка избранных тем",
+            description = "Позволяет получить список избранных тем"
+    )
+    @GetMapping(GET_FAVORITE)
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(@AuthenticationPrincipal UserDto userDto){
+        return themeService.getFavoriteThemes(userDto);
     }
 }

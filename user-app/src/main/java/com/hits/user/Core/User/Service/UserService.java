@@ -16,12 +16,7 @@ public interface UserService {
 
     UserDto getUserFromLogin(String login) throws NotFoundException;
 
-    ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException;
-
-    ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException;
-
-    ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto);
-
     ResponseEntity<?> verifyUser(UUID userId, String code) throws NotFoundException, BadRequestException;
+
     Boolean validateToken(String token);
 }

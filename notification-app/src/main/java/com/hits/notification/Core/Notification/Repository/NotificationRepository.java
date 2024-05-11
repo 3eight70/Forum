@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface NotificationRepository extends JpaRepository<UUID, Notification> {
+public interface NotificationRepository extends JpaRepository<Notification, UUID> {
     @Query(value = "SELECT COUNT(*) FROM notifications WHERE is_read = false AND user_login = :userLogin", nativeQuery = true)
     Integer countByIsReadFalse(String userLogin);
 }

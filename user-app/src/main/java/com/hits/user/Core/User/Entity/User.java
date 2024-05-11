@@ -72,11 +72,6 @@ public class User implements UserDetails {
     @Schema(description = "Роль пользователя", example = "USER")
     private Role role;
 
-    @ElementCollection
-    @CollectionTable(name = "user_favorite_themes", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "theme_id")
-    private List<UUID> favoriteThemes;
-
     @Schema(description = "Идентификаторы категорий, управляемых пользователем, являющимся модератором")
     @ElementCollection
     @CollectionTable(name = "user_manage_categories", joinColumns = @JoinColumn(name = "user_id"))

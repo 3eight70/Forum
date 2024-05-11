@@ -26,5 +26,7 @@ public interface ThemeService {
     ResponseEntity<?> archiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
     ResponseEntity<?> unArchiveTheme(UserDto user, UUID themeId) throws NotFoundException, ForbiddenException;
     ResponseEntity<?> checkTheme(UUID themeId) throws NotFoundException;
-    ResponseEntity<List<ThemeDto>> getThemesById(List<UUID> themesId);
+    ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto);
+    ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException;
+    ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException;
 }

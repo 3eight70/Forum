@@ -21,9 +21,9 @@ public class Consts {
     public static final String GIVE_MODERATOR = "/api/account/admin/give/moderator";
     public static final String DELETE_MODERATOR = "/api/account/admin/delete/moderator";
     public static final String GIVE_CATEGORY = "/api/account/admin/give/category";
-    public static final String ADD_TO_FAVORITE = "/api/account/favorite/add";
-    public static final String DELETE_FROM_FAVORITE = "/api/account/favorite/delete";
-    public static final String GET_FAVORITE = "/api/account/favorite";
+    public static final String ADD_TO_FAVORITE = "/api/forum/favorite/add";
+    public static final String DELETE_FROM_FAVORITE = "/api/forum/favorite/delete";
+    public static final String GET_FAVORITE = "/api/forum/favorite";
     public static final String EUREKA = "/eureka";
     public static final String CREATE_CATEGORY = "/api/forum/category";
     public static final String GET_CATEGORIES = "/api/forum/category/get";

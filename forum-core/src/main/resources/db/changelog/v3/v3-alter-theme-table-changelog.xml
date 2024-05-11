@@ -11,4 +11,18 @@
        </addColumn>
     </changeSet>
 
+    <changeSet id="v3-2" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_favorite_themes"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_favorite_themes">
+            <column name="theme_id" type="uuid">
+                <constraints references="themes(id)" foreignKeyName="fk_user_favorite_themes_theme_id"/>
+            </column>
+            <column name="user_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
