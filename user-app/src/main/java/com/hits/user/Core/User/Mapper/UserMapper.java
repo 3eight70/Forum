@@ -9,7 +9,6 @@ import com.hits.user.Core.User.Entity.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

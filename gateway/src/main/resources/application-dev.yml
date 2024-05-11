@@ -23,6 +23,11 @@ spring:
           predicates:
             - Path=/api/forum/**
 
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/notification/**
+
 jwt:
   secret: AbdaasdasdasdasfasgasASFASF
 

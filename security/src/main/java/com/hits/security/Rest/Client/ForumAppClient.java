@@ -2,14 +2,12 @@ package com.hits.security.Rest.Client;
 
 import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.common.Core.Message.DTO.MessageDto;
-import com.hits.common.Core.Theme.DTO.ThemeDto;
 import com.hits.security.Rest.Configurations.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.UUID;
 
 import static com.hits.common.Core.Consts.*;

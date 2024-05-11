@@ -2,11 +2,9 @@ package com.hits.user.Core.User.Service;
 
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.Response.TokenResponse;
-import com.hits.common.Core.Theme.DTO.ThemeDto;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.common.Exceptions.UnknownException;
 import com.hits.security.Rest.Client.ForumAppClient;
 import com.hits.user.Core.RefreshToken.Entity.RefreshToken;
 import com.hits.user.Core.RefreshToken.Service.RefreshTokenService;
@@ -24,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

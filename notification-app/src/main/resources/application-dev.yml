@@ -4,6 +4,28 @@ spring:
     username: postgres
     password: gbhfns
     driverClassName: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/main-changelog.xml
+
+  application:
+    name: NOTIFICATION-SERVICE
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: http://localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
 eureka:
   client:
     service-url:

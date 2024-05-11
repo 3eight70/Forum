@@ -2,7 +2,6 @@ package com.hits.forum.Rest.Controllers.Feign;
 
 import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.common.Core.Message.DTO.MessageDto;
-import com.hits.common.Core.Theme.DTO.ThemeDto;
 import com.hits.common.Exceptions.NotFoundException;
 import com.hits.forum.Core.Category.Service.CategoryService;
 import com.hits.forum.Core.Message.Service.MessageService;
@@ -15,10 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
-import static com.hits.common.Core.Consts.GET_THEMES_BY_ID;
 import static com.hits.common.Core.Consts.SEND_MESSAGE;
 
 @RestController
