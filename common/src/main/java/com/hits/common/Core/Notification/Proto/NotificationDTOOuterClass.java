@@ -139,812 +139,6 @@ public final class NotificationDTOOuterClass {
     // @@protoc_insertion_point(enum_scope:NotificationChannel)
   }
 
-  public interface UserNotificationDTOOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:UserNotificationDTO)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>string user_id = 1;</code>
-     * @return The userId.
-     */
-    String getUserId();
-    /**
-     * <code>string user_id = 1;</code>
-     * @return The bytes for userId.
-     */
-    com.google.protobuf.ByteString
-        getUserIdBytes();
-
-    /**
-     * <code>string email = 2;</code>
-     * @return The email.
-     */
-    String getEmail();
-    /**
-     * <code>string email = 2;</code>
-     * @return The bytes for email.
-     */
-    com.google.protobuf.ByteString
-        getEmailBytes();
-
-    /**
-     * <code>string login = 3;</code>
-     * @return The login.
-     */
-    String getLogin();
-    /**
-     * <code>string login = 3;</code>
-     * @return The bytes for login.
-     */
-    com.google.protobuf.ByteString
-        getLoginBytes();
-  }
-  /**
-   * Protobuf type {@code UserNotificationDTO}
-   */
-  public static final class UserNotificationDTO extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:UserNotificationDTO)
-      UserNotificationDTOOrBuilder {
-  private static final long serialVersionUID = 0L;
-    static {
-      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
-        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
-        /* major= */ 4,
-        /* minor= */ 26,
-        /* patch= */ 1,
-        /* suffix= */ "",
-        UserNotificationDTO.class.getName());
-    }
-    // Use UserNotificationDTO.newBuilder() to construct.
-    private UserNotificationDTO(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-    }
-    private UserNotificationDTO() {
-      userId_ = "";
-      email_ = "";
-      login_ = "";
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return NotificationDTOOuterClass.internal_static_UserNotificationDTO_descriptor;
-    }
-
-    @Override
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return NotificationDTOOuterClass.internal_static_UserNotificationDTO_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              UserNotificationDTO.class, Builder.class);
-    }
-
-    public static final int USER_ID_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile Object userId_ = "";
-    /**
-     * <code>string user_id = 1;</code>
-     * @return The userId.
-     */
-    @Override
-    public String getUserId() {
-      Object ref = userId_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        userId_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string user_id = 1;</code>
-     * @return The bytes for userId.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getUserIdBytes() {
-      Object ref = userId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        userId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int EMAIL_FIELD_NUMBER = 2;
-    @SuppressWarnings("serial")
-    private volatile Object email_ = "";
-    /**
-     * <code>string email = 2;</code>
-     * @return The email.
-     */
-    @Override
-    public String getEmail() {
-      Object ref = email_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        email_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string email = 2;</code>
-     * @return The bytes for email.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getEmailBytes() {
-      Object ref = email_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        email_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int LOGIN_FIELD_NUMBER = 3;
-    @SuppressWarnings("serial")
-    private volatile Object login_ = "";
-    /**
-     * <code>string login = 3;</code>
-     * @return The login.
-     */
-    @Override
-    public String getLogin() {
-      Object ref = login_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        login_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string login = 3;</code>
-     * @return The bytes for login.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getLoginBytes() {
-      Object ref = login_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        login_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(userId_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 1, userId_);
-      }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 2, email_);
-      }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(login_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 3, login_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(userId_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(1, userId_);
-      }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(2, email_);
-      }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(login_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(3, login_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof UserNotificationDTO)) {
-        return super.equals(obj);
-      }
-      UserNotificationDTO other = (UserNotificationDTO) obj;
-
-      if (!getUserId()
-          .equals(other.getUserId())) return false;
-      if (!getEmail()
-          .equals(other.getEmail())) return false;
-      if (!getLogin()
-          .equals(other.getLogin())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + USER_ID_FIELD_NUMBER;
-      hash = (53 * hash) + getUserId().hashCode();
-      hash = (37 * hash) + EMAIL_FIELD_NUMBER;
-      hash = (53 * hash) + getEmail().hashCode();
-      hash = (37 * hash) + LOGIN_FIELD_NUMBER;
-      hash = (53 * hash) + getLogin().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static UserNotificationDTO parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static UserNotificationDTO parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static UserNotificationDTO parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static UserNotificationDTO parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static UserNotificationDTO parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static UserNotificationDTO parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static UserNotificationDTO parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input);
-    }
-    public static UserNotificationDTO parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public static UserNotificationDTO parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static UserNotificationDTO parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static UserNotificationDTO parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input);
-    }
-    public static UserNotificationDTO parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(UserNotificationDTO prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @Override
-    protected Builder newBuilderForType(
-        BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code UserNotificationDTO}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:UserNotificationDTO)
-        UserNotificationDTOOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return NotificationDTOOuterClass.internal_static_UserNotificationDTO_descriptor;
-      }
-
-      @Override
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return NotificationDTOOuterClass.internal_static_UserNotificationDTO_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                UserNotificationDTO.class, Builder.class);
-      }
-
-      // Construct using NotificationDTOOuterClass.UserNotificationDTO.newBuilder()
-      private Builder() {
-
-      }
-
-      private Builder(
-          BuilderParent parent) {
-        super(parent);
-
-      }
-      @Override
-      public Builder clear() {
-        super.clear();
-        bitField0_ = 0;
-        userId_ = "";
-        email_ = "";
-        login_ = "";
-        return this;
-      }
-
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return NotificationDTOOuterClass.internal_static_UserNotificationDTO_descriptor;
-      }
-
-      @Override
-      public UserNotificationDTO getDefaultInstanceForType() {
-        return UserNotificationDTO.getDefaultInstance();
-      }
-
-      @Override
-      public UserNotificationDTO build() {
-        UserNotificationDTO result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @Override
-      public UserNotificationDTO buildPartial() {
-        UserNotificationDTO result = new UserNotificationDTO(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
-        onBuilt();
-        return result;
-      }
-
-      private void buildPartial0(UserNotificationDTO result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.userId_ = userId_;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.email_ = email_;
-        }
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.login_ = login_;
-        }
-      }
-
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof UserNotificationDTO) {
-          return mergeFrom((UserNotificationDTO)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(UserNotificationDTO other) {
-        if (other == UserNotificationDTO.getDefaultInstance()) return this;
-        if (!other.getUserId().isEmpty()) {
-          userId_ = other.userId_;
-          bitField0_ |= 0x00000001;
-          onChanged();
-        }
-        if (!other.getEmail().isEmpty()) {
-          email_ = other.email_;
-          bitField0_ |= 0x00000002;
-          onChanged();
-        }
-        if (!other.getLogin().isEmpty()) {
-          login_ = other.login_;
-          bitField0_ |= 0x00000004;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        onChanged();
-        return this;
-      }
-
-      @Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new NullPointerException();
-        }
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                userId_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              case 18: {
-                email_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 18
-              case 26: {
-                login_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 26
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.unwrapIOException();
-        } finally {
-          onChanged();
-        } // finally
-        return this;
-      }
-      private int bitField0_;
-
-      private Object userId_ = "";
-      /**
-       * <code>string user_id = 1;</code>
-       * @return The userId.
-       */
-      public String getUserId() {
-        Object ref = userId_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          userId_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <code>string user_id = 1;</code>
-       * @return The bytes for userId.
-       */
-      public com.google.protobuf.ByteString
-          getUserIdBytes() {
-        Object ref = userId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          userId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string user_id = 1;</code>
-       * @param value The userId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setUserId(
-          String value) {
-        if (value == null) { throw new NullPointerException(); }
-        userId_ = value;
-        bitField0_ |= 0x00000001;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string user_id = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearUserId() {
-        userId_ = getDefaultInstance().getUserId();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string user_id = 1;</code>
-       * @param value The bytes for userId to set.
-       * @return This builder for chaining.
-       */
-      public Builder setUserIdBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        userId_ = value;
-        bitField0_ |= 0x00000001;
-        onChanged();
-        return this;
-      }
-
-      private Object email_ = "";
-      /**
-       * <code>string email = 2;</code>
-       * @return The email.
-       */
-      public String getEmail() {
-        Object ref = email_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          email_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <code>string email = 2;</code>
-       * @return The bytes for email.
-       */
-      public com.google.protobuf.ByteString
-          getEmailBytes() {
-        Object ref = email_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          email_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string email = 2;</code>
-       * @param value The email to set.
-       * @return This builder for chaining.
-       */
-      public Builder setEmail(
-          String value) {
-        if (value == null) { throw new NullPointerException(); }
-        email_ = value;
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string email = 2;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearEmail() {
-        email_ = getDefaultInstance().getEmail();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string email = 2;</code>
-       * @param value The bytes for email to set.
-       * @return This builder for chaining.
-       */
-      public Builder setEmailBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        email_ = value;
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return this;
-      }
-
-      private Object login_ = "";
-      /**
-       * <code>string login = 3;</code>
-       * @return The login.
-       */
-      public String getLogin() {
-        Object ref = login_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          login_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <code>string login = 3;</code>
-       * @return The bytes for login.
-       */
-      public com.google.protobuf.ByteString
-          getLoginBytes() {
-        Object ref = login_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          login_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string login = 3;</code>
-       * @param value The login to set.
-       * @return This builder for chaining.
-       */
-      public Builder setLogin(
-          String value) {
-        if (value == null) { throw new NullPointerException(); }
-        login_ = value;
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string login = 3;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearLogin() {
-        login_ = getDefaultInstance().getLogin();
-        bitField0_ = (bitField0_ & ~0x00000004);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string login = 3;</code>
-       * @param value The bytes for login to set.
-       * @return This builder for chaining.
-       */
-      public Builder setLoginBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        login_ = value;
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:UserNotificationDTO)
-    }
-
-    // @@protoc_insertion_point(class_scope:UserNotificationDTO)
-    private static final UserNotificationDTO DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new UserNotificationDTO();
-    }
-
-    public static UserNotificationDTO getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<UserNotificationDTO>
-        PARSER = new com.google.protobuf.AbstractParser<UserNotificationDTO>() {
-      @Override
-      public UserNotificationDTO parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
-      }
-    };
-
-    public static com.google.protobuf.Parser<UserNotificationDTO> parser() {
-      return PARSER;
-    }
-
-    @Override
-    public com.google.protobuf.Parser<UserNotificationDTO> getParserForType() {
-      return PARSER;
-    }
-
-    @Override
-    public UserNotificationDTO getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
   public interface NotificationDTOOrBuilder extends
       // @@protoc_insertion_point(interface_extends:NotificationDTO)
       com.google.protobuf.MessageOrBuilder {
@@ -974,66 +168,87 @@ public final class NotificationDTOOuterClass {
         getContentBytes();
 
     /**
-     * <code>.UserNotificationDTO user_notification = 3;</code>
-     * @return Whether the userNotification field is set.
+     * <code>string user_id = 3;</code>
+     * @return The userId.
      */
-    boolean hasUserNotification();
+    String getUserId();
     /**
-     * <code>.UserNotificationDTO user_notification = 3;</code>
-     * @return The userNotification.
+     * <code>string user_id = 3;</code>
+     * @return The bytes for userId.
      */
-    UserNotificationDTO getUserNotification();
-    /**
-     * <code>.UserNotificationDTO user_notification = 3;</code>
-     */
-    UserNotificationDTOOrBuilder getUserNotificationOrBuilder();
+    com.google.protobuf.ByteString
+        getUserIdBytes();
 
     /**
-     * <code>.google.protobuf.Timestamp create_time = 4;</code>
+     * <code>string email = 4;</code>
+     * @return The email.
+     */
+    String getEmail();
+    /**
+     * <code>string email = 4;</code>
+     * @return The bytes for email.
+     */
+    com.google.protobuf.ByteString
+        getEmailBytes();
+
+    /**
+     * <code>string login = 5;</code>
+     * @return The login.
+     */
+    String getLogin();
+    /**
+     * <code>string login = 5;</code>
+     * @return The bytes for login.
+     */
+    com.google.protobuf.ByteString
+        getLoginBytes();
+
+    /**
+     * <code>.google.protobuf.Timestamp create_time = 6;</code>
      * @return Whether the createTime field is set.
      */
     boolean hasCreateTime();
     /**
-     * <code>.google.protobuf.Timestamp create_time = 4;</code>
+     * <code>.google.protobuf.Timestamp create_time = 6;</code>
      * @return The createTime.
      */
     com.google.protobuf.Timestamp getCreateTime();
     /**
-     * <code>.google.protobuf.Timestamp create_time = 4;</code>
+     * <code>.google.protobuf.Timestamp create_time = 6;</code>
      */
     com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder();
 
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @return A list containing the channelList.
      */
     java.util.List<NotificationChannel> getChannelListList();
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @return The count of channelList.
      */
     int getChannelListCount();
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @param index The index of the element to return.
      * @return The channelList at the given index.
      */
     NotificationChannel getChannelList(int index);
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @return A list containing the enum numeric values on the wire for channelList.
      */
     java.util.List<Integer>
     getChannelListValueList();
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @param index The index of the value to return.
      * @return The enum numeric value on the wire of channelList at the given index.
      */
     int getChannelListValue(int index);
 
     /**
-     * <code>bool need_in_history = 6;</code>
+     * <code>bool need_in_history = 8;</code>
      * @return The needInHistory.
      */
     boolean getNeedInHistory();
@@ -1062,6 +277,9 @@ public final class NotificationDTOOuterClass {
     private NotificationDTO() {
       title_ = "";
       content_ = "";
+      userId_ = "";
+      email_ = "";
+      login_ = "";
       channelList_ = java.util.Collections.emptyList();
     }
 
@@ -1157,44 +375,135 @@ public final class NotificationDTOOuterClass {
       }
     }
 
-    public static final int USER_NOTIFICATION_FIELD_NUMBER = 3;
-    private UserNotificationDTO userNotification_;
+    public static final int USER_ID_FIELD_NUMBER = 3;
+    @SuppressWarnings("serial")
+    private volatile Object userId_ = "";
     /**
-     * <code>.UserNotificationDTO user_notification = 3;</code>
-     * @return Whether the userNotification field is set.
+     * <code>string user_id = 3;</code>
+     * @return The userId.
      */
     @Override
-    public boolean hasUserNotification() {
-      return ((bitField0_ & 0x00000001) != 0);
+    public String getUserId() {
+      Object ref = userId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        userId_ = s;
+        return s;
+      }
     }
     /**
-     * <code>.UserNotificationDTO user_notification = 3;</code>
-     * @return The userNotification.
+     * <code>string user_id = 3;</code>
+     * @return The bytes for userId.
      */
     @Override
-    public UserNotificationDTO getUserNotification() {
-      return userNotification_ == null ? UserNotificationDTO.getDefaultInstance() : userNotification_;
-    }
-    /**
-     * <code>.UserNotificationDTO user_notification = 3;</code>
-     */
-    @Override
-    public UserNotificationDTOOrBuilder getUserNotificationOrBuilder() {
-      return userNotification_ == null ? UserNotificationDTO.getDefaultInstance() : userNotification_;
+    public com.google.protobuf.ByteString
+        getUserIdBytes() {
+      Object ref = userId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        userId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
-    public static final int CREATE_TIME_FIELD_NUMBER = 4;
+    public static final int EMAIL_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private volatile Object email_ = "";
+    /**
+     * <code>string email = 4;</code>
+     * @return The email.
+     */
+    @Override
+    public String getEmail() {
+      Object ref = email_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        email_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string email = 4;</code>
+     * @return The bytes for email.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      Object ref = email_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int LOGIN_FIELD_NUMBER = 5;
+    @SuppressWarnings("serial")
+    private volatile Object login_ = "";
+    /**
+     * <code>string login = 5;</code>
+     * @return The login.
+     */
+    @Override
+    public String getLogin() {
+      Object ref = login_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        login_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string login = 5;</code>
+     * @return The bytes for login.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getLoginBytes() {
+      Object ref = login_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        login_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int CREATE_TIME_FIELD_NUMBER = 6;
     private com.google.protobuf.Timestamp createTime_;
     /**
-     * <code>.google.protobuf.Timestamp create_time = 4;</code>
+     * <code>.google.protobuf.Timestamp create_time = 6;</code>
      * @return Whether the createTime field is set.
      */
     @Override
     public boolean hasCreateTime() {
-      return ((bitField0_ & 0x00000002) != 0);
+      return ((bitField0_ & 0x00000001) != 0);
     }
     /**
-     * <code>.google.protobuf.Timestamp create_time = 4;</code>
+     * <code>.google.protobuf.Timestamp create_time = 6;</code>
      * @return The createTime.
      */
     @Override
@@ -1202,14 +511,14 @@ public final class NotificationDTOOuterClass {
       return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
     }
     /**
-     * <code>.google.protobuf.Timestamp create_time = 4;</code>
+     * <code>.google.protobuf.Timestamp create_time = 6;</code>
      */
     @Override
     public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
       return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
     }
 
-    public static final int CHANNEL_LIST_FIELD_NUMBER = 5;
+    public static final int CHANNEL_LIST_FIELD_NUMBER = 7;
     @SuppressWarnings("serial")
     private java.util.List<Integer> channelList_;
     private static final com.google.protobuf.Internal.ListAdapter.Converter<
@@ -1222,7 +531,7 @@ public final class NotificationDTOOuterClass {
               }
             };
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @return A list containing the channelList.
      */
     @Override
@@ -1231,7 +540,7 @@ public final class NotificationDTOOuterClass {
           Integer, NotificationChannel>(channelList_, channelList_converter_);
     }
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @return The count of channelList.
      */
     @Override
@@ -1239,7 +548,7 @@ public final class NotificationDTOOuterClass {
       return channelList_.size();
     }
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @param index The index of the element to return.
      * @return The channelList at the given index.
      */
@@ -1248,7 +557,7 @@ public final class NotificationDTOOuterClass {
       return channelList_converter_.convert(channelList_.get(index));
     }
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @return A list containing the enum numeric values on the wire for channelList.
      */
     @Override
@@ -1257,7 +566,7 @@ public final class NotificationDTOOuterClass {
       return channelList_;
     }
     /**
-     * <code>repeated .NotificationChannel channel_list = 5;</code>
+     * <code>repeated .NotificationChannel channel_list = 7;</code>
      * @param index The index of the value to return.
      * @return The enum numeric value on the wire of channelList at the given index.
      */
@@ -1267,10 +576,10 @@ public final class NotificationDTOOuterClass {
     }
     private int channelListMemoizedSerializedSize;
 
-    public static final int NEED_IN_HISTORY_FIELD_NUMBER = 6;
+    public static final int NEED_IN_HISTORY_FIELD_NUMBER = 8;
     private boolean needInHistory_ = false;
     /**
-     * <code>bool need_in_history = 6;</code>
+     * <code>bool need_in_history = 8;</code>
      * @return The needInHistory.
      */
     @Override
@@ -1299,21 +608,27 @@ public final class NotificationDTOOuterClass {
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(content_)) {
         com.google.protobuf.GeneratedMessage.writeString(output, 2, content_);
       }
-      if (((bitField0_ & 0x00000001) != 0)) {
-        output.writeMessage(3, getUserNotification());
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(userId_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 3, userId_);
       }
-      if (((bitField0_ & 0x00000002) != 0)) {
-        output.writeMessage(4, getCreateTime());
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 4, email_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(login_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 5, login_);
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeMessage(6, getCreateTime());
       }
       if (getChannelListList().size() > 0) {
-        output.writeUInt32NoTag(42);
+        output.writeUInt32NoTag(58);
         output.writeUInt32NoTag(channelListMemoizedSerializedSize);
       }
       for (int i = 0; i < channelList_.size(); i++) {
         output.writeEnumNoTag(channelList_.get(i));
       }
       if (needInHistory_ != false) {
-        output.writeBool(6, needInHistory_);
+        output.writeBool(8, needInHistory_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1330,13 +645,18 @@ public final class NotificationDTOOuterClass {
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(content_)) {
         size += com.google.protobuf.GeneratedMessage.computeStringSize(2, content_);
       }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(userId_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(3, userId_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(4, email_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(login_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(5, login_);
+      }
       if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getUserNotification());
-      }
-      if (((bitField0_ & 0x00000002) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getCreateTime());
+          .computeMessageSize(6, getCreateTime());
       }
       {
         int dataSize = 0;
@@ -1352,7 +672,7 @@ public final class NotificationDTOOuterClass {
       }
       if (needInHistory_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(6, needInHistory_);
+          .computeBoolSize(8, needInHistory_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -1373,11 +693,12 @@ public final class NotificationDTOOuterClass {
           .equals(other.getTitle())) return false;
       if (!getContent()
           .equals(other.getContent())) return false;
-      if (hasUserNotification() != other.hasUserNotification()) return false;
-      if (hasUserNotification()) {
-        if (!getUserNotification()
-            .equals(other.getUserNotification())) return false;
-      }
+      if (!getUserId()
+          .equals(other.getUserId())) return false;
+      if (!getEmail()
+          .equals(other.getEmail())) return false;
+      if (!getLogin()
+          .equals(other.getLogin())) return false;
       if (hasCreateTime() != other.hasCreateTime()) return false;
       if (hasCreateTime()) {
         if (!getCreateTime()
@@ -1401,10 +722,12 @@ public final class NotificationDTOOuterClass {
       hash = (53 * hash) + getTitle().hashCode();
       hash = (37 * hash) + CONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getContent().hashCode();
-      if (hasUserNotification()) {
-        hash = (37 * hash) + USER_NOTIFICATION_FIELD_NUMBER;
-        hash = (53 * hash) + getUserNotification().hashCode();
-      }
+      hash = (37 * hash) + USER_ID_FIELD_NUMBER;
+      hash = (53 * hash) + getUserId().hashCode();
+      hash = (37 * hash) + EMAIL_FIELD_NUMBER;
+      hash = (53 * hash) + getEmail().hashCode();
+      hash = (37 * hash) + LOGIN_FIELD_NUMBER;
+      hash = (53 * hash) + getLogin().hashCode();
       if (hasCreateTime()) {
         hash = (37 * hash) + CREATE_TIME_FIELD_NUMBER;
         hash = (53 * hash) + getCreateTime().hashCode();
@@ -1546,7 +869,6 @@ public final class NotificationDTOOuterClass {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage
                 .alwaysUseFieldBuilders) {
-          getUserNotificationFieldBuilder();
           getCreateTimeFieldBuilder();
         }
       }
@@ -1556,18 +878,16 @@ public final class NotificationDTOOuterClass {
         bitField0_ = 0;
         title_ = "";
         content_ = "";
-        userNotification_ = null;
-        if (userNotificationBuilder_ != null) {
-          userNotificationBuilder_.dispose();
-          userNotificationBuilder_ = null;
-        }
+        userId_ = "";
+        email_ = "";
+        login_ = "";
         createTime_ = null;
         if (createTimeBuilder_ != null) {
           createTimeBuilder_.dispose();
           createTimeBuilder_ = null;
         }
         channelList_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000040);
         needInHistory_ = false;
         return this;
       }
@@ -1602,9 +922,9 @@ public final class NotificationDTOOuterClass {
       }
 
       private void buildPartialRepeatedFields(NotificationDTO result) {
-        if (((bitField0_ & 0x00000010) != 0)) {
+        if (((bitField0_ & 0x00000040) != 0)) {
           channelList_ = java.util.Collections.unmodifiableList(channelList_);
-          bitField0_ = (bitField0_ & ~0x00000010);
+          bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.channelList_ = channelList_;
       }
@@ -1617,20 +937,23 @@ public final class NotificationDTOOuterClass {
         if (((from_bitField0_ & 0x00000002) != 0)) {
           result.content_ = content_;
         }
-        int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.userNotification_ = userNotificationBuilder_ == null
-              ? userNotification_
-              : userNotificationBuilder_.build();
-          to_bitField0_ |= 0x00000001;
+          result.userId_ = userId_;
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.email_ = email_;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.login_ = login_;
+        }
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000020) != 0)) {
           result.createTime_ = createTimeBuilder_ == null
               ? createTime_
               : createTimeBuilder_.build();
-          to_bitField0_ |= 0x00000002;
+          to_bitField0_ |= 0x00000001;
         }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
+        if (((from_bitField0_ & 0x00000080) != 0)) {
           result.needInHistory_ = needInHistory_;
         }
         result.bitField0_ |= to_bitField0_;
@@ -1658,8 +981,20 @@ public final class NotificationDTOOuterClass {
           bitField0_ |= 0x00000002;
           onChanged();
         }
-        if (other.hasUserNotification()) {
-          mergeUserNotification(other.getUserNotification());
+        if (!other.getUserId().isEmpty()) {
+          userId_ = other.userId_;
+          bitField0_ |= 0x00000004;
+          onChanged();
+        }
+        if (!other.getEmail().isEmpty()) {
+          email_ = other.email_;
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        if (!other.getLogin().isEmpty()) {
+          login_ = other.login_;
+          bitField0_ |= 0x00000010;
+          onChanged();
         }
         if (other.hasCreateTime()) {
           mergeCreateTime(other.getCreateTime());
@@ -1667,7 +1002,7 @@ public final class NotificationDTOOuterClass {
         if (!other.channelList_.isEmpty()) {
           if (channelList_.isEmpty()) {
             channelList_ = other.channelList_;
-            bitField0_ = (bitField0_ & ~0x00000010);
+            bitField0_ = (bitField0_ & ~0x00000040);
           } else {
             ensureChannelListIsMutable();
             channelList_.addAll(other.channelList_);
@@ -1714,26 +1049,34 @@ public final class NotificationDTOOuterClass {
                 break;
               } // case 18
               case 26: {
-                input.readMessage(
-                    getUserNotificationFieldBuilder().getBuilder(),
-                    extensionRegistry);
+                userId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000004;
                 break;
               } // case 26
               case 34: {
-                input.readMessage(
-                    getCreateTimeFieldBuilder().getBuilder(),
-                    extensionRegistry);
+                email_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000008;
                 break;
               } // case 34
-              case 40: {
+              case 42: {
+                login_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
+              case 50: {
+                input.readMessage(
+                    getCreateTimeFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000020;
+                break;
+              } // case 50
+              case 56: {
                 int tmpRaw = input.readEnum();
                 ensureChannelListIsMutable();
                 channelList_.add(tmpRaw);
                 break;
-              } // case 40
-              case 42: {
+              } // case 56
+              case 58: {
                 int length = input.readRawVarint32();
                 int oldLimit = input.pushLimit(length);
                 while(input.getBytesUntilLimit() > 0) {
@@ -1743,12 +1086,12 @@ public final class NotificationDTOOuterClass {
                 }
                 input.popLimit(oldLimit);
                 break;
-              } // case 42
-              case 48: {
+              } // case 58
+              case 64: {
                 needInHistory_ = input.readBool();
-                bitField0_ |= 0x00000020;
+                bitField0_ |= 0x00000080;
                 break;
-              } // case 48
+              } // case 64
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -1910,139 +1253,234 @@ public final class NotificationDTOOuterClass {
         return this;
       }
 
-      private UserNotificationDTO userNotification_;
-      private com.google.protobuf.SingleFieldBuilder<
-          UserNotificationDTO, UserNotificationDTO.Builder, UserNotificationDTOOrBuilder> userNotificationBuilder_;
+      private Object userId_ = "";
       /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
-       * @return Whether the userNotification field is set.
+       * <code>string user_id = 3;</code>
+       * @return The userId.
        */
-      public boolean hasUserNotification() {
-        return ((bitField0_ & 0x00000004) != 0);
-      }
-      /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
-       * @return The userNotification.
-       */
-      public UserNotificationDTO getUserNotification() {
-        if (userNotificationBuilder_ == null) {
-          return userNotification_ == null ? UserNotificationDTO.getDefaultInstance() : userNotification_;
+      public String getUserId() {
+        Object ref = userId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          userId_ = s;
+          return s;
         } else {
-          return userNotificationBuilder_.getMessage();
+          return (String) ref;
         }
       }
       /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
+       * <code>string user_id = 3;</code>
+       * @return The bytes for userId.
        */
-      public Builder setUserNotification(UserNotificationDTO value) {
-        if (userNotificationBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          userNotification_ = value;
+      public com.google.protobuf.ByteString
+          getUserIdBytes() {
+        Object ref = userId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          userId_ = b;
+          return b;
         } else {
-          userNotificationBuilder_.setMessage(value);
+          return (com.google.protobuf.ByteString) ref;
         }
+      }
+      /**
+       * <code>string user_id = 3;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUserId(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        userId_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
       /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
+       * <code>string user_id = 3;</code>
+       * @return This builder for chaining.
        */
-      public Builder setUserNotification(
-          UserNotificationDTO.Builder builderForValue) {
-        if (userNotificationBuilder_ == null) {
-          userNotification_ = builderForValue.build();
-        } else {
-          userNotificationBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
-       */
-      public Builder mergeUserNotification(UserNotificationDTO value) {
-        if (userNotificationBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) != 0) &&
-            userNotification_ != null &&
-            userNotification_ != UserNotificationDTO.getDefaultInstance()) {
-            getUserNotificationBuilder().mergeFrom(value);
-          } else {
-            userNotification_ = value;
-          }
-        } else {
-          userNotificationBuilder_.mergeFrom(value);
-        }
-        if (userNotification_ != null) {
-          bitField0_ |= 0x00000004;
-          onChanged();
-        }
-        return this;
-      }
-      /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
-       */
-      public Builder clearUserNotification() {
+      public Builder clearUserId() {
+        userId_ = getDefaultInstance().getUserId();
         bitField0_ = (bitField0_ & ~0x00000004);
-        userNotification_ = null;
-        if (userNotificationBuilder_ != null) {
-          userNotificationBuilder_.dispose();
-          userNotificationBuilder_ = null;
-        }
         onChanged();
         return this;
       }
       /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
+       * <code>string user_id = 3;</code>
+       * @param value The bytes for userId to set.
+       * @return This builder for chaining.
        */
-      public UserNotificationDTO.Builder getUserNotificationBuilder() {
+      public Builder setUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        userId_ = value;
         bitField0_ |= 0x00000004;
         onChanged();
-        return getUserNotificationFieldBuilder().getBuilder();
+        return this;
       }
+
+      private Object email_ = "";
       /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
+       * <code>string email = 4;</code>
+       * @return The email.
        */
-      public UserNotificationDTOOrBuilder getUserNotificationOrBuilder() {
-        if (userNotificationBuilder_ != null) {
-          return userNotificationBuilder_.getMessageOrBuilder();
+      public String getEmail() {
+        Object ref = email_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          email_ = s;
+          return s;
         } else {
-          return userNotification_ == null ?
-              UserNotificationDTO.getDefaultInstance() : userNotification_;
+          return (String) ref;
         }
       }
       /**
-       * <code>.UserNotificationDTO user_notification = 3;</code>
+       * <code>string email = 4;</code>
+       * @return The bytes for email.
        */
-      private com.google.protobuf.SingleFieldBuilder<
-          UserNotificationDTO, UserNotificationDTO.Builder, UserNotificationDTOOrBuilder>
-          getUserNotificationFieldBuilder() {
-        if (userNotificationBuilder_ == null) {
-          userNotificationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              UserNotificationDTO, UserNotificationDTO.Builder, UserNotificationDTOOrBuilder>(
-                  getUserNotification(),
-                  getParentForChildren(),
-                  isClean());
-          userNotification_ = null;
+      public com.google.protobuf.ByteString
+          getEmailBytes() {
+        Object ref = email_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          email_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
         }
-        return userNotificationBuilder_;
+      }
+      /**
+       * <code>string email = 4;</code>
+       * @param value The email to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmail(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        email_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string email = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearEmail() {
+        email_ = getDefaultInstance().getEmail();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string email = 4;</code>
+       * @param value The bytes for email to set.
+       * @return This builder for chaining.
+       */
+      public Builder setEmailBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        email_ = value;
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
+      private Object login_ = "";
+      /**
+       * <code>string login = 5;</code>
+       * @return The login.
+       */
+      public String getLogin() {
+        Object ref = login_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          login_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string login = 5;</code>
+       * @return The bytes for login.
+       */
+      public com.google.protobuf.ByteString
+          getLoginBytes() {
+        Object ref = login_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          login_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string login = 5;</code>
+       * @param value The login to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLogin(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        login_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string login = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearLogin() {
+        login_ = getDefaultInstance().getLogin();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string login = 5;</code>
+       * @param value The bytes for login to set.
+       * @return This builder for chaining.
+       */
+      public Builder setLoginBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        login_ = value;
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return this;
       }
 
       private com.google.protobuf.Timestamp createTime_;
       private com.google.protobuf.SingleFieldBuilder<
           com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> createTimeBuilder_;
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        * @return Whether the createTime field is set.
        */
       public boolean hasCreateTime() {
-        return ((bitField0_ & 0x00000008) != 0);
+        return ((bitField0_ & 0x00000020) != 0);
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        * @return The createTime.
        */
       public com.google.protobuf.Timestamp getCreateTime() {
@@ -2053,7 +1491,7 @@ public final class NotificationDTOOuterClass {
         }
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       public Builder setCreateTime(com.google.protobuf.Timestamp value) {
         if (createTimeBuilder_ == null) {
@@ -2064,12 +1502,12 @@ public final class NotificationDTOOuterClass {
         } else {
           createTimeBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       public Builder setCreateTime(
           com.google.protobuf.Timestamp.Builder builderForValue) {
@@ -2078,16 +1516,16 @@ public final class NotificationDTOOuterClass {
         } else {
           createTimeBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       public Builder mergeCreateTime(com.google.protobuf.Timestamp value) {
         if (createTimeBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) != 0) &&
+          if (((bitField0_ & 0x00000020) != 0) &&
             createTime_ != null &&
             createTime_ != com.google.protobuf.Timestamp.getDefaultInstance()) {
             getCreateTimeBuilder().mergeFrom(value);
@@ -2098,16 +1536,16 @@ public final class NotificationDTOOuterClass {
           createTimeBuilder_.mergeFrom(value);
         }
         if (createTime_ != null) {
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000020;
           onChanged();
         }
         return this;
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       public Builder clearCreateTime() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000020);
         createTime_ = null;
         if (createTimeBuilder_ != null) {
           createTimeBuilder_.dispose();
@@ -2117,15 +1555,15 @@ public final class NotificationDTOOuterClass {
         return this;
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       public com.google.protobuf.Timestamp.Builder getCreateTimeBuilder() {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000020;
         onChanged();
         return getCreateTimeFieldBuilder().getBuilder();
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
         if (createTimeBuilder_ != null) {
@@ -2136,7 +1574,7 @@ public final class NotificationDTOOuterClass {
         }
       }
       /**
-       * <code>.google.protobuf.Timestamp create_time = 4;</code>
+       * <code>.google.protobuf.Timestamp create_time = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
@@ -2155,13 +1593,13 @@ public final class NotificationDTOOuterClass {
       private java.util.List<Integer> channelList_ =
         java.util.Collections.emptyList();
       private void ensureChannelListIsMutable() {
-        if (!((bitField0_ & 0x00000010) != 0)) {
+        if (!((bitField0_ & 0x00000040) != 0)) {
           channelList_ = new java.util.ArrayList<Integer>(channelList_);
-          bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000040;
         }
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @return A list containing the channelList.
        */
       public java.util.List<NotificationChannel> getChannelListList() {
@@ -2169,14 +1607,14 @@ public final class NotificationDTOOuterClass {
             Integer, NotificationChannel>(channelList_, channelList_converter_);
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @return The count of channelList.
        */
       public int getChannelListCount() {
         return channelList_.size();
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param index The index of the element to return.
        * @return The channelList at the given index.
        */
@@ -2184,7 +1622,7 @@ public final class NotificationDTOOuterClass {
         return channelList_converter_.convert(channelList_.get(index));
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param index The index to set the value at.
        * @param value The channelList to set.
        * @return This builder for chaining.
@@ -2200,7 +1638,7 @@ public final class NotificationDTOOuterClass {
         return this;
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param value The channelList to add.
        * @return This builder for chaining.
        */
@@ -2214,7 +1652,7 @@ public final class NotificationDTOOuterClass {
         return this;
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param values The channelList to add.
        * @return This builder for chaining.
        */
@@ -2228,17 +1666,17 @@ public final class NotificationDTOOuterClass {
         return this;
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @return This builder for chaining.
        */
       public Builder clearChannelList() {
         channelList_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @return A list containing the enum numeric values on the wire for channelList.
        */
       public java.util.List<Integer>
@@ -2246,7 +1684,7 @@ public final class NotificationDTOOuterClass {
         return java.util.Collections.unmodifiableList(channelList_);
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param index The index of the value to return.
        * @return The enum numeric value on the wire of channelList at the given index.
        */
@@ -2254,7 +1692,7 @@ public final class NotificationDTOOuterClass {
         return channelList_.get(index);
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param index The index to set the value at.
        * @param value The enum numeric value on the wire for channelList to set.
        * @return This builder for chaining.
@@ -2267,7 +1705,7 @@ public final class NotificationDTOOuterClass {
         return this;
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param value The enum numeric value on the wire for channelList to add.
        * @return This builder for chaining.
        */
@@ -2278,7 +1716,7 @@ public final class NotificationDTOOuterClass {
         return this;
       }
       /**
-       * <code>repeated .NotificationChannel channel_list = 5;</code>
+       * <code>repeated .NotificationChannel channel_list = 7;</code>
        * @param values The enum numeric values on the wire for channelList to add.
        * @return This builder for chaining.
        */
@@ -2294,7 +1732,7 @@ public final class NotificationDTOOuterClass {
 
       private boolean needInHistory_ ;
       /**
-       * <code>bool need_in_history = 6;</code>
+       * <code>bool need_in_history = 8;</code>
        * @return The needInHistory.
        */
       @Override
@@ -2302,23 +1740,23 @@ public final class NotificationDTOOuterClass {
         return needInHistory_;
       }
       /**
-       * <code>bool need_in_history = 6;</code>
+       * <code>bool need_in_history = 8;</code>
        * @param value The needInHistory to set.
        * @return This builder for chaining.
        */
       public Builder setNeedInHistory(boolean value) {
 
         needInHistory_ = value;
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
       /**
-       * <code>bool need_in_history = 6;</code>
+       * <code>bool need_in_history = 8;</code>
        * @return This builder for chaining.
        */
       public Builder clearNeedInHistory() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000080);
         needInHistory_ = false;
         onChanged();
         return this;
@@ -2376,11 +1814,6 @@ public final class NotificationDTOOuterClass {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_UserNotificationDTO_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_UserNotificationDTO_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_NotificationDTO_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -2395,34 +1828,26 @@ public final class NotificationDTOOuterClass {
   static {
     String[] descriptorData = {
       "\n\025NotificationDTO.proto\032\037google/protobuf" +
-      "/timestamp.proto\"D\n\023UserNotificationDTO\022" +
-      "\017\n\007user_id\030\001 \001(\t\022\r\n\005email\030\002 \001(\t\022\r\n\005login" +
-      "\030\003 \001(\t\"\330\001\n\017NotificationDTO\022\r\n\005title\030\001 \001(" +
-      "\t\022\017\n\007content\030\002 \001(\t\022/\n\021user_notification\030" +
-      "\003 \001(\0132\024.UserNotificationDTO\022/\n\013create_ti" +
-      "me\030\004 \001(\0132\032.google.protobuf.Timestamp\022*\n\014" +
-      "channel_list\030\005 \003(\0162\024.NotificationChannel" +
-      "\022\027\n\017need_in_history\030\006 \001(\010*/\n\023Notificatio" +
-      "nChannel\022\t\n\005EMAIL\020\000\022\r\n\tMESSENGER\020\001b\006prot" +
-      "o3"
+      "/timestamp.proto\"\326\001\n\017NotificationDTO\022\r\n\005" +
+      "title\030\001 \001(\t\022\017\n\007content\030\002 \001(\t\022\017\n\007user_id\030" +
+      "\003 \001(\t\022\r\n\005email\030\004 \001(\t\022\r\n\005login\030\005 \001(\t\022/\n\013c" +
+      "reate_time\030\006 \001(\0132\032.google.protobuf.Times" +
+      "tamp\022*\n\014channel_list\030\007 \003(\0162\024.Notificatio" +
+      "nChannel\022\027\n\017need_in_history\030\010 \001(\010*/\n\023Not" +
+      "ificationChannel\022\t\n\005EMAIL\020\000\022\r\n\tMESSENGER" +
+      "\020\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.protobuf.TimestampProto.getDescriptor(),
         });
-    internal_static_UserNotificationDTO_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_UserNotificationDTO_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_UserNotificationDTO_descriptor,
-        new String[] { "UserId", "Email", "Login", });
     internal_static_NotificationDTO_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+      getDescriptor().getMessageTypes().get(0);
     internal_static_NotificationDTO_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_NotificationDTO_descriptor,
-        new String[] { "Title", "Content", "UserNotification", "CreateTime", "ChannelList", "NeedInHistory", });
+        new String[] { "Title", "Content", "UserId", "Email", "Login", "CreateTime", "ChannelList", "NeedInHistory", });
     descriptor.resolveAllFeaturesImmutable();
     com.google.protobuf.TimestampProto.getDescriptor();
   }

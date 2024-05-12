@@ -33,10 +33,9 @@ public class KafkaProducer {
                 .setContent(content)
                 .setTitle(title)
                 .setNeedInHistory(needInHistory)
-                .setUserNotification(NotificationDTOOuterClass.UserNotificationDTO.newBuilder()
-                        .setEmail(userDto.getEmail())
-                        .setUserId(String.valueOf(userDto.getId()))
-                        .setLogin(userDto.getLogin()))
+                .setUserId(String.valueOf(userDto.getId()))
+                .setEmail(userDto.getEmail())
+                .setLogin(userDto.getLogin())
                 .build();
 
         kafkaTemplate.send(TOPIC, notificationDTO);

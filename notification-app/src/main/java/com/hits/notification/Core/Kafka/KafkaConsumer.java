@@ -36,7 +36,6 @@ public class KafkaConsumer {
     public void listenMessage(byte[] data)
             throws MessagingException, UnsupportedEncodingException,  com.google.protobuf.InvalidProtocolBufferException {
         NotificationDTOOuterClass.NotificationDTO notificationProto = NotificationDTOOuterClass.NotificationDTO.parseFrom(data);
-        NotificationDTOOuterClass.UserNotificationDTO userNotificationDTO = notificationProto.getUserNotification();
 
         List<NotificationChannel> channels = new ArrayList<>();
 
@@ -50,9 +49,9 @@ public class KafkaConsumer {
         }
 
         UserNotificationDTO userNotification = new UserNotificationDTO(
-                UUID.fromString(userNotificationDTO.getUserId()),
-                userNotificationDTO.getEmail(),
-                userNotificationDTO.getLogin()
+                UUID.fromString(notificationProto.getUserId()),
+                notificationProto.getEmail(),
+                notificationProto.getLogin()
         );
 
         NotificationDTO notificationDTO = new NotificationDTO(
