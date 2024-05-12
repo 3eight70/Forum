@@ -9,9 +9,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserNotificationDto {
+public class UserNotificationDTO {
     private UUID userId;
     private String email;
-    private String verificationCode;
     private String login;
 }

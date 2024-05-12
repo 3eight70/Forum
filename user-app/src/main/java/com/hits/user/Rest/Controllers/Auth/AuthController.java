@@ -10,7 +10,6 @@ import com.hits.user.Exceptions.UserAlreadyExistsException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,9 +41,7 @@ public class AuthController {
             summary = "Регистрация пользователя",
             description = "Позволяет пользователю зарегистрироваться"
     )
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) throws MessagingException,
-            UnsupportedEncodingException,
-            UserAlreadyExistsException {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterModel userRegisterModel) throws UserAlreadyExistsException {
         userRegisterModel.setPassword(passwordEncoder.encode(userRegisterModel.getPassword()));
 
         return authService.registerNewUser(userRegisterModel);

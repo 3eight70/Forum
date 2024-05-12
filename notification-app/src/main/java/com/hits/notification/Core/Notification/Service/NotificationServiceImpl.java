@@ -8,19 +8,16 @@ import com.hits.notification.Core.Notification.Entity.Notification;
 import com.hits.notification.Core.Notification.Mapper.NotificationMapper;
 import com.hits.notification.Core.Notification.Repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +39,7 @@ public class NotificationServiceImpl implements NotificationService{
         return ResponseEntity.ok(new PageImpl<>(mappedNotifications, pageable, page.getTotalElements()));
     }
 
+    @Transactional
     public ResponseEntity<Response> readNotification(UserDto userDto, UUID notificationId) throws NotFoundException {
         Notification notification = notificationRepository.findByUserLoginAndId(userDto.getLogin(), notificationId)
                 .orElseThrow(() -> new NotFoundException("Уведомление с указанным id не найдено"));
@@ -53,6 +51,7 @@ public class NotificationServiceImpl implements NotificationService{
                 "Уведомление успешно прочитано"), HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<Response> readAllNotifications(UserDto userDto) {
         List<Notification> notifications = notificationRepository.findAllUnreadNotificationsByUserLogin(userDto.getLogin());
 

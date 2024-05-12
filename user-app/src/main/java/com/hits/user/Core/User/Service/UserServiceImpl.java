@@ -5,7 +5,6 @@ import com.hits.common.Core.Response.TokenResponse;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.NotFoundException;
-import com.hits.security.Rest.Client.ForumAppClient;
 import com.hits.user.Core.RefreshToken.Entity.RefreshToken;
 import com.hits.user.Core.RefreshToken.Service.RefreshTokenService;
 import com.hits.user.Core.User.Entity.User;

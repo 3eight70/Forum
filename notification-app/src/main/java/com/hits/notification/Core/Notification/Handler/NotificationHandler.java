@@ -1,7 +1,7 @@
 package com.hits.notification.Core.Notification.Handler;
 
 import com.hits.common.Core.Notification.Enum.NotificationChannel;
-import com.hits.common.Core.User.DTO.UserNotificationDto;
+import com.hits.common.Core.User.DTO.UserNotificationDTO;
 import com.hits.notification.Core.Notification.Entity.Notification;
 import jakarta.mail.MessagingException;
 import lombok.Getter;
@@ -15,6 +15,6 @@ import java.util.List;
 public abstract class NotificationHandler {
     private NotificationHandler next;
 
-    public abstract void handle(Notification notification, UserNotificationDto userNotificationDto, List<NotificationChannel> channels)
+    public abstract void handle(Notification notification, UserNotificationDTO userNotificationDto, List<NotificationChannel> channels)
             throws MessagingException, UnsupportedEncodingException;
 }

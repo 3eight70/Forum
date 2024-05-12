@@ -1,7 +1,7 @@
 package com.hits.notification.Core.Notification.Handler;
 
 import com.hits.common.Core.Notification.Enum.NotificationChannel;
-import com.hits.common.Core.User.DTO.UserNotificationDto;
+import com.hits.common.Core.User.DTO.UserNotificationDTO;
 import com.hits.notification.Core.Notification.Entity.Notification;
 import jakarta.mail.MessagingException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,7 +33,7 @@ public class NotificationHandlerChain {
         }
     }
 
-    public void process(Notification notification, UserNotificationDto userNotificationDto, List<NotificationChannel> channels) throws MessagingException, UnsupportedEncodingException {
+    public void process(Notification notification, UserNotificationDTO userNotificationDto, List<NotificationChannel> channels) throws MessagingException, UnsupportedEncodingException {
         head.handle(notification, userNotificationDto, channels);
     }
 }

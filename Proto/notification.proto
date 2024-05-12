@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package notification;
+
+message UserNotificationDto {
+  string user_id = 1;
+  string email = 2;
+  string login = 3;
+}
+
+message Notification {
+  string title = 1;
+  string content = 2;
+  UserNotificationDto user_notification = 3;
+  google.protobuf.Timestamp create_time = 4;
+  repeated NotificationChannel channel_list = 5;
+  bool need_in_history = 6;
+}
+
+enum NotificationChannel {
+  EMAIL = 0;
+  MESSENGER = 1;
+}

@@ -1,6 +1,8 @@
 package com.hits.user.Core.Admin.Service;
 
 import com.hits.common.Core.Category.DTO.CategoryDto;
+import com.hits.common.Core.Notification.Enum.NotificationChannel;
+import com.hits.common.Core.Notification.Proto.NotificationDTOOuterClass;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
@@ -47,11 +49,15 @@ public class AdminServiceImpl implements AdminService {
         userToBan.setIsBanned(true);
         userRepository.saveAndFlush(userToBan);
 
+        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+
         kafkaProducer.sendMessage(
+                UserMapper.userToUserDto(userToBan),
                 "Блокировка",
                 "Вы были заблокированы",
-                userToBan.getLogin(),
-                LocalDateTime.now()
+                channels,
+                true
         );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
@@ -70,11 +76,15 @@ public class AdminServiceImpl implements AdminService {
         userToUnBan.setIsBanned(false);
         userRepository.saveAndFlush(userToUnBan);
 
+        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+
         kafkaProducer.sendMessage(
+                UserMapper.userToUserDto(userToUnBan),
                 "Разблокировка",
                 "Вы были разблокированы",
-                userToUnBan.getLogin(),
-                LocalDateTime.now()
+                channels,
+                true
         );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
@@ -93,11 +103,15 @@ public class AdminServiceImpl implements AdminService {
         user.setRole(Role.MODERATOR);
         userRepository.saveAndFlush(user);
 
+        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+
         kafkaProducer.sendMessage(
+                UserMapper.userToUserDto(user),
                 "Смена роли",
                 "Вам была выдана роль модератора",
-                user.getLogin(),
-                LocalDateTime.now()
+                channels,
+                true
         );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
@@ -117,11 +131,15 @@ public class AdminServiceImpl implements AdminService {
         user.setManageCategoryId(null);
         userRepository.saveAndFlush(user);
 
+        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+
         kafkaProducer.sendMessage(
+                UserMapper.userToUserDto(user),
                 "Смена роли",
                 "Вас сняли с роли модератора",
-                user.getLogin(),
-                LocalDateTime.now()
+                channels,
+                true
         );
 
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
@@ -158,11 +176,15 @@ public class AdminServiceImpl implements AdminService {
             manageCategoriesIds.add(categoryId);
             user.setManageCategoryId(manageCategoriesIds);
 
+            List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
+            channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+
             kafkaProducer.sendMessage(
+                    UserMapper.userToUserDto(user),
                     "Назначение на категорию",
                     String.format("Вас назначили на управлению категорией с id=%s", categoryId),
-                    user.getLogin(),
-                    LocalDateTime.now()
+                    channels,
+                    true
             );
 
             return new ResponseEntity<>(new Response(HttpStatus.OK.value(),

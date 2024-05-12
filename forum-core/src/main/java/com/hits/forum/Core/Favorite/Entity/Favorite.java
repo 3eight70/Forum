@@ -2,7 +2,6 @@ package com.hits.forum.Core.Favorite.Entity;
 
 import com.hits.forum.Core.Theme.Entity.ForumTheme;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

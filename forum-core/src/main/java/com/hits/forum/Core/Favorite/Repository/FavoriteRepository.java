@@ -1,7 +1,6 @@
 package com.hits.forum.Core.Favorite.Repository;
 
 import com.hits.forum.Core.Favorite.Entity.Favorite;
-import com.hits.forum.Core.Theme.Entity.ForumTheme;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

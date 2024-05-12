@@ -9,7 +9,6 @@ import com.hits.forum.Core.Favorite.Entity.Favorite;
 import com.hits.forum.Core.Favorite.Mapper.FavoriteMapper;
 import com.hits.forum.Core.Favorite.Repository.FavoriteRepository;
 import com.hits.forum.Core.Theme.Entity.ForumTheme;
-import com.hits.forum.Core.Theme.Mapper.ThemeMapper;
 import com.hits.forum.Core.Theme.Repository.ThemeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
