@@ -1,5 +1,6 @@
 package com.hits.common.Core.Notification.DTO;
 
+import com.hits.common.Core.User.DTO.UserNotificationDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,9 @@ public class NotificationDTO {
     @NotNull
     private String content;
 
-    @Schema(description = "Логин получателя")
+    @Schema(description = "Модель получателя")
     @NotNull
-    private String userLogin;
+    private UserNotificationDto userNotification;
 
     @Schema(description = "Время создания")
     private LocalDateTime createTime;

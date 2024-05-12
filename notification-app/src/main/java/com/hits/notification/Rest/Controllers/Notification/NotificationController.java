@@ -1,5 +1,6 @@
 package com.hits.notification.Rest.Controllers.Notification;
 
+import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.notification.Core.Notification.DTO.NotificationForUserModel;
 import com.hits.notification.Core.Notification.Service.NotificationService;
@@ -15,11 +16,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.hits.common.Core.Consts.GET_NOTIFICATIONS;
-import static com.hits.common.Core.Consts.GET_UNREAD_NOTIFICATIONS;
+import java.util.UUID;
+
+import static com.hits.common.Core.Consts.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,10 +47,33 @@ public class NotificationController {
     @GetMapping(GET_UNREAD_NOTIFICATIONS)
     @Operation(
             summary = "Получение количества непрочитанных уведомлений",
-            description = "Позволяеть получить количество уведомлений, которые пользователь не прочитал"
+            description = "Позволяет получить количество уведомлений, которые пользователь не прочитал"
     )
     @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<Integer> getAmountOfUnreadNotifications(@AuthenticationPrincipal UserDto userDto){
         return notificationService.getAmountOfUnreadNotifications(userDto);
+    }
+
+    @PostMapping(READ_NOTIFICATION)
+    @Operation(
+            summary = "Прочтение уведомления",
+            description = "Позволяет прочитать уведомление, чтобы оно было помечено, как прочитанное"
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<Response> readNotification(
+            @AuthenticationPrincipal UserDto userDto,
+            @RequestParam(name = "notificationId") UUID notificationId){
+        return notificationService.readNotification(userDto, notificationId);
+    }
+
+    @PostMapping(READ_ALL_NOTIFICATIONS)
+    @Operation(
+            summary = "Прочтение всех уведомлений",
+            description = "Позволяет пометить все уведомления, как прочитанные"
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<Response> readAllNotification(
+            @AuthenticationPrincipal UserDto userDto){
+        return notificationService.readAllNotifications(userDto);
     }
 }

@@ -6,12 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Модель для уведомлений, которые получает пользователь")
 public class NotificationForUserModel {
+    @Schema(description = "Идентификатор уведомления")
+    private UUID notificationId;
+
     @Schema(description = "Заголовок")
     private String title;
 

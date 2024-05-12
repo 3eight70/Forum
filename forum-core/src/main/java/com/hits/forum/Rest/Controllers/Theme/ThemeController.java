@@ -123,45 +123,4 @@ public class ThemeController {
             throws NotFoundException, ForbiddenException {
         return themeService.unArchiveTheme(user, themeId);
     }
-
-    @Operation(
-            summary = "Добавление темы в избранное",
-            description = "Позволяет добавить тему в избранное пользователя"
-    )
-    @PostMapping(ADD_TO_FAVORITE)
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> addThemeToFavorite(
-            @AuthenticationPrincipal UserDto userDto,
-            @RequestParam(name = "themeId") @Parameter(description = "Идентификатор темы") UUID themeId
-    ) throws NotFoundException{
-        try {
-            return themeService.addThemeToFavorite(userDto, themeId);
-        }
-        catch (FeignException.BadRequest e){
-            return new ResponseEntity<>(new Response(HttpStatus.NOT_FOUND.value(), "Темы с указанным id не существует"), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @Operation(
-            summary = "Удаление темы из избранного",
-            description = "Позволяет удалить тему из избранного"
-    )
-    @DeleteMapping(DELETE_FROM_FAVORITE)
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<?> deleteThemeFromFavorite(
-            @AuthenticationPrincipal UserDto userDto,
-            @RequestParam(name = "themeId") @Parameter(description = "Идентификатор темы") UUID themeId
-    ) throws NotFoundException{
-        return themeService.deleteThemeFromFavorite(userDto, themeId);
-    }
-
-    @Operation(
-            summary = "Получение списка избранных тем",
-            description = "Позволяет получить список избранных тем"
-    )
-    @GetMapping(GET_FAVORITE)
-    @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(@AuthenticationPrincipal UserDto userDto){
-        return themeService.getFavoriteThemes(userDto);
-    }
 }

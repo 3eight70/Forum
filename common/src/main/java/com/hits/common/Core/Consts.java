@@ -48,6 +48,8 @@ public class Consts {
     public static final String GET_THEMES_WITH_SUBSTRING = "/api/forum/themes";
     public static final String GET_MESSAGES_WITH_SUBSTRING = "/api/forum/messages";
     public static final String GET_NOTIFICATIONS = "/api/notification";
+    public static final String READ_NOTIFICATION = "/api/notification/read";
+    public static final String READ_ALL_NOTIFICATIONS = "/api/notification/read/all";
     public static final String GET_UNREAD_NOTIFICATIONS = "/api/notification/unreaden";
     public static final String ADMIN = "ADMIN";
     public static final String MODERATOR = "MODERATOR";

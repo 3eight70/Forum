@@ -1,0 +1,32 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="v4-1" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="favorite_themes"/>
+            </not>
+        </preConditions>
+        <createTable tableName="favorite_themes">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="favorite_add_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="theme_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="favorite_themes"
+                                 baseColumnNames="theme_id"
+                                 constraintName="fk_favorite_theme_id"
+                                 referencedTableName="themes"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

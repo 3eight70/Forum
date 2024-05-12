@@ -24,5 +24,11 @@
             <column name="user_id" type="uuid"/>
         </createTable>
     </changeSet>
+    <changeSet id="v3-3" author="Vasilev Danil">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="user_favorite_themes"/>
+        </preConditions>
+        <dropTable tableName="user_favorite_themes"/>
+    </changeSet>
 
 </databaseChangeLog>

@@ -185,47 +185,4 @@ public class ThemeServiceImpl implements ThemeService{
             }
         }
     }
-
-    @Transactional
-    public ResponseEntity<?> addThemeToFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
-                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
-
-        if (!forumTheme.getUsersWhoAddThemeToFavorite().contains(userDto.getId())){
-           forumTheme.getUsersWhoAddThemeToFavorite().add(userDto.getId());
-           themeRepository.saveAndFlush(forumTheme);
-
-            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
-                    "Пользователь успешно добавил тему в избранное"), HttpStatus.OK);
-        }
-        else{
-            throw new BadRequestException(String.format("Тема с id=%s и так находится в избранном пользователя", themeId));
-        }
-    }
-
-    @Transactional
-    public ResponseEntity<?> deleteThemeFromFavorite(UserDto userDto, UUID themeId) throws NotFoundException{
-        ForumTheme forumTheme = themeRepository.findForumThemeById(themeId)
-                .orElseThrow(() -> new NotFoundException(String.format("Темы с id=%s не существует", themeId)));
-
-        if (forumTheme.getUsersWhoAddThemeToFavorite().contains(userDto.getId())){
-            forumTheme.getUsersWhoAddThemeToFavorite().remove(userDto.getId());
-            themeRepository.saveAndFlush(forumTheme);
-
-            return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
-                    "Пользователь успешно удалил тему из избранного"), HttpStatus.OK);
-        }
-        else{
-            throw new BadRequestException(String.format("Тема с id=%s не находится в избранном пользователя", themeId));
-        }
-    }
-
-    public ResponseEntity<List<ThemeDto>> getFavoriteThemes(UserDto userDto){
-        List<ThemeDto> themes = themeRepository.findAllByUsersWhoAddThemeToFavoriteContains(userDto.getId())
-                .stream()
-                .map(ThemeMapper::forumThemeToThemeDto)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(themes);
-    }
 }

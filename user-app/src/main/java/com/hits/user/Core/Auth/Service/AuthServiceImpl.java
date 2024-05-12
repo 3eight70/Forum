@@ -33,12 +33,11 @@ public class AuthServiceImpl implements AuthService {
     private final RedisRepository redisRepository;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenUtils jwtTokenUtils;
-    private final JavaMailSender mailSender;
     private final RefreshRepository refreshRepository;
 
     @Transactional
     public ResponseEntity<?> registerNewUser(UserRegisterModel userRegisterModel)
-            throws MessagingException, UnsupportedEncodingException, UserAlreadyExistsException {
+            throws UserAlreadyExistsException {
         String login = userRegisterModel.getLogin();
         userRegisterModel.setLogin(login == null ? userRegisterModel.getEmail() : login.toLowerCase());
 
@@ -121,33 +120,4 @@ public class AuthServiceImpl implements AuthService {
         return new ResponseEntity<>(new Response(HttpStatus.OK.value(),
                 "Пользователь успешно вышел из аккаунт"), HttpStatus.OK);
     }
-
-//    private void sendVerificationEmail(User user, String siteURL)
-//            throws MessagingException, UnsupportedEncodingException {
-//        String toAddress = user.getEmail();
-//        String fromAddress = "gbhfns47@gmail.com";
-//        String senderName = "HITS.CO";
-//        String subject = "Пожалуйста подтвердите свою регистрацию";
-//        String content = "Эй, [[name]],<br>"
-//                + "Пожалуйста перейдите по ссылке ниже для подтверждения регистрации:<br>"
-//                + "<h3><a href=\"[[URL]]\" target=\"_self\">ПОДТВЕРДИ МЕНЯ</a></h3>"
-//                + "Спасибо,<br>"
-//                + "HITS COMPANY.";
-//
-//        MimeMessage message = mailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message);
-//
-//        helper.setFrom(fromAddress, senderName);
-//        helper.setTo(toAddress);
-//        helper.setSubject(subject);
-//
-//        content = content.replace("[[name]]", user.getLogin());
-//        String verifyURL = siteURL + VERIFY_USER + "?id=" + user.getId() + "&code=" + user.getVerificationCode();
-//
-//        content = content.replace("[[URL]]", verifyURL);
-//
-//        helper.setText(content, true);
-//
-//        mailSender.send(message);
-//    }
 }

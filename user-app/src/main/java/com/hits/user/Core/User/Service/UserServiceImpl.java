@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final RefreshTokenService refreshTokenService;
-    private final ForumAppClient forumAppClient;
 
     @Transactional
     @Override

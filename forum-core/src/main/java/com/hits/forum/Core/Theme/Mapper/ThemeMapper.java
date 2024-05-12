@@ -18,7 +18,6 @@ public class ThemeMapper {
                 themeRequest.getThemeName(),
                 themeRequest.getCategoryId(),
                 false,
-                new ArrayList<>(),
                 new ArrayList<>()
         );
     }

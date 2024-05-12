@@ -36,7 +36,9 @@ public class SecurityConfig {
                         .requestMatchers(DELETE_THEME).hasAnyRole(ADMIN, MODERATOR)
                         .requestMatchers(SEND_MESSAGE, EDIT_MESSAGE, DELETE_MESSAGE).authenticated()
                         .requestMatchers(GET_FILES).authenticated()
-                        .requestMatchers(GET_FAVORITE, ADD_TO_FAVORITE, DELETE_FROM_FAVORITE).authenticated()
+                        .requestMatchers(GET_FAVORITE,
+                                ADD_TO_FAVORITE,
+                                DELETE_FROM_FAVORITE).authenticated()
                         .requestMatchers(DOWNLOAD_FILE+"/*", DOWNLOAD_FILE + "*").authenticated()
                         .requestMatchers(UPLOAD_FILE, DELETE_FILE).authenticated()
                         .requestMatchers(BAN_USER,
@@ -48,7 +50,10 @@ public class SecurityConfig {
                         .requestMatchers(ARCHIVE_THEME).hasAnyRole(ADMIN, MODERATOR)
                         .requestMatchers(GET_PROFILE).authenticated()
                         .requestMatchers(DELETE_ATTACHMENT).authenticated()
-                        .requestMatchers(GET_NOTIFICATIONS, GET_UNREAD_NOTIFICATIONS).authenticated()
+                        .requestMatchers(GET_NOTIFICATIONS,
+                                GET_UNREAD_NOTIFICATIONS,
+                                READ_ALL_NOTIFICATIONS,
+                                READ_NOTIFICATION).authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(accessDeniedHandler())
