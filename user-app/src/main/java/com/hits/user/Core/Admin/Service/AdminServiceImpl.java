@@ -2,7 +2,6 @@ package com.hits.user.Core.Admin.Service;
 
 import com.hits.common.Core.Category.DTO.CategoryDto;
 import com.hits.common.Core.Notification.Enum.NotificationChannel;
-import com.hits.common.Core.Notification.Proto.NotificationDTOOuterClass;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
@@ -24,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,8 +47,8 @@ public class AdminServiceImpl implements AdminService {
         userToBan.setIsBanned(true);
         userRepository.saveAndFlush(userToBan);
 
-        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
-        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+        List<NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationChannel.EMAIL);
 
         kafkaProducer.sendMessage(
                 UserMapper.userToUserDto(userToBan),
@@ -76,8 +74,8 @@ public class AdminServiceImpl implements AdminService {
         userToUnBan.setIsBanned(false);
         userRepository.saveAndFlush(userToUnBan);
 
-        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
-        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+        List<NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationChannel.EMAIL);
 
         kafkaProducer.sendMessage(
                 UserMapper.userToUserDto(userToUnBan),
@@ -103,8 +101,8 @@ public class AdminServiceImpl implements AdminService {
         user.setRole(Role.MODERATOR);
         userRepository.saveAndFlush(user);
 
-        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
-        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+        List<NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationChannel.EMAIL);
 
         kafkaProducer.sendMessage(
                 UserMapper.userToUserDto(user),
@@ -131,8 +129,8 @@ public class AdminServiceImpl implements AdminService {
         user.setManageCategoryId(null);
         userRepository.saveAndFlush(user);
 
-        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
-        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+        List<NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationChannel.EMAIL);
 
         kafkaProducer.sendMessage(
                 UserMapper.userToUserDto(user),
@@ -176,8 +174,8 @@ public class AdminServiceImpl implements AdminService {
             manageCategoriesIds.add(categoryId);
             user.setManageCategoryId(manageCategoriesIds);
 
-            List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
-            channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+            List<NotificationChannel> channels = new ArrayList<>();
+            channels.add(NotificationChannel.EMAIL);
 
             kafkaProducer.sendMessage(
                     UserMapper.userToUserDto(user),

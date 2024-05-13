@@ -7,8 +7,6 @@ import com.hits.user.Exceptions.AccountNotConfirmedException;
 import com.hits.user.Exceptions.UserAlreadyExistsException;
 import org.springframework.http.ResponseEntity;
 
-import java.io.UnsupportedEncodingException;
-
 public interface AuthService {
     ResponseEntity<?> registerNewUser(UserRegisterModel userRegisterModel) throws UserAlreadyExistsException;
 

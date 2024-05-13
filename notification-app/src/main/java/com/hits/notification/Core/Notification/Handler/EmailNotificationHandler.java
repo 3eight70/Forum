@@ -6,19 +6,19 @@ import com.hits.notification.Core.Notification.Entity.Notification;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class EmailNotificationHandler extends NotificationHandler {
-    private final JavaMailSender mailSender;
-
-    @Value("${spring.mail.username}")
-    private String fromAddress;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public void handle(Notification notification, UserNotificationDTO userNotificationDto, List<NotificationChannel> channels) throws MessagingException, UnsupportedEncodingException {
@@ -34,15 +34,16 @@ public class EmailNotificationHandler extends NotificationHandler {
             throws UnsupportedEncodingException, MessagingException {
         String senderName = "HITS.CO";
 
-        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
+        String fromAddress = "gbhfns47@gmail.com";
         helper.setFrom(fromAddress, senderName);
         helper.setTo(userMailDto.getEmail());
         helper.setSubject(notification.getTitle());
         helper.setText(notification.getContent(), true);
 
-        mailSender.send(message);
+        javaMailSender.send(message);
     }
 }
 

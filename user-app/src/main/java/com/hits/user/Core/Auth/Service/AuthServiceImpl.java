@@ -1,7 +1,6 @@
 package com.hits.user.Core.Auth.Service;
 
 import com.hits.common.Core.Notification.Enum.NotificationChannel;
-import com.hits.common.Core.Notification.Proto.NotificationDTOOuterClass;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.Response.TokenResponse;
 import com.hits.user.Core.Auth.DTO.LoginCredentials;
@@ -23,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,8 +91,8 @@ public class AuthServiceImpl implements AuthService {
 
         content = content.replace("[[URL]]", verifyURL);
 
-        List<NotificationDTOOuterClass.NotificationChannel> channels = new ArrayList<>();
-        channels.add(NotificationDTOOuterClass.NotificationChannel.EMAIL);
+        List<NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationChannel.EMAIL);
 
         kafkaProducer.sendMessage(UserMapper.userToUserDto(user),
                 "Пожалуйста подтвердите свою регистрацию",
