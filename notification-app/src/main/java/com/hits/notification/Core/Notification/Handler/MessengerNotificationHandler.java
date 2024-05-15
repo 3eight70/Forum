@@ -13,8 +13,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class MessengerNotificationHandler extends NotificationHandler {
-    private static final String BOT_TOKEN = "YOUR_BOT_TOKEN";
-    private static final String CHAT_ID = "YOUR_CHAT_ID";
+    private static String botToken = "botToken";
+    private static String chatId = "chatId";
 
     @Override
     public void handle(Notification notification, UserNotificationDTO userNotificationDto, List<NotificationChannel> channels) throws MessagingException, UnsupportedEncodingException {
@@ -26,12 +26,12 @@ public class MessengerNotificationHandler extends NotificationHandler {
         }
     }
 
-    public static void sendMessage(Notification notification, UserNotificationDTO userNotificationDTO) {
+    public void sendMessage(Notification notification, UserNotificationDTO userNotificationDTO) {
         try {
             HttpClient httpclient = HttpClients.createDefault();
-            HttpPost httppost = new HttpPost("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage");
+            HttpPost httppost = new HttpPost("https://api.telegram.org/bot" + botToken + "/sendMessage");
 
-            StringEntity params = new StringEntity("{\"chat_id\":\"" + CHAT_ID + "\",\"text\":\"" + "Уважаемый "
+            StringEntity params = new StringEntity("{\"chat_id\":\"" + chatId + "\",\"text\":\"" + "Уважаемый "
                     + userNotificationDTO.getLogin() + " для вас пришло уведомление: " + notification.getTitle() + " "
                     + notification.getContent() + "\"}");
             httppost.addHeader("content-type", "application/json");

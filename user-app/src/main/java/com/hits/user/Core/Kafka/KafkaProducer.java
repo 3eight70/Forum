@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.hits.common.Core.Consts.TOPIC;
@@ -30,6 +31,7 @@ public class KafkaProducer {
                 .content(content)
                 .title(title)
                 .needInHistory(needInHistory)
+                .createTime(LocalDateTime.now())
                 .userNotification(UserNotificationMapper.userDtoToUserNotificationDto(userDto))
                 .build();
 

@@ -1,7 +1,5 @@
 package com.hits.notification.Core.Kafka;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hits.common.Core.Notification.DTO.NotificationDTO;
 import com.hits.notification.Core.Notification.Entity.Notification;
 import com.hits.notification.Core.Notification.Mapper.NotificationMapper;

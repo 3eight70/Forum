@@ -2,15 +2,18 @@ package com.hits.forum.Core.Message.Service;
 
 import com.hits.common.Core.File.DTO.FileDto;
 import com.hits.common.Core.Message.DTO.MessageDto;
+import com.hits.common.Core.Notification.Enum.NotificationChannel;
 import com.hits.common.Core.Response.Response;
 import com.hits.common.Core.User.DTO.Role;
 import com.hits.common.Core.User.DTO.UserDto;
 import com.hits.common.Exceptions.BadRequestException;
 import com.hits.common.Exceptions.ForbiddenException;
 import com.hits.common.Exceptions.NotFoundException;
+import com.hits.forum.Core.Favorite.Repository.FavoriteRepository;
 import com.hits.forum.Core.File.Entity.File;
 import com.hits.forum.Core.File.Mapper.FileMapper;
 import com.hits.forum.Core.File.Repository.FileRepository;
+import com.hits.forum.Core.Kafka.KafkaProducer;
 import com.hits.forum.Core.Message.DTO.EditMessageRequest;
 import com.hits.forum.Core.Message.DTO.MessageWithFiltersDto;
 import com.hits.forum.Core.Message.DTO.MessageWithFiltersRequest;
@@ -24,6 +27,7 @@ import com.hits.security.Rest.Client.FileAppClient;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -38,15 +42,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MessageServiceImpl implements MessageService{
     private final ThemeRepository themeRepository;
+    private final FavoriteRepository favoriteRepository;
     private final MessageRepository messageRepository;
     private final FileRepository fileRepository;
     private final FileAppClient fileAppClient;
+    private final KafkaProducer kafkaProducer;
 
     @Transactional
     public ResponseEntity<?> createMessage(UserDto user, String content, UUID themeId)
@@ -62,6 +70,33 @@ public class MessageServiceImpl implements MessageService{
         if (forumTheme.getIsArchived()){
             throw new BadRequestException("Категория находится в архиве");
         }
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                List<UUID> userIds = favoriteRepository.findAllUserIdsByThemeId(themeId);
+                UUID usId = user.getId();
+
+                if (userIds.contains(usId)){
+                    userIds.remove(usId);
+                }
+
+                List<NotificationChannel> channels = new ArrayList<>();
+                channels.add(NotificationChannel.EMAIL);
+
+                for (UUID userId : userIds) {
+                    kafkaProducer.sendMessage(
+                            userId,
+                            String.format("В топик: %s прислали сообщение", forumTheme.getThemeName()),
+                            String.format("Логин отправителя: %s, текст сообщение: %s", user.getLogin(), content),
+                            channels,
+                            true
+                    );
+                }
+            } catch (Exception e) {
+                log.error("При работе с рассылкой уведомлений, что-то пошло не так");
+                e.printStackTrace();
+            }
+        });
 
         ForumMessage forumMessage = MessageMapper.messageRequestToForumTheme(user.getLogin(), content,
                 themeId, forumTheme.getCategoryId());

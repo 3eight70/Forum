@@ -41,7 +41,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: gbhfns47@gmail.com
-    password: afhc xnsk kvmc qddb
+    password: password
     properties:
       mail:
         smtp:
@@ -52,6 +52,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://service-registry:8761/eureka
+
+telegram:
+  botToken: botToken
+  chatId: chatId
 
 springdoc:
   api-docs:

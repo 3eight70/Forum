@@ -54,5 +54,6 @@ public class Consts {
     public static final String ADMIN = "ADMIN";
     public static final String MODERATOR = "MODERATOR";
     public static final String TOPIC = "notification-topic";
+    public static final String MESSAGE_TOPIC = "message-topic";
     public static final String NOTIFICATION_GROUP = "notifications_group";
 }

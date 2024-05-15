@@ -19,10 +19,11 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.hits.common.Core.Consts.MESSAGE_TOPIC;
 import static com.hits.common.Core.Consts.TOPIC;
 
 @Configuration
-public class KafkaConfiguration {
+public class KafkaConsumerConfiguration {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
@@ -77,6 +78,15 @@ public class KafkaConfiguration {
     public NewTopic newTopic(){
         return new NewTopic(
                 TOPIC,
+                1,
+                (short) 1
+        );
+    }
+
+    @Bean
+    public NewTopic newMessageTopic(){
+        return new NewTopic(
+                MESSAGE_TOPIC,
                 1,
                 (short) 1
         );
