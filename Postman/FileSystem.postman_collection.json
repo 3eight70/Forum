@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "69a9694e-0558-4544-93d4-3397a40cde8e",
-		"name": "FileSystem",
+		"_postman_id": "2938e502-0ea3-47ef-99d3-e6ed30c59f54",
+		"name": "ForumApp",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29907070"
 	},
@@ -113,6 +113,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DeleteFile",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/file/delete?messageId=79f2bea8-6404-47a7-a5f9-3dcc57ba1914",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "messageId",
+									"value": "79f2bea8-6404-47a7-a5f9-3dcc57ba1914"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -120,13 +147,259 @@
 			"name": "User",
 			"item": [
 				{
+					"name": "ADMIN",
+					"item": [
+						{
+							"name": "BanUser",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/ban?userId=18271911-d671-4641-b039-1f8b2fd4ffcb",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"ban"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "18271911-d671-4641-b039-1f8b2fd4ffcb"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UnBanUser",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/ban?userId=7a1b3511-a8ba-4c71-aec3-c1faba0db06d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"ban"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "7a1b3511-a8ba-4c71-aec3-c1faba0db06d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUser",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasfasfasfasfasdsdd@asd.com\",\r\n    \"login\": \"skodnffasfsaik\",\r\n    \"password\": \"string1\",\r\n    \"phoneNumber\": \"+7 (727) 777-77-77\",\r\n    \"role\": \"ADMIN\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/create/user",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"create",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EditUser",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasfasdsdd@asd.com\",\r\n    \"login\": \"skodnfik\",\r\n    \"password\": \"string1\",\r\n    \"phoneNumber\": \"+7 (717) 777-77-77\",\r\n    \"role\": \"ADMIN\",\r\n    \"isConfirmed\": \"true\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/edit/user?userId=7a1b3511-a8ba-4c71-aec3-c1faba0db06d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"edit",
+										"user"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "7a1b3511-a8ba-4c71-aec3-c1faba0db06d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GiveModerator",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/give/moderator",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"give",
+										"moderator"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GiveCategoryToModerator",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/give/category?userId=1049229a-133f-4d61-943c-f1e16629f131&categoryId=98c7e79b-d556-4bd6-8e0b-e038e6b97b69",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"give",
+										"category"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "1049229a-133f-4d61-943c-f1e16629f131"
+										},
+										{
+											"key": "categoryId",
+											"value": "98c7e79b-d556-4bd6-8e0b-e038e6b97b69"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteModerator",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/account/admin/delete/moderator",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"account",
+										"admin",
+										"delete",
+										"moderator"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "RegisterUser",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+							"raw": "{\r\n    \"email\": \"gbhfndasdasds90@gmail.com\",\r\n    \"login\": \"Gbhffasfsasfns\",\r\n    \"phoneNumber\": \"+7 (999) 333-33-33\",\r\n    \"password\": \"string1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -144,6 +417,26 @@
 								"api",
 								"account",
 								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProfile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/account",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"account"
 							]
 						}
 					},
@@ -186,7 +479,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+							"raw": "{\r\n    \"login\": \"example\",\r\n    \"password\": \"qwerty12345\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -208,6 +501,59 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "VerifyAccount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/account/verify?id=21d0da96-ae0f-4f9c-adb4-99951af6c2d7&code=9fa37dd7-d675-4ef6-a67e-ac8f30c59689",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"account",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "21d0da96-ae0f-4f9c-adb4-99951af6c2d7"
+								},
+								{
+									"key": "code",
+									"value": "9fa37dd7-d675-4ef6-a67e-ac8f30c59689"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -406,7 +752,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/forum/category/theme/edit?themeId=c5a60bed-4e84-4255-8827-fdef371cc827",
+									"raw": "http://localhost:8080/api/forum/category/theme/edit?themeId=3e8aa7a7-62b7-424d-b19a-ff0a115be49d",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -422,7 +768,7 @@
 									"query": [
 										{
 											"key": "themeId",
-											"value": "c5a60bed-4e84-4255-8827-fdef371cc827"
+											"value": "3e8aa7a7-62b7-424d-b19a-ff0a115be49d"
 										}
 									]
 								}
@@ -478,6 +824,58 @@
 										"forum",
 										"category",
 										"theme"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ArchiveTheme",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme/archive?themeId=3e8aa7a7-62b7-424d-b19a-ff0a115be49d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme",
+										"archive"
+									],
+									"query": [
+										{
+											"key": "themeId",
+											"value": "3e8aa7a7-62b7-424d-b19a-ff0a115be49d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UnArchiveTheme",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/category/theme/archive",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"category",
+										"theme",
+										"archive"
 									]
 								}
 							},
@@ -603,6 +1001,64 @@
 										"theme",
 										"message",
 										"delete"
+									],
+									"query": [
+										{
+											"key": "messageId",
+											"value": "366d2ffa-8c94-48df-8869-eb02fb68d051"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteAttachment",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/message/attachment/delete?messageId=366d2ffa-8c94-48df-8869-eb02fb68d051",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"message",
+										"attachment",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "messageId",
+											"value": "366d2ffa-8c94-48df-8869-eb02fb68d051"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "AddAttachment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/forum/message/attachment/add?messageId=366d2ffa-8c94-48df-8869-eb02fb68d051",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"message",
+										"attachment",
+										"add"
 									],
 									"query": [
 										{
@@ -788,13 +1244,24 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"content\": \"O yeaaaaa\",\r\n    \"themeId\": \"2b737623-b71d-43c9-8ac0-5fc2797fe3a4\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/User/Downloads/Header.png"
+										},
+										{
+											"key": "content",
+											"value": "jora",
+											"type": "text"
+										},
+										{
+											"key": "themeId",
+											"value": "6a815ea0-1e3e-4512-90d9-ed17b72390ec",
+											"type": "text"
 										}
-									}
+									]
 								},
 								"url": {
 									"raw": "http://localhost:8080/api/forum/theme/message",
@@ -808,12 +1275,242 @@
 										"forum",
 										"theme",
 										"message"
+									],
+									"query": [
+										{
+											"key": "content",
+											"value": "jora",
+											"disabled": true
+										},
+										{
+											"key": "themeId",
+											"value": "6a815ea0-1e3e-4512-90d9-ed17b72390ec",
+											"disabled": true
+										}
 									]
 								}
 							},
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Favorite",
+					"item": [
+						{
+							"name": "AddThemeToFavorite",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/favorite/add?themeId=cd44d90c-b382-4c25-b1fb-8c0d4cd7373d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"favorite",
+										"add"
+									],
+									"query": [
+										{
+											"key": "themeId",
+											"value": "cd44d90c-b382-4c25-b1fb-8c0d4cd7373d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteThemeFromFavorite",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/favorite/delete?themeId=cd44d90c-b382-4c25-b1fb-8c0d4cd7373d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"favorite",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "themeId",
+											"value": "cd44d90c-b382-4c25-b1fb-8c0d4cd7373d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetFavorite",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"asddasdsdd@asd.com\",\r\n    \"password\": \"string1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/forum/favorite",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"forum",
+										"favorite"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "AmountOfUnread",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/notification/unreaden",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notification",
+								"unreaden"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetNotifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/notification?size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notification"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReadNotification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/notification/read?notificationId=1ebe5c61-e47b-4c67-9391-af5f8bdf434d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notification",
+								"read"
+							],
+							"query": [
+								{
+									"key": "notificationId",
+									"value": "1ebe5c61-e47b-4c67-9391-af5f8bdf434d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ReadAllNotifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/notification/read/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notification",
+								"read",
+								"all"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -853,7 +1550,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHYmhmbnMiLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzA5OTgwODgxLCJ1c2VySWQiOiIwNjVmZTRkOC1mMTE4LTQwZjgtODVjOS02NTY1N2QxOTU2MTEiLCJpYXQiOjE3MDk5NzcyODEsImp0aSI6ImI3OGQ5NDk2LTc4NzktNGNhYy1hMjExLTAxZWFmOWVlYjkwOCJ9.cb2LtZwGgStWIl2X3EmloSsWH5LpaE66-WSrw8N8mks",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnYmhmbmQ5MEBnbWFpbC5jb20iLCJyb2xlcyI6WyJST0xFX1VTRVIiXSwiZXhwIjoxNzE1Nzc0ODYwLCJ1c2VySWQiOiJlYzNhYmJiMy0wMDg2LTQ4Y2ItOWI3ZC04MTBlYzU2MzExNzQiLCJpYXQiOjE3MTU3NzEyNjAsImp0aSI6IjQ0MDI5YzA3LTE0NWYtNDY2Ny04ZjkyLTQzYWVlODVkMjk2NSJ9.uSaY_OMk4JbxxZP_mMkbXJCL7r_X7OBQACWruZJGHpw",
 				"type": "string"
 			}
 		]
@@ -881,7 +1578,7 @@
 	"variable": [
 		{
 			"key": "fileId",
-			"value": "c9ffa024-55ab-4655-b3fc-7108d95227fe",
+			"value": "dd72a73a-f382-4491-825c-23c1bbac8ed1",
 			"type": "string"
 		},
 		{
